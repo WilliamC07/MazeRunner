@@ -25,4 +25,10 @@ public class Wall implements Renderable{
     public void render(){
 
     }
+
+    @Override
+    public int hashCode(){
+        // pretty bad, i should learn how to make a effective one
+        return (int) start.getX() * 1000 + (int) start.getY() * 100 + (int) end.getX() * 10 + (int) end.getY();
+    }
 }

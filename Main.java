@@ -37,7 +37,7 @@ public class Main extends PApplet{
 	@Override
 	public void setup(){
 		// TODO: replace with maze
-		Set<Wall> walls = new HashSet<Wall>();
+		List<Wall> walls = new ArrayList<>();
 		walls.add(new Wall(new Point(50, 50), new Point(50, 100)));
 		renderables.addAll(walls);
 

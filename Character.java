@@ -36,10 +36,10 @@ public class Character implements Renderable{
             // if the ray will intersect another wall, ignore it
             for(Wall wallCheck : walls){
                 if(wallCheck != wall){
-                    if(toStart.intersects(wallCheck) != null){
+                    if(toStart != null && toStart.intersects(wallCheck) != null){
                         toStart = null;
                     }
-                    if(toEnd.intersects(wallCheck) != null){
+                    if(toEnd != null && toEnd.intersects(wallCheck) != null){
                         toEnd = null;
                     }
                 }

@@ -27,7 +27,13 @@ public class Main extends PApplet{
 
 	@Override
 	public void setup(){
+		// TODO: replace with maze
+		Set<Wall> walls = new HashSet<Wall>();
+		walls.add(new Wall(new Point(50, 50), new Point(50, 100)));
+		renderables.addAll(walls);
 
+		character = new Character(new Point((float) width / 2, (float) height / 2), walls);
+		renderables.add(character);
 	}
 
 	@Override

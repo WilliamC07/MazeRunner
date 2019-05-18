@@ -18,6 +18,6 @@ public class Character implements Renderable{
 
     @Override
     public void render(){
-
+        Main.getInstance().ellipse(200, 200, 20, 20);
     }
 }

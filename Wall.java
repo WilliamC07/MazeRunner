@@ -23,7 +23,7 @@ public class Wall implements Renderable{
 
     @Override
     public void render(){
-
+        Main.getInstance().line(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
     @Override

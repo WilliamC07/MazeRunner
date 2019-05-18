@@ -1,4 +1,4 @@
-public class Ray{
+public class Ray implements Renderable{
     private Point start;
     private Point end;
     private double slope;
@@ -50,5 +50,10 @@ public class Ray{
         }else{
             return null;
         }
+    }
+
+    @Override
+    public void render() {
+        Main.getInstance().line(start.getX(), start.getY(), end.getX(), end.getY());
     }
 }

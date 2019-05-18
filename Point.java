@@ -21,7 +21,6 @@ public class Point{
     }
     /**
     * Accessor for the abscissa.
-    *{@link Point#x}
     *@return the abscissa of the Point
     */
     public float getX(){
@@ -29,7 +28,6 @@ public class Point{
     }
     /**
     * Accessor for the ordinate.
-    *{@link Point#y}
     *@return the ordinate of the Point
     */
     public float getY(){

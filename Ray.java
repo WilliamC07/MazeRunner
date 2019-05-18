@@ -5,15 +5,15 @@ public class Ray implements Comparable<Ray>{
     /**
     * The Point at the origin of the Ray.
     */
-    Point start;
+    private Point start;
     /**
     *The Point at the head of the Ray.
     */
-    Point end;
+    private Point end;
     /**
     * The slope of the Ray in radians.
     */
-    float slope;
+    private float slope;
     /**
     *Constructs a Ray given start and end Points.
     *@param start the origin of the Ray

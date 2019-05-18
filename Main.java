@@ -18,6 +18,15 @@ public class Main extends PApplet{
 		PApplet.main("Main");
 	}
 
+	/**
+	 * Access the singleton.
+	 * Use this to access draw methods (the ellipse(), line() and more).
+	 * @return Get the single instance of this class.
+	 */
+	public static Main getInstance(){
+		return instance;
+	}
+
 	@Override
 	public void settings(){
 		instance = this;

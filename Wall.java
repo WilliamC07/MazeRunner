@@ -31,4 +31,12 @@ public class Wall implements Renderable{
         // pretty bad, i should learn how to make a effective one
         return (int) start.getX() * 1000 + (int) start.getY() * 100 + (int) end.getX() * 10 + (int) end.getY();
     }
+
+    public Point getStart() {
+        return start;
+    }
+
+    public Point getEnd() {
+        return end;
+    }
 }

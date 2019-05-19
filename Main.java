@@ -29,7 +29,7 @@ public class Main extends PApplet{
 	@Override
 	public void settings(){
 		instance = this;
-		size(1000, 500);
+		size(1000, 1000);
 		renderables = new ArrayList<>();
 	}
 

@@ -47,19 +47,18 @@ public class Main extends PApplet{
 	@Override
 	public void draw(){
 		background(255);
-		System.out.println("apples");
 		renderables.forEach(Renderable::render);
 	}
-  
+
   public void keyPressed(){
 		if(key=='W' || key=='w'){
-			character.move((float)0,(float)-5);
+			character.move(0f,-5f);
 		} else if(key=='S' || key=='s'){
-			character.move((float)0,(float)5);
+			character.move(0f,5f);
 		} else if(key=='A' || key=='a'){
-			character.move((float)-5,(float)0);
+			character.move(-5f,0f);
 		} else if(key=='D' || key=='d'){
-			character.move((float)5,(float)0);
+			character.move(5f,0f);
 		}
 	}
 }

@@ -23,6 +23,20 @@ public class Wall implements Renderable{
 
     @Override
     public void render(){
+        Main.getInstance().line(start.getX(), start.getY(), end.getX(), end.getY());
+    }
 
+    @Override
+    public int hashCode(){
+        // pretty bad, i should learn how to make a effective one
+        return (int) start.getX() * 1000 + (int) start.getY() * 100 + (int) end.getX() * 10 + (int) end.getY();
+    }
+
+    public Point getStart() {
+        return start;
+    }
+
+    public Point getEnd() {
+        return end;
     }
 }

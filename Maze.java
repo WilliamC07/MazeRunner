@@ -41,19 +41,19 @@ public class Maze implements Renderable{
         generate(0,0);
     }
     private boolean unvisited(int row, int col){
-            if(col!=0 && walls[2*row][col-1]==null){
-                return false;
-            }
-            if(col!=width-1 && walls[2*row][col]!=null){
-                return false;
-            }
-            if(row!=0 && walls[2*row-1][col]!=null){
-                return false;
-            }
-            if(row!=length-1 && walls[2*row+1][col]!=null){
-                return false;
-            }
-            return true;
+        if(col!=0 && walls[2*row][col-1]==null){
+            return false;
+        }
+        if(col!=width-1 && walls[2*row][col]==null){
+            return false;
+        }
+        if(row!=0 && walls[2*row-1][col]==null){
+            return false;
+        }
+        if(row!=length-1 && walls[2*row+1][col]==null){
+            return false;
+        }
+        return true;
     }
     public void generate(int row, int col){
         ArrayList<Integer> adjacentWalls = new ArrayList<Integer>();
@@ -87,14 +87,6 @@ public class Maze implements Renderable{
                 walls[2*row+1][col]=null;
                 generate(row+1,col);
             }
-        }
-        for(Wall[] currentRow : walls){
-            for(Wall wall : currentRow){
-                if(wall!=null){
-                    System.out.print("# ");
-                }
-            }
-            System.out.println();
         }
     }
     @Override

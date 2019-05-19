@@ -39,7 +39,7 @@ public class Ray implements Comparable<Ray>{
     *@return
     */
     public Point intersects(Wall wall){
-        return new Point((float)0.0,(float)0.0);
+        return new Point((float)0,(float)0);
     }
     /**
     *

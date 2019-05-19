@@ -14,8 +14,11 @@ public class Character implements Renderable{
         wallsAhead=new HashSet<Wall>();
         intersectionPoints=new ArrayList<Point>();
     }
-    public void move(Point newPos){
-        location=newPos;
+    public Point getPos(){
+        return location;
+    }
+    public void move(float dx, float dy){
+        location = new Point(location.getX()+dx,location.getY()+dy);
     }
     @Override
     public void render(){

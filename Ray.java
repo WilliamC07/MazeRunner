@@ -22,12 +22,11 @@ public class Ray implements Renderable{
     /**
      * Creates a ray given the start position and the degree of slope
      * @param start Start point of the ray
-     * @param degreeOfSlope The arctan of the slope is the degree of the line
+     * @param slope The slope of the line
      */
-    public Ray(Point start, double degreeOfSlope){
+    public Ray(Point start, float slope){
         this.start = start;
         this.isRay = true;
-        float slope = (float) Math.tan(degreeOfSlope); // the tan of the degree of slope from positive x-axis is the slope
         this.end = new Point(start.getX() + 1, start.getY() + slope);
     }
 
@@ -47,13 +46,19 @@ public class Ray implements Renderable{
 
         float t = result[0];
         float u = result[1];
-        if(t >= 0 && t <= 1 && (        // t must always be within this range
-          (isRay && u >= 0) ||          // a ray only needs u to be >= 0
-          (!isRay && u >= 0 && u <= 1)) // two line segments require 1 >= u >= 0
-        ){
-            float intersectX = (start.getX() + t * (end.getX() - start.getX()));
-            float intersectY = (start.getY() + t * (end.getY() - start.getY()));
-            return new Point(intersectX, intersectY);
+        if(isRay){
+            if(u <= 1 && u >= 0 && t >= 0){
+                float intersectX = (start.getX() + t * (end.getX() - start.getX()));
+                float intersectY = (start.getY() + t * (end.getY() - start.getY()));
+                return new Point(intersectX, intersectY);
+            }
+        }else {
+            if (t >= 0 && t <= 1 && u >= 0 && u <= 1) {
+                // there is an intersection
+                float intersectX = (start.getX() + t * (end.getX() - start.getX()));
+                float intersectY = (start.getY() + t * (end.getY() - start.getY()));
+                return new Point(intersectX, intersectY);
+            }
         }
 
         // no intersection
@@ -88,6 +93,10 @@ public class Ray implements Renderable{
         float t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denominator;
         float u = -1 * ((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denominator;
         return new float[]{t, u};
+    }
+
+    public Point getEnd() {
+        return end;
     }
 
     @Override

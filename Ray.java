@@ -1,6 +1,12 @@
 public class Ray implements Renderable{
     private Point start;
     private Point end;
+    /**
+     * To optimize ray tracing, we are drawing a line segment from the character position to a wall endpoint. However,
+     * to prevent a choppy view, we have to draw another ray of a certain degree away from this line segment. Since we
+     * only know the certain degree away and not where it will land, we have to make it a ray.
+     */
+    private boolean isRay;
 
     /**
      * Creates a ray given the start position and end position from the character.
@@ -10,7 +16,7 @@ public class Ray implements Renderable{
     public Ray(Point start, Point end){
         this.start = start;
         this.end = end;
-
+        this.isRay = false;
     }
 
     /**
@@ -20,7 +26,9 @@ public class Ray implements Renderable{
      */
     public Ray(Point start, double degreeOfSlope){
         this.start = start;
-
+        this.isRay = true;
+        float slope = (float) Math.tan(degreeOfSlope); // the tan of the degree of slope from positive x-axis is the slope
+        this.end = new Point(start.getX() + 1, start.getY() + slope);
     }
 
     /**
@@ -30,10 +38,6 @@ public class Ray implements Renderable{
      * @return null if no intersection, a point instance if there is an intersection
      */
     public Point intersects(Wall wall){
-        if(end == null) {
-            throw new IllegalStateException("No end point determined");
-        }
-
         float[] result = lineLineIntersectionValues(wall);
         // collinear lines means that we return the wall endpoint that is closest to the ray start point
         // the result is length 3 to differentiate from t and u values returned if the lines are no collinear
@@ -45,8 +49,10 @@ public class Ray implements Renderable{
 
         float t = result[0];
         float u = result[1];
-        if(t >= 0 && t <= 1 && u >= 0 && u <= 1){
-            // there is an intersection
+        if(t >= 0 && t <= 1 && (        // t must always be within this range
+          (isRay && u >= 0) ||          // a ray only needs u to be >= 0
+          (!isRay && u >= 0 && u <= 1)) // two line segments require 1 >= u >= 0
+        ){
             float intersectX = (start.getX() + t * (end.getX() - start.getX()));
             float intersectY = (start.getY() + t * (end.getY() - start.getY()));
             return new Point(intersectX, intersectY);

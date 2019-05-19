@@ -9,3 +9,12 @@ Can render Wall and Character
 5/18/19:  
 Can determine point of intersection between two line segments  
 More boilerplate code (distance formula, accessors)
+
+#Eric
+5/17/19
+Boilerplate code for Renderable and Point
+5/18/19
+Biolerplate code for Ray
+Basic Character Movement
+5/19/19
+Basic Maze Generation

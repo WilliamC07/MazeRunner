@@ -46,7 +46,8 @@ public class Main extends PApplet{
 
 	@Override
 	public void draw(){
-		fill(255);
+		background(255);
+		System.out.println("apples");
 		renderables.forEach(Renderable::render);
 	}
   

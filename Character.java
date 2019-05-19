@@ -38,6 +38,7 @@ public class Character implements Renderable{
     }
 
     private void findIntersectionPoints(){
+        rays.clear();
         // n^2 algorithm yikes
         // find intersections for walls in the maze
         for(Wall wall : walls){

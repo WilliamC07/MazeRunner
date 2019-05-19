@@ -36,7 +36,8 @@ public class Ray implements Renderable{
 
         float[] result = lineLineIntersectionValues(wall);
         // collinear lines means that we return the wall endpoint that is closest to the ray start point
-        if(result == null){
+        // the result is length 3 to differentiate from t and u values returned if the lines are no collinear
+        if(result.length == 3){
             float distanceToWallStart = result[0];
             float distanceToWallEnd = result[1];
             return distanceToWallStart > distanceToWallEnd ? wall.getEnd() : wall.getStart();
@@ -59,7 +60,7 @@ public class Ray implements Renderable{
      * Performs the line-line intersection algorithm.
      * Algorithm: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
      * @param wall Wall to check if there is an intersection
-     * @return {t, u} if there is an intersection. {distanceToWallStart, distanceToWallEnd} if the lines are collinear.
+     * @return {t, u} if there is an intersection. {distanceToWallStart, distanceToWallEnd, 0} if the lines are collinear.
      */
     private float[] lineLineIntersectionValues(Wall wall){
         // Write out all of this so there is no mistake when implementing the formula
@@ -79,7 +80,7 @@ public class Ray implements Renderable{
             // Return null since we can no longer calculate the t and u values
             float distanceToWallStart = (float) start.distancePortion(wall.getStart());
             float distanceToWallEnd = (float) start.distancePortion(wall.getEnd());
-            return new float[]{distanceToWallStart, distanceToWallEnd};
+            return new float[]{distanceToWallStart, distanceToWallEnd, 0};
         }
 
         float t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denominator;

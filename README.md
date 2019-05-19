@@ -9,4 +9,7 @@ Can render Wall and Character
 5/18/19:  
 Can determine point of intersection between two line segments  
 More boilerplate code (distance formula, accessors)
-Merged ray casting to master
+Merged ray casting to master  
+5/19/19:
+Draw additional rays to give a smoother field of vision
+Fixed calculating intersection between two line segments and intersection between a ray and line segment

@@ -35,7 +35,7 @@ public class Main extends PApplet{
 
 	@Override
 	public void setup(){
-		Maze maze = new Maze(10,10,this);
+		Maze maze = new Maze(100,100,this);
 		renderables.add(maze);
 		character = new Character(new Point((float) width / 2, (float) height / 2), new ArrayList<Wall>());
 		renderables.add(character);

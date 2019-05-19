@@ -15,12 +15,12 @@ public class Maze implements Renderable{
         float colWidth = 4*screenWidth/5/cols;
         for(int i = 0; i<walls.length; i++){
             if(i%2==0){
-                walls[i] = new Wall[rows-1];
+                walls[i] = new Wall[cols-1];
 
             } else {
-                walls[i] = new Wall[rows];
+                walls[i] = new Wall[cols];
             }
-            for(int j = 0; j<rows-(i%2==0? 1:0); j++){
+            for(int j = 0; j<cols-(i%2==0? 1:0); j++){
                 float startX,startY,endX,endY;
                 if(i%2==0){
                     startX = screenWidth/10+(j+1)*colWidth;

@@ -1,4 +1,4 @@
-public class Ray implements Renderable{
+public class Ray implements Renderable, Comparable<Ray>{
     private Point start;
     private Point end;
     /**
@@ -47,9 +47,11 @@ public class Ray implements Renderable{
         float t = result[0];
         float u = result[1];
         if(isRay){
-            if(u <= 1 && u >= 0 && t <= 0){
-                float intersectX = (start.getX() + t * (end.getX() - start.getX()));
-                float intersectY = (start.getY() + t * (end.getY() - start.getY()));
+            if(u <= 1 && u >= 0){
+                Point wallStart = wall.getStart();
+                Point wallEnd = wall.getEnd();
+                float intersectX = (wallStart.getX() + u * (wallEnd.getX() - wallStart.getX()));
+                float intersectY = (wallStart.getY() + u * (wallEnd.getY() - wallStart.getY()));
                 return new Point(intersectX, intersectY);
             }
         }else {
@@ -91,12 +93,18 @@ public class Ray implements Renderable{
         }
 
         float t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denominator;
-        float u = -1 * ((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denominator;
+        float u = -1 * (((x1 - x2) * (y1 - y3) - (y1 - y2) * (x1 - x3)) / denominator);
         return new float[]{t, u};
     }
 
     public Point getEnd() {
         return end;
+    }
+
+    @Override
+    public int compareTo(Ray ray) {
+        return 1;
+        //return (int) (Math.atan2(ray.end.getY() - start.getY(), ray.end.getX()- start.getX()) * 1000 - Math.atan2(end.getY()- start.getY(), end.getX()- start.getX()) * 1000);
     }
 
     @Override

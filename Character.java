@@ -51,11 +51,14 @@ public class Character implements Renderable{
     @Override
     public void render(){
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
-        findIntersectionPoints();
+        getRays();
         rays.forEach(Ray::render);
     }
 
-    private void findIntersectionPoints(){
+    /**
+     * Finds all the rays that determines the extend of the user's vision
+     */
+    private void getRays(){
         rays.clear();
         // n^2 algorithm yikes
         // find intersections for walls in the maze
@@ -64,26 +67,14 @@ public class Character implements Renderable{
             Ray toStart = new Ray(location, wall.getStart());
             Ray toEnd = new Ray(location, wall.getEnd());
 
-            // if the ray will intersect another wall, ignore it
-            for(Wall wallCheck : walls){
-                if(wallCheck != wall){
-                    if(toStart != null && toStart.intersects(wallCheck) != null){
-                        toStart = null;
-                    }
-                    if(toEnd != null && toEnd.intersects(wallCheck) != null){
-                        toEnd = null;
-                    }
-                }
-            }
-
             List<Ray> additionalRays = new ArrayList<>(4);
-            if(toStart != null){
+            if(!isBlocked(toStart, wall)){
                 rays.add(toStart);
                 float slope = location.slope(toStart.getEnd());
                 additionalRays.add(new Ray(location, slope + SLOPE_DELTA));
                 additionalRays.add(new Ray(location, slope - SLOPE_DELTA));
             }
-            if(toEnd != null){
+            if(!isBlocked(toEnd, wall)){
                 rays.add(toEnd);
                 float slope = location.slope(toEnd.getEnd());
                 additionalRays.add(new Ray(location, slope + SLOPE_DELTA));
@@ -97,19 +88,7 @@ public class Character implements Renderable{
                     Point collision = ray.intersects(wallCollision);
                     if(collision != null){
                         // make sure that there is no other wall blocking the way
-                        boolean valid = true;
-                        for(Wall wallCheck : allWalls){
-                            if(wallCheck != wallCollision){
-                                Point collisionCheck = ray.intersects(wallCheck);
-                                if(collisionCheck != null){
-                                    valid = false;
-                                    break;
-                                }
-                            }
-                        }
-
-                        //if there is no wall blocking add the ray to the view
-                        if(valid){
+                        if(!isBlocked(ray, wallCollision)){
                             rays.add(new Ray(location, collision));
                         }
                     }
@@ -120,14 +99,24 @@ public class Character implements Renderable{
         // Draw rays to corner of screen to complete ray casting
         for(Point borderPoint : borderPoints){
             Ray toBorderPoint = new Ray(location, borderPoint);
-            for(Wall wallCheck : walls){
-                if(toBorderPoint != null && toBorderPoint.intersects(wallCheck) != null){
-                    toBorderPoint = null;
-                }
-            }
-            if(toBorderPoint != null){
+            if(!isBlocked(toBorderPoint, null)){
                 rays.add(toBorderPoint);
             }
         }
+    }
+
+    /**
+     * Checks if the ray is blocked by a wall between the start of the ray and the end of the ray.
+     * @param ray Ray to check for collision with a wall other than the one it is aiming for
+     * @param wallToTouch Wall the ray is attempting to collide with. Null if the ray is pointing to a point
+     * @return True if the ray is blocked, false otherwise
+     */
+    private boolean isBlocked(Ray ray, Wall wallToTouch){
+        for(Wall wall : walls){
+            if(wall != wallToTouch && ray.intersects(wall) != null){
+                return true;
+            }
+        }
+        return false;
     }
 }

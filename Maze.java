@@ -5,14 +5,14 @@ public class Maze implements Renderable{
     private Wall[][] walls;
     private int length;
     private int width;
+    private PApplet sketch;
     public Maze(int rows, int cols, PApplet sketch){
         length = rows;
         width = cols;
-        float screenWidth = sketch.width;
-        float screenHeight = sketch.height;
+        this.sketch = sketch;
         walls = new Wall[2*rows-1][];
-        float rowWidth = 4*screenHeight/5/rows;
-        float colWidth = 4*screenWidth/5/cols;
+        float rowWidth = 4*sketch.height/5/rows;
+        float colWidth = 4*sketch.width/5/cols;
         for(int i = 0; i<walls.length; i++){
             if(i%2==0){
                 walls[i] = new Wall[cols-1];
@@ -23,14 +23,14 @@ public class Maze implements Renderable{
             for(int j = 0; j<cols-(i%2==0? 1:0); j++){
                 float startX,startY,endX,endY;
                 if(i%2==0){
-                    startX = screenWidth/10+(j+1)*colWidth;
-                    startY = screenHeight/10+(i/2)*rowWidth+1;
+                    startX = sketch.width/10+(j+1)*colWidth;
+                    startY = sketch.height/10+(i/2)*rowWidth+1;
                     endX = startX;
-                    endY = screenHeight/10+(i/2+1)*rowWidth-1;
+                    endY = sketch.height/10+(i/2+1)*rowWidth-1;
                 } else {
-                    startX = screenWidth/10+j*colWidth+1;
-                    startY = screenHeight/10+(i/2+1)*rowWidth;
-                    endX = screenWidth/10+(j+1)*colWidth-1;
+                    startX = sketch.width/10+j*colWidth+1;
+                    startY = sketch.height/10+(i/2+1)*rowWidth;
+                    endX = sketch.width/10+(j+1)*colWidth-1;
                     endY = startY;
                 }
                 Point start = new Point(startX,startY);
@@ -91,6 +91,10 @@ public class Maze implements Renderable{
     }
     @Override
     public void render(){
+        sketch.line(sketch.width/10,sketch.height/10,9*sketch.width/10,sketch.height/10);
+        sketch.line(sketch.width/10,sketch.height/10,sketch.width/10,9*sketch.height/10);
+        sketch.line(9*sketch.width/10,sketch.height/10,9*sketch.width/10,9*sketch.height/10);
+        sketch.line(sketch.width/10,9*sketch.height/10,9*sketch.width/10,9*sketch.height/10);
         for(Wall[] row : walls){
             for(Wall wall : row){
                 if(wall!=null){

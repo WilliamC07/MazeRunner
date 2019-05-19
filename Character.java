@@ -22,8 +22,12 @@ public class Character implements Renderable{
         };
     }
 
-    public void move(Point newLocation){
-        this.location = newLocation;
+    public void move(float dx, float dy){
+        location = new Point(location.getX()+dx,location.getY()+dy);
+    }
+  
+    public Point getPos(){
+        return location;
     }
 
     @Override

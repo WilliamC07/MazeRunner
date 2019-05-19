@@ -1,5 +1,4 @@
 import processing.core.PApplet;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -49,5 +48,17 @@ public class Main extends PApplet{
 	public void draw(){
 		fill(255);
 		renderables.forEach(Renderable::render);
+	}
+  
+  public void keyPressed(){
+		if(key=='W' || key=='w'){
+			character.move((float)0,(float)-5);
+		} else if(key=='S' || key=='s'){
+			character.move((float)0,(float)5);
+		} else if(key=='A' || key=='a'){
+			character.move((float)-5,(float)0);
+		} else if(key=='D' || key=='d'){
+			character.move((float)5,(float)0);
+		}
 	}
 }

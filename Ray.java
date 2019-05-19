@@ -47,7 +47,7 @@ public class Ray implements Renderable{
         float t = result[0];
         float u = result[1];
         if(isRay){
-            if(u <= 1 && u >= 0 && t >= 0){
+            if(u <= 1 && u >= 0 && t <= 0){
                 float intersectX = (start.getX() + t * (end.getX() - start.getX()));
                 float intersectY = (start.getY() + t * (end.getY() - start.getY()));
                 return new Point(intersectX, intersectY);

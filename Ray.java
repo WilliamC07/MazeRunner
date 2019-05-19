@@ -1,10 +1,10 @@
 public class Ray implements Renderable{
     private Point start;
     private Point end;
-    private double slope;
+    private double degreeOfSlope;
 
     /**
-     * Creates a ray given the start position and degree coming from the character
+     * Creates a ray given the start position and end position from the character.
      * @param start The character's location
      * @param end The end of the line
      */
@@ -14,12 +14,27 @@ public class Ray implements Renderable{
     }
 
     /**
+     * Creates a ray given the start position and the slope (delta x / delta y)
+     * @param start
+     * @param slope
+     */
+    public Ray(Point start, double slope){
+        // the arctan of the slope is the degree of the line
+        this.start = start;
+        this.degreeOfSlope = Math.atan(slope);
+    }
+
+    /**
      * Determines if this wall (using the start and end point) intersects a wall. If there is an intersection, it will
      * return the point of intersection. If there is no intersection, it return nulls
      * @param wall Wall to check if the current ray intersects
      * @return null if no intersection, a point instance if there is an intersection
      */
     public Point intersects(Wall wall){
+        if(end == null){
+            throw new IllegalStateException("No end point determined");
+        }
+
         // Write out all of this so there is no mistake when implementing the formula
         // Algorithm: https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
         float x1 = start.getX();

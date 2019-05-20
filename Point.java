@@ -45,4 +45,21 @@ public class Point{
     public double distancePortion(Point other){
         return Math.pow(other.x - this.x, 2) + Math.pow(other.y - this.y, 2);
     }
+
+    /**
+     * Calculates the slope between two points. If the two points are collinear and horizontal, the slope will be a
+     * very small number.
+     * @param other Other point in the line
+     * @return Slope of the line.
+     */
+    public float slope(Point other){
+        float deltaX = this.x - other.x;
+        float deltaY = this.y - other.y;
+
+        if(deltaX == 0){
+            deltaX = .00001F; // don't want division by 0;
+        }
+
+        return deltaY / deltaX;
+    }
 }

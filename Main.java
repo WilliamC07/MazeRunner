@@ -29,18 +29,15 @@ public class Main extends PApplet{
 	@Override
 	public void settings(){
 		instance = this;
-		size(1000, 500);
+		size(1000, 1000);
 		renderables = new ArrayList<>();
 	}
 
 	@Override
 	public void setup(){
-		// TODO: replace with maze
-		List<Wall> walls = new ArrayList<>();
-		walls.add(new Wall(new Point(50, 50), new Point(50, 100)));
-		renderables.addAll(walls);
-
-		character = new Character(new Point((float) width / 2, (float) height / 2), walls);
+		Maze maze = new Maze(100,100,this);
+		renderables.add(maze);
+		character = new Character(new Point((float) width / 2, (float) height / 2), new ArrayList<Wall>());
 		renderables.add(character);
 	}
 

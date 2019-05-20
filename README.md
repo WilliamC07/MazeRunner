@@ -15,3 +15,12 @@ Draw additional rays to give a smoother field of vision
 Fixed calculating intersection between two line segments and intersection between a ray and line segment  
 5/20/19:
 Half completed ray casting drawing triangles for field of vision. A small bug of not drawing some triangles
+
+#Eric
+5/17/19
+Boilerplate code for Renderable and Point
+5/18/19
+Biolerplate code for Ray
+Basic Character Movement
+5/19/19
+Basic Maze Generation

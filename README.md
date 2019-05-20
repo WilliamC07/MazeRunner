@@ -12,4 +12,6 @@ More boilerplate code (distance formula, accessors)
 Merged ray casting to master  
 5/19/19:
 Draw additional rays to give a smoother field of vision
-Fixed calculating intersection between two line segments and intersection between a ray and line segment
+Fixed calculating intersection between two line segments and intersection between a ray and line segment  
+5/20/19:
+Half completed ray casting drawing triangles for field of vision. A small bug of not drawing some triangles

@@ -43,7 +43,7 @@ public class Main extends PApplet{
 
 	@Override
 	public void draw(){
-		background(255);
+		background(0);
 		renderables.forEach(Renderable::render);
 	}
 

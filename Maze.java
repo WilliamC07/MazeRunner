@@ -1,6 +1,7 @@
 import processing.core.PApplet;
-import java.util.ArrayList;
-import java.util.Collections;
+
+import java.util.*;
+
 public class Maze implements Renderable{
     private Wall[][] walls;
     private int length;
@@ -102,5 +103,13 @@ public class Maze implements Renderable{
                 }
             }
         }
+    }
+
+    public List<Wall> getWalls(){
+        List<Wall> walls = new ArrayList<>();
+        for(Wall[] row : this.walls){
+            Arrays.stream(row).filter(Objects::nonNull).forEach(walls::add);
+        }
+        return walls;
     }
 }

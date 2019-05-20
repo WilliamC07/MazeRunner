@@ -1,11 +1,11 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
 public class Character implements Renderable{
     private Point location;
     private List<Wall> walls;
-    private List<Ray> rays;
     private Point[] borderPoints;
     private Wall[] borderWall;
     private List<Wall> allWalls;
@@ -13,13 +13,12 @@ public class Character implements Renderable{
      * When we construct a ray from the the character location to a wall endpoint, we need to generate two other rays
      * that is +/- this value.
      */
-    private final float SLOPE_DELTA = .001F;
+    private final float SLOPE_DELTA = .01F;
 
     public Character(Point location, List<Wall> walls){
         this.location = location;
         // TODO: update when the Maze.java is finished. I have some testing code for now
         this.walls = walls;
-        this.rays = new ArrayList<>();
         Main main = Main.getInstance();
         this.borderPoints = new Point[]{
                 new Point(0, 0),
@@ -51,15 +50,22 @@ public class Character implements Renderable{
     @Override
     public void render(){
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
-        getRays();
+        List<Ray> rays = getRays();
         rays.forEach(Ray::render);
+        for(int i = 0; i < rays.size(); i++){
+            Point current = rays.get(i).getEnd();
+            Point next = rays.get((i + 1) % rays.size()).getEnd();
+            Main.getInstance().fill(50);
+            Main.getInstance().triangle(location.getX(), location.getY(), current.getX(), current.getY(), next.getX(), next.getY());
+        }
     }
 
     /**
-     * Finds all the rays that determines the extend of the user's vision
+     * Finds all the rays that determines the extend of the user's vision.
+     * @return Sorted list by slope of all the rays the user can see
      */
-    private void getRays(){
-        rays.clear();
+    private List<Ray> getRays(){
+        List<Ray> rays = new ArrayList<>();
         // n^2 algorithm yikes
         // find intersections for walls in the maze
         for(Wall wall : walls){
@@ -103,6 +109,9 @@ public class Character implements Renderable{
                 rays.add(toBorderPoint);
             }
         }
+
+        Collections.sort(rays);
+        return rays;
     }
 
     /**

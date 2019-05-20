@@ -103,8 +103,7 @@ public class Ray implements Renderable, Comparable<Ray>{
 
     @Override
     public int compareTo(Ray ray) {
-        return 1;
-        //return (int) (Math.atan2(ray.end.getY() - start.getY(), ray.end.getX()- start.getX()) * 1000 - Math.atan2(end.getY()- start.getY(), end.getX()- start.getX()) * 1000);
+        return (int) (Math.atan2(ray.end.getY() - start.getY(), ray.end.getX()- start.getX()) * 1000 - Math.atan2(end.getY()- start.getY(), end.getX()- start.getX()) * 1000);
     }
 
     @Override

@@ -39,6 +39,28 @@ public class Maze implements Renderable{
             }
         }
         generate(0,0);
+        convertToBool();
+    }
+    private boolean[][] convertToBool(){
+        boolean[][] isWall = new boolean[2*length-1][2*width-1];
+        for(int i = 0; i < walls.length; i++){
+            for(int j = 0; j < walls[i].lengtj; j++){
+                if(walls[i][j]!=null){
+                    if(i%2==0){
+                        isWall[i][j*2+1]=true;
+                    } else {
+                        isWall[i][j*2]=true;
+                        if(){
+                            isWall[i][j*2+1]=true;
+                        }
+                        if(){
+                            isWall[i][j*2-1]=true;
+                        }
+                    }
+                }
+            }
+        }
+        return isWall;
     }
     private boolean unvisited(int row, int col){
         if(col!=0 && walls[2*row][col-1]==null){

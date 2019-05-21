@@ -1,6 +1,7 @@
 import processing.core.PApplet;
-import java.util.ArrayList;
-import java.util.Collections;
+
+import java.util.*;
+
 public class Maze implements Renderable{
     private Wall[][] walls;
     private boolean[][] maze;
@@ -46,7 +47,7 @@ public class Maze implements Renderable{
             }
         }
     }
-    public void generate(int row, int col){
+    public void generate(int row, int col, Wall[][] walls){
         ArrayList<Integer> adjacentWalls = new ArrayList<Integer>();
         if(col!=0 && walls[2*row][col-1]!=null){
             adjacentWalls.add(0); //left
@@ -62,21 +63,21 @@ public class Maze implements Renderable{
         }
         Collections.shuffle(adjacentWalls);
         for(Integer direction : adjacentWalls){
-            if(direction==0 && unvisited(row,col-1)){
+            if(direction==0 && unvisited(row,col-1,walls)){
                 walls[2*row][col-1]=null;
-                generate(row,col-1);
+                generate(row,col-1,walls);
             }
-            if(direction==1 && unvisited(row,col+1)){
+            if(direction==1 && unvisited(row,col+1,walls)){
                 walls[2*row][col]=null;
-                generate(row,col+1);
+                generate(row,col+1,walls);
             }
-            if(direction==2 && unvisited(row-1,col)){
+            if(direction==2 && unvisited(row-1,col,walls)){
                 walls[2*row-1][col]=null;
-                generate(row-1,col);
+                generate(row-1,col,walls);
             }
-            if(direction==3 && unvisited(row+1,col)){
+            if(direction==3 && unvisited(row+1,col,walls)){
                 walls[2*row+1][col]=null;
-                generate(row+1,col);
+                generate(row+1,col,walls);
             }
         }
     }
@@ -120,12 +121,19 @@ public class Maze implements Renderable{
         sketch.line(sketch.width/10,sketch.height/10,sketch.width/10,9*sketch.height/10);
         sketch.line(9*sketch.width/10,sketch.height/10,9*sketch.width/10,9*sketch.height/10);
         sketch.line(sketch.width/10,9*sketch.height/10,9*sketch.width/10,9*sketch.height/10);
-        for(Wall[] row : walls){
+        /*for(Wall[] row : walls){
             for(Wall wall : row){
                 if(wall!=null){
                     wall.render();
                 }
             }
+        }*/
+        for(Wall wall : maze){
+            wall.render();
         }
+    }
+
+    public List<Wall> getWalls(){
+        return maze;
     }
 }

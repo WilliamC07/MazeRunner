@@ -9,12 +9,23 @@ Can render Wall and Character
 5/18/19:  
 Can determine point of intersection between two line segments  
 More boilerplate code (distance formula, accessors)
+Merged ray casting to master  
+5/19/19:
+Draw additional rays to give a smoother field of vision
+Fixed calculating intersection between two line segments and intersection between a ray and line segment  
+5/20/19:
+Half completed ray casting drawing triangles for field of vision. A small bug of not drawing some triangles
+Merged and connect Eric's work to mine  
+5/21/19
+Floating point rounding error bug found (only took 3 days)  
+Class time to figure out a better way to represent the maze in memory to increase efficiency
+
 
 #Eric
 5/17/19
-Boilerplate code for Renderable and Point
-5/18/19
-Biolerplate code for Ray
-Basic Character Movement
-5/19/19
-Basic Maze Generation
+Boilerplate code for Renderable and Point  
+5/18/19  
+Biolerplate code for Ray  
+Basic Character Movement  
+5/19/19  
+Basic Maze Generation  

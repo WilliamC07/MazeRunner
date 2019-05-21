@@ -50,10 +50,10 @@ public class Maze implements Renderable{
                         isWall[i][j*2+1]=true;
                     } else {
                         isWall[i][j*2]=true;
-                        if(){
+                        if(i!=0 && walls[i-1][j]!=null){
                             isWall[i][j*2+1]=true;
                         }
-                        if(){
+                        if(i!=walls.length-1 && walls[i-1][j+1]!=null){
                             isWall[i][j*2-1]=true;
                         }
                     }

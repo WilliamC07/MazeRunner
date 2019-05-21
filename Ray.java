@@ -27,6 +27,8 @@ public class Ray implements Renderable, Comparable<Ray>{
     public Ray(Point start, float slope){
         this.start = start;
         this.isRay = true;
+
+        // TODO: the negative slope is BADDDD
         this.end = new Point(start.getX() + 1, start.getY() + slope);
     }
 

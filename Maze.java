@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 public class Maze implements Renderable{
     private Wall[][] walls;
+    private boolean[][] maze;
     private int length;
     private int width;
     private PApplet sketch;
@@ -11,8 +12,14 @@ public class Maze implements Renderable{
         width = cols;
         this.sketch = sketch;
         walls = new Wall[2*rows-1][];
-        float rowWidth = 4*sketch.height/5/rows;
-        float colWidth = 4*sketch.width/5/cols;
+        maze = new boolean[2*length-1][2*width-1];
+        fillWalls(length,width);
+        generate(0,0);
+        convertToBool();
+    }
+    public void fillWalls(int rows, int cols){
+        float rowWidth = 4f*sketch.height/5/rows;
+        float colWidth = 4f*sketch.width/5/cols;
         for(int i = 0; i<walls.length; i++){
             if(i%2==0){
                 walls[i] = new Wall[cols-1];
@@ -23,14 +30,14 @@ public class Maze implements Renderable{
             for(int j = 0; j<cols-(i%2==0? 1:0); j++){
                 float startX,startY,endX,endY;
                 if(i%2==0){
-                    startX = sketch.width/10+(j+1)*colWidth;
-                    startY = sketch.height/10+(i/2)*rowWidth+1;
+                    startX = sketch.width/10f+(j+1)*colWidth;
+                    startY = sketch.height/10f+(i/2)*rowWidth+1;
                     endX = startX;
-                    endY = sketch.height/10+(i/2+1)*rowWidth-1;
+                    endY = sketch.height/10f+(i/2+1)*rowWidth-1;
                 } else {
-                    startX = sketch.width/10+j*colWidth+1;
-                    startY = sketch.height/10+(i/2+1)*rowWidth;
-                    endX = sketch.width/10+(j+1)*colWidth-1;
+                    startX = sketch.width/10f+j*colWidth+1;
+                    startY = sketch.height/10f+(i/2+1)*rowWidth;
+                    endX = sketch.width/10f+(j+1)*colWidth-1;
                     endY = startY;
                 }
                 Point start = new Point(startX,startY);
@@ -38,44 +45,6 @@ public class Maze implements Renderable{
                 walls[i][j] = new Wall(start,end);
             }
         }
-        generate(0,0);
-        convertToBool();
-    }
-    private boolean[][] convertToBool(){
-        boolean[][] isWall = new boolean[2*length-1][2*width-1];
-        for(int i = 0; i < walls.length; i++){
-            for(int j = 0; j < walls[i].lengtj; j++){
-                if(walls[i][j]!=null){
-                    if(i%2==0){
-                        isWall[i][j*2+1]=true;
-                    } else {
-                        isWall[i][j*2]=true;
-                        if(i!=0 && walls[i-1][j]!=null){
-                            isWall[i][j*2+1]=true;
-                        }
-                        if(i!=walls.length-1 && walls[i-1][j+1]!=null){
-                            isWall[i][j*2-1]=true;
-                        }
-                    }
-                }
-            }
-        }
-        return isWall;
-    }
-    private boolean unvisited(int row, int col){
-        if(col!=0 && walls[2*row][col-1]==null){
-            return false;
-        }
-        if(col!=width-1 && walls[2*row][col]==null){
-            return false;
-        }
-        if(row!=0 && walls[2*row-1][col]==null){
-            return false;
-        }
-        if(row!=length-1 && walls[2*row+1][col]==null){
-            return false;
-        }
-        return true;
     }
     public void generate(int row, int col){
         ArrayList<Integer> adjacentWalls = new ArrayList<Integer>();
@@ -108,6 +77,40 @@ public class Maze implements Renderable{
             if(direction==3 && unvisited(row+1,col)){
                 walls[2*row+1][col]=null;
                 generate(row+1,col);
+            }
+        }
+    }
+    private boolean unvisited(int row, int col){
+        if(col!=0 && walls[2*row][col-1]==null){
+            return false;
+        }
+        if(col!=width-1 && walls[2*row][col]==null){
+            return false;
+        }
+        if(row!=0 && walls[2*row-1][col]==null){
+            return false;
+        }
+        if(row!=length-1 && walls[2*row+1][col]==null){
+            return false;
+        }
+        return true;
+    }
+    private void convertToBool(){
+        for(int i = 0; i < walls.length; i++){
+            for(int j = 0; j < walls[i].length; j++){
+                if(walls[i][j]!=null){
+                    if(i%2==0){
+                        maze[i][j*2+1]=true;
+                    } else {
+                        maze[i][j*2]=true;
+                        if(j<length-1 && walls[i-1][j]!=null){
+                            maze[i][j*2+1]=true;
+                        }
+                        if(j>0 && walls[i-1][j-1]!=null){
+                            maze[i][j*2-1]=true;
+                        }
+                    }
+                }
             }
         }
     }

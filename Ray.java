@@ -3,7 +3,7 @@ public class Ray implements Renderable, Comparable<Ray>{
     private final Point end;
     private final boolean isMainRay;
     private final Wall pointOf;
-    private final Ray auxiliaryRay;
+    private Ray auxiliaryRay;
 
     public Ray(Point start, Point end, boolean isMainRay, Wall pointOf, Ray auxiliaryRay) {
         this.start = start;
@@ -82,6 +82,14 @@ public class Ray implements Renderable, Comparable<Ray>{
 
     public Point getEnd() {
         return end;
+    }
+
+    public Ray getAuxiliaryRay() {
+        return auxiliaryRay;
+    }
+
+    public void setAuxiliaryRay(Ray auxiliaryRay) {
+        this.auxiliaryRay = auxiliaryRay;
     }
 
     @Override

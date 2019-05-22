@@ -27,6 +27,10 @@ public class LineSegmentDirectional{
         }
     }
 
+    public double slope(){
+        return start.slope(end);
+    }
+
     public Point getStart() {
         return start;
     }

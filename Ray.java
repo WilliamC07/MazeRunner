@@ -5,12 +5,11 @@ public class Ray implements Renderable, Comparable<Ray>{
     private final Wall pointOf;
     private Ray auxiliaryRay;
 
-    public Ray(Point start, Point end, boolean isMainRay, Wall pointOf, Ray auxiliaryRay) {
+    public Ray(Point start, Point end, boolean isMainRay, Wall pointOf) {
         this.start = start;
         this.end = end;
         this.isMainRay = isMainRay;
         this.pointOf = pointOf;
-        this.auxiliaryRay = auxiliaryRay;
     }
 
     /**

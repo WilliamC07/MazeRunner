@@ -55,7 +55,7 @@ public class Character implements Renderable{
         for(int i = 0; i < rays.size(); i++){
             Point current = rays.get(i).getEnd();
             Point next = rays.get((i + 1) % rays.size()).getEnd();
-            Main.getInstance().fill(255);
+            Main.getInstance().fill(0);
             Main.getInstance().triangle(location.getX(), location.getY(), current.getX(), current.getY(), next.getX(), next.getY());
         }
     }
@@ -73,18 +73,14 @@ public class Character implements Renderable{
             Ray toStart = new Ray(location, wall.getStart());
             Ray toEnd = new Ray(location, wall.getEnd());
 
-            List<Ray> additionalRays = new ArrayList<>(4);
+            List<Ray> additionalRays = new ArrayList<>(2);
             if(!isBlocked(toStart, wall)){
                 rays.add(toStart);
-                float slope = location.slope(toStart.getEnd());
-                additionalRays.add(new Ray(location, slope + SLOPE_DELTA));
-                additionalRays.add(new Ray(location, slope - SLOPE_DELTA));
+                additionalRays.add(new Ray(location, wall.getStart(), wall));
             }
             if(!isBlocked(toEnd, wall)){
                 rays.add(toEnd);
-                float slope = location.slope(toEnd.getEnd());
-                additionalRays.add(new Ray(location, slope + SLOPE_DELTA));
-                additionalRays.add(new Ray(location, slope - SLOPE_DELTA));
+                additionalRays.add(new Ray(location, wall.getEnd(), wall));
             }
 
             // find where the additional ray ends, we need to include the border walls now
@@ -92,10 +88,17 @@ public class Character implements Renderable{
                 // find where the ray intersects another wall
                 for(Wall wallCollision : allWalls){
                     Point collision = ray.intersects(wallCollision);
-                    if(collision != null){
+                    if(wall != wallCollision && collision != null){
                         // make sure that there is no other wall blocking the way
-                        if(!isBlocked(ray, wallCollision)){
-                            rays.add(new Ray(location, collision));
+                        boolean isBlocked = false;
+                        for(Wall wallCheck : walls){
+                            if(wallCollision != wallCheck && wall != wallCheck && ray.intersects(wallCheck) != null){
+                                isBlocked = true;
+                                break;
+                            }
+                        }
+                        if(!isBlocked){
+                            rays.add(new Ray(location, ray.getEnd(), collision));
                         }
                     }
                 }

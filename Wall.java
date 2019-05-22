@@ -32,6 +32,15 @@ public class Wall implements Renderable{
         return (int) start.getX() * 1000 + (int) start.getY() * 100 + (int) end.getX() * 10 + (int) end.getY();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wall wall = (Wall) o;
+        return start.equals(wall.start) &&
+                end.equals(wall.end);
+    }
+
     public Point getStart() {
         return start;
     }

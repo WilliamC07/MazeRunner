@@ -15,29 +15,10 @@ public class Ray implements Renderable, Comparable<Ray>{
      * @param start The character's location
      * @param end The end of the line
      */
-    public Ray(Point start, Point end){
+    public Ray(Point start, Point direction, ){
         this.start = start;
         this.end = end;
         this.isRay = false;
-    }
-
-    /**
-     * Creates a ray given the start position and the degree of slope
-     * @param start Start point of the ray
-     * @param slope The slope of the line
-     */
-    public Ray(Point start, Point end, Wall ignoreThisWall){
-        this.start = start;
-        this.end = end;
-        this.isRay = true;
-        this.ignoreThisWall = ignoreThisWall;
-    }
-
-    public Ray(Point start, Point onRay, Point end){
-        this.start = start;
-        this.end = end;
-        this.pointOnRay = onRay;
-        this.isRay = true;
     }
 
     /**

@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /**
 * The Point class stores an abscissa and ordinate.
 */
@@ -57,9 +59,18 @@ public class Point{
         float deltaY = this.y - other.y;
 
         if(deltaX == 0){
-            deltaX = .00001F; // don't want division by 0;
+            return 0;
         }
 
         return deltaY / deltaX;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Point point = (Point) o;
+        return Float.compare(point.x, x) == 0 &&
+                Float.compare(point.y, y) == 0;
     }
 }

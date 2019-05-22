@@ -1,24 +1,16 @@
 public class Ray implements Renderable, Comparable<Ray>{
-    private Point start;
-    private Point end;
-    private Wall ignoreThisWall;
-    private Point pointOnRay;
-    /**
-     * To optimize ray tracing, we are drawing a line segment from the character position to a wall endpoint. However,
-     * to prevent a choppy view, we have to draw another ray of a certain degree away from this line segment. Since we
-     * only know the certain degree away and not where it will land, we have to make it a ray.
-     */
-    private boolean isRay;
+    private final Point start;
+    private final Point end;
+    private final boolean isMainRay;
+    private final Wall pointOf;
+    private final Ray auxiliaryRay;
 
-    /**
-     * Creates a ray given the start position and end position from the character.
-     * @param start The character's location
-     * @param end The end of the line
-     */
-    public Ray(Point start, Point direction, ){
+    public Ray(Point start, Point end, boolean isMainRay, Wall pointOf, Ray auxiliaryRay) {
         this.start = start;
         this.end = end;
-        this.isRay = false;
+        this.isMainRay = isMainRay;
+        this.pointOf = pointOf;
+        this.auxiliaryRay = auxiliaryRay;
     }
 
     /**
@@ -28,10 +20,6 @@ public class Ray implements Renderable, Comparable<Ray>{
      * @return null if no intersection, a point instance if there is an intersection
      */
     public Point intersects(Wall wall){
-        if(wall == ignoreThisWall){
-            return null;
-        }
-
         float[] result = lineLineIntersectionValues(wall);
         // collinear lines means that we return the wall endpoint that is closest to the ray start point
         // the result is length 3 to differentiate from t and u values returned if the lines are no collinear
@@ -41,7 +29,7 @@ public class Ray implements Renderable, Comparable<Ray>{
 
         float t = result[0];
         float u = result[1];
-        if(isRay){
+        if(!isMainRay){
             if(u <= 1 && u >= 0){
                 Point wallStart = wall.getStart();
                 Point wallEnd = wall.getEnd();

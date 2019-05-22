@@ -60,62 +60,83 @@ public class Character implements Renderable{
         }
     }
 
-    /**
-     * Finds all the rays that determines the extend of the user's vision.
-     * @return Sorted list by slope of all the rays the user can see
-     */
     private List<Ray> getRays(){
         List<Ray> rays = new ArrayList<>();
-        // n^2 algorithm yikes
-        // find intersections for walls in the maze
-        for(Wall wall : walls){
-            // draw a ray to start and end point
-            Ray toStart = new Ray(location, wall.getStart());
-            Ray toEnd = new Ray(location, wall.getEnd());
 
-            List<Ray> additionalRays = new ArrayList<>(2);
-            if(!isBlocked(toStart, wall)){
-                rays.add(toStart);
-                additionalRays.add(new Ray(location, wall.getStart(), wall));
-            }
-            if(!isBlocked(toEnd, wall)){
-                rays.add(toEnd);
-                additionalRays.add(new Ray(location, wall.getEnd(), wall));
-            }
+        // Draw a ray to each endpoint if there is not a wall blocking the way
+        for(Wall wall : allWalls){
+            Ray mainRayStart = new Ray(location, wall.getStart(), true, wall);
+            Ray mainRayEnd = new Ray(location, wall.getEnd(), true, wall);
 
-            // find where the additional ray ends, we need to include the border walls now
-            for(Ray ray : additionalRays){
-                // find where the ray intersects another wall
-                for(Wall wallCollision : allWalls){
-                    Point collision = ray.intersects(wallCollision);
-                    if(wall != wallCollision && collision != null){
-                        // make sure that there is no other wall blocking the way
-                        boolean isBlocked = false;
-                        for(Wall wallCheck : walls){
-                            if(wallCollision != wallCheck && wall != wallCheck && ray.intersects(wallCheck) != null){
-                                isBlocked = true;
-                                break;
-                            }
-                        }
-                        if(!isBlocked){
-                            rays.add(new Ray(location, ray.getEnd(), collision));
-                        }
-                    }
-                }
+            // If a ray cannot be drawn, do not keep track of it
+            // If the ray can be drawn, keep track of it and generate the auxiliary ray
+            if(!isBlocked(mainRayStart, wall)){
+                rays.add(mainRayStart);
+            }
+            if(!isBlocked(mainRayEnd, wall)){
+                rays.add(mainRayEnd);
             }
         }
 
-        // Draw rays to corner of screen to complete ray casting
-        for(Point borderPoint : borderPoints){
-            Ray toBorderPoint = new Ray(location, borderPoint);
-            if(!isBlocked(toBorderPoint, null)){
-                rays.add(toBorderPoint);
-            }
-        }
-
-        Collections.sort(rays);
         return rays;
     }
+
+//    /**
+//     * Finds all the rays that determines the extend of the user's vision.
+//     * @return Sorted list by slope of all the rays the user can see
+//     */
+//    private List<Ray> getRaysOld(){
+//        List<Ray> rays = new ArrayList<>();
+//        // n^2 algorithm yikes
+//        // find intersections for walls in the maze
+//        for(Wall wall : walls){
+//            // draw a ray to start and end point
+//            Ray toStart = new Ray(location, wall.getStart());
+//            Ray toEnd = new Ray(location, wall.getEnd());
+//
+//            List<Ray> additionalRays = new ArrayList<>(2);
+//            if(!isBlocked(toStart, wall)){
+//                rays.add(toStart);
+//                //additionalRays.add(new Ray(location, wall.getStart(), wall));
+//            }
+//            if(!isBlocked(toEnd, wall)){
+//                rays.add(toEnd);
+//                //additionalRays.add(new Ray(location, wall.getEnd(), wall));
+//            }
+//
+//            // find where the additional ray ends, we need to include the border walls now
+//            for(Ray ray : additionalRays){
+//                // find where the ray intersects another wall
+//                for(Wall wallCollision : allWalls){
+//                    Point collision = ray.intersects(wallCollision);
+//                    if(wall != wallCollision && collision != null){
+//                        // make sure that there is no other wall blocking the way
+//                        boolean isBlocked = false;
+//                        for(Wall wallCheck : walls){
+//                            if(wallCollision != wallCheck && wall != wallCheck && ray.intersects(wallCheck) != null){
+//                                isBlocked = true;
+//                                break;
+//                            }
+//                        }
+//                        if(!isBlocked){
+//                            //rays.add(new Ray(location, ray.getEnd(), collision));
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Draw rays to corner of screen to complete ray casting
+//        for(Point borderPoint : borderPoints){
+//            Ray toBorderPoint = new Ray(location, borderPoint);
+//            if(!isBlocked(toBorderPoint, null)){
+//                rays.add(toBorderPoint);
+//            }
+//        }
+//
+//        Collections.sort(rays);
+//        return rays;
+//    }
 
     /**
      * Checks if the ray is blocked by a wall between the start of the ray and the end of the ray.
@@ -131,4 +152,6 @@ public class Character implements Renderable{
         }
         return false;
     }
+
+
 }

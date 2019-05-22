@@ -115,6 +115,9 @@ public class Maze implements Renderable{
             }
         }
     }
+    public boolean[][] getBool(){
+        return maze;
+    }
     @Override
     public void render(){
         sketch.line(sketch.width/10,sketch.height/10,9*sketch.width/10,sketch.height/10);

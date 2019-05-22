@@ -15,13 +15,20 @@ Draw additional rays to give a smoother field of vision
 Fixed calculating intersection between two line segments and intersection between a ray and line segment  
 5/20/19:
 Half completed ray casting drawing triangles for field of vision. A small bug of not drawing some triangles
-Merged and connect Eric's work to mine
+Merged and connect Eric's work to mine  
+5/21/19
+Floating point rounding error bug found (only took 3 days)  
+Class time to figure out a better way to represent the maze in memory to increase efficiency
 
-#Eric
-5/17/19
-Boilerplate code for Renderable and Point  
+# Eric  
+5/17/19  
+Boilerplate Code for Renderable and Point  
 5/18/19  
-Biolerplate code for Ray  
+Boilerplate Code for Ray  
 Basic Character Movement  
 5/19/19  
-Basic Maze Generation  
+Initial Attempts at Basic Maze Generation  
+5/20/19  
+Completed Maze Generation Bug Fixes  
+5/21/19   
+Completed Flattening of Maze and Combining Walls 5/22/19 Completed Converting Maze to a 2D Boolean Array

@@ -29,7 +29,7 @@ public class Main extends PApplet{
 	@Override
 	public void settings(){
 		instance = this;
-		size(1000, 1000);
+		size(750, 750);
 		renderables = new ArrayList<>();
 	}
 
@@ -37,13 +37,15 @@ public class Main extends PApplet{
 	public void setup(){
 		Maze maze = new Maze(50,50,this);
 		renderables.add(maze);
-		character = new Character(new Point((float) width / 2, (float) height / 2), maze.convertToList());
+		float startX = width/10f+2f*width/5/maze.getWidth();
+		float startY = height/10f+2f*height/5/maze.getLength();
+		character = new Character(new Point(startX,startY), maze.convertToList());
 		renderables.add(character);
 	}
 
 	@Override
 	public void draw(){
-		background(0);
+		background(255);
 		renderables.forEach(Renderable::render);
 	}
 

@@ -55,7 +55,7 @@ public class Character implements Renderable{
         for(int i = 0; i < rays.size(); i++){
             Point current = rays.get(i).getEnd();
             Point next = rays.get((i + 1) % rays.size()).getEnd();
-            Main.getInstance().fill(255);
+            Main.getInstance().fill(100);
             Main.getInstance().triangle(location.getX(), location.getY(), current.getX(), current.getY(), next.getX(), next.getY());
         }
     }

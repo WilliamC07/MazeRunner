@@ -1,6 +1,8 @@
 public class Ray implements Renderable, Comparable<Ray>{
     private Point start;
     private Point end;
+    private Wall ignoreThisWall;
+    private Point pointOnRay;
     /**
      * To optimize ray tracing, we are drawing a line segment from the character position to a wall endpoint. However,
      * to prevent a choppy view, we have to draw another ray of a certain degree away from this line segment. Since we
@@ -24,12 +26,18 @@ public class Ray implements Renderable, Comparable<Ray>{
      * @param start Start point of the ray
      * @param slope The slope of the line
      */
-    public Ray(Point start, float slope){
+    public Ray(Point start, Point end, Wall ignoreThisWall){
         this.start = start;
+        this.end = end;
         this.isRay = true;
+        this.ignoreThisWall = ignoreThisWall;
+    }
 
-        // TODO: the negative slope is BADDDD
-        this.end = new Point(start.getX() + 1, start.getY() + slope);
+    public Ray(Point start, Point onRay, Point end){
+        this.start = start;
+        this.end = end;
+        this.pointOnRay = onRay;
+        this.isRay = true;
     }
 
     /**
@@ -39,6 +47,10 @@ public class Ray implements Renderable, Comparable<Ray>{
      * @return null if no intersection, a point instance if there is an intersection
      */
     public Point intersects(Wall wall){
+        if(wall == ignoreThisWall){
+            return null;
+        }
+
         float[] result = lineLineIntersectionValues(wall);
         // collinear lines means that we return the wall endpoint that is closest to the ray start point
         // the result is length 3 to differentiate from t and u values returned if the lines are no collinear

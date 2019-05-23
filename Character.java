@@ -86,10 +86,9 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-
-        //Main.getInstance().stroke(255, 0, 0);
+        Main.getInstance().fill(255, 0, 0);
+        Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
-            Main.getInstance().fill(i*25, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
             if(current.getPointOf().shareCommonEnd(next.getPointOf())){

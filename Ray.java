@@ -29,7 +29,7 @@ public class Ray implements Renderable, Comparable<Ray>{
         float t = result[0];
         float u = result[1];
         if(!isMainRay){
-            if(u <= 1 && u >= 0){
+            if(t>= 0 && u <= 1 && u >= 0){
                 Point wallStart = wall.getStart();
                 Point wallEnd = wall.getEnd();
                 float intersectX = (wallStart.getX() + u * (wallEnd.getX() - wallStart.getX()));

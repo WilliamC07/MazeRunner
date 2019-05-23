@@ -17,8 +17,12 @@ Fixed calculating intersection between two line segments and intersection betwee
 Half completed ray casting drawing triangles for field of vision. A small bug of not drawing some triangles
 Merged and connect Eric's work to mine  
 5/21/19
-Floating point rounding error bug found (only took 3 days)  
+Floating point rounding error bug found
 Class time to figure out a better way to represent the maze in memory to increase efficiency
+5/22/19
+Fixed ray casting -- actually works now (tested on custom walls)
+Cleaned up Ray.java to simplified creation (only one constructor; down from 3)
+Merged ray_casting_fix to master
 
 # Eric  
 5/17/19  

@@ -50,6 +50,11 @@ public class Wall implements Renderable{
     }
 
     public boolean shareCommonEnd(Wall other){
+        return other.end.equals(end) || other.end.equals(start) ||
+                other.start.equals(end) || other.start.equals(start);
+    }
+
+    public boolean areDistinct(Wall other){
         return !other.end.equals(end) && !other.end.equals(start) &&
                 !other.start.equals(end) && !other.start.equals(start);
     }

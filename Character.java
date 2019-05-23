@@ -5,27 +5,13 @@ import java.util.Set;
 
 public class Character implements Renderable{
     private Point location;
-    private List<Wall> walls;
-    private Point[] borderPoints;
     private Wall[] borderWall;
     private List<Wall> allWalls;
-    /**
-     * When we construct a ray from the the character location to a wall endpoint, we need to generate two other rays
-     * that is +/- this value.
-     */
-    private final float SLOPE_DELTA = .01F;
 
     public Character(Point location, List<Wall> walls){
         this.location = location;
         // TODO: update when the Maze.java is finished. I have some testing code for now
-        this.walls = walls;
         Main main = Main.getInstance();
-        this.borderPoints = new Point[]{
-                new Point(0, 0),
-                new Point(0, main.height),
-                new Point(main.width, 0),
-                new Point(main.width, main.height)
-        };
 
         Point a = new Point(1, 1);
         Point b = new Point(main.width - 2, 1);

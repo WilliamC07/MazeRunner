@@ -56,7 +56,7 @@ public class Character implements Renderable{
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
         List<Ray> rays = getRays();
         rays.forEach(Ray::render);
-        allWalls.forEach(Wall::render);
+        //allWalls.forEach(Wall::render);
         drawVision(rays);
     }
 
@@ -86,15 +86,35 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
+
+        //Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
+            Main.getInstance().fill(i*25, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
             if(current.getPointOf().shareCommonEnd(next.getPointOf())){
                 // if the ray is drawing to the same wall, then use the main lines to connect
-                Main.getInstance().fill(255, 0, 0);
                 Main.getInstance().triangle(location.getX(), location.getY(),
                                             current.getEnd().getX(), current.getEnd().getY(),
                                             next.getEnd().getX(), next.getEnd().getY());
+            }else{
+                // The rays are not drawn to the same point
+                // If a ray cannot be drawn to the midpoint between the two auxiliary rays, we must connect
+                // auxiliary to main
+                Ray currentAuxiliary = current.getAuxiliaryRay();
+                Ray nextAuxiliary = next.getAuxiliaryRay();
+                Point midpoint = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
+                if(!isRayToBorder(current) && isBlocked(new Ray(location, midpoint, true, null), null)){
+                    // connecting auxiliary does not work
+                    Main.getInstance().triangle(location.getX(), location.getY(),
+                                                currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                                                next.getEnd().getX(), next.getEnd().getY());
+                }else{
+                    // connecting auxiliary does work
+                    Main.getInstance().triangle(location.getX(), location.getY(),
+                            currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                            nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
+                }
             }
         }
     }
@@ -108,7 +128,22 @@ public class Character implements Renderable{
     private boolean isBlocked(Ray ray, Wall wallToTouch){
         for(Wall wall : allWalls){
             Point intersect = ray.intersects(wall);
-            if(!wall.equals(wallToTouch) && intersect != null && !intersect.equals(wallToTouch.getStart()) && !intersect.equals(wallToTouch.getEnd())){
+            if(!wall.equals(wallToTouch) && intersect != null &&
+                    (wallToTouch == null || !intersect.equals(wallToTouch.getStart()) && !intersect.equals(wallToTouch.getEnd()))){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determines if the given ray is drawn to a border edge.
+     * @param ray A main ray to check if it is drawn to the edge of a border
+     * @return True if the ray is drawn to a border endpoint, false otherwise.
+     */
+    private boolean isRayToBorder(Ray ray){
+        for(Wall border : borderWall){
+            if(border.isAEndPoint(ray.getEnd())){
                 return true;
             }
         }

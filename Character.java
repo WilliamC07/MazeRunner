@@ -64,7 +64,6 @@ public class Character implements Renderable{
         List<Ray> rays = new ArrayList<>();
 
         // Draw a ray to each endpoint if there is not a wall blocking the way
-        System.out.println(allWalls.size());
         for(Wall wall : allWalls){
             Ray mainRayStart = new Ray(location, wall.getStart(), true, wall);
             Ray mainRayEnd = new Ray(location, wall.getEnd(), true, wall);

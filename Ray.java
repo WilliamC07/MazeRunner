@@ -114,6 +114,10 @@ public class Ray implements Renderable, Comparable<Ray>{
         return (int) (Math.atan2(ray.end.getY() - start.getY(), ray.end.getX()- start.getX()) * 100000 - Math.atan2(end.getY()- start.getY(), end.getX()- start.getX()) * 100000);
     }
 
+    public boolean isMainRay(){
+        return this.isMainRay;
+    }
+
     @Override
     public void render() {
 //        Main.getInstance().line(start.getX(), start.getY(), end.getX(), end.getY());

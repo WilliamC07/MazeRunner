@@ -73,4 +73,9 @@ public class Point{
         return Float.compare(point.x, x) == 0 &&
                 Float.compare(point.y, y) == 0;
     }
+
+    @Override
+    public String toString() {
+        return String.format("x: %f y: %f", x, y);
+    }
 }

@@ -58,12 +58,6 @@ public class Character implements Renderable{
         rays.forEach(Ray::render);
         allWalls.forEach(Wall::render);
         drawVision(rays);
-//        for(int i = 0; i < rays.size(); i++){
-//            Point current = rays.get(i).getEnd();
-//            Point next = rays.get((i + 1) % rays.size()).getEnd();
-//            Main.getInstance().fill(0);
-//            Main.getInstance().triangle(location.getX(), location.getY(), current.getX(), current.getY(), next.getX(), next.getY());
-//        }
     }
 
     private List<Ray> getRays(){
@@ -95,7 +89,7 @@ public class Character implements Renderable{
         for(int i = 0; i < rays.size(); i++){
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
-            if(current.getPointOf().equals(next.getPointOf())){
+            if(current.getPointOf().shareCommonEnd(next.getPointOf())){
                 // if the ray is drawing to the same wall, then use the main lines to connect
                 Main.getInstance().fill(255, 0, 0);
                 Main.getInstance().triangle(location.getX(), location.getY(),
@@ -136,7 +130,7 @@ public class Character implements Renderable{
                 boolean isBlocked = false;
                 for(Wall block : allWalls){
                     if(!block.equals(collideWith) && !block.equals(wallToIgnore) && auxiliaryRay.intersects(block) != null &&
-                       !block.shareCommonEnd(collideWith) && !block.shareCommonEnd(wallToIgnore)){
+                       !block.areDistinct(collideWith) && !block.areDistinct(wallToIgnore)){
                         System.out.println("blocked at " + auxiliaryRay.intersects(block));
                         isBlocked = true;
                     }

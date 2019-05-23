@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -13,6 +15,7 @@ public class Point{
     */
     private float y;
     private boolean isLineSegmentEndpoint = false;
+    private List<Wall> partOf = new ArrayList<>();
     /**
     * Constructs a Point given an abscissa and an ordinate.
     *@param x the abscissa for the Point
@@ -22,9 +25,10 @@ public class Point{
         this.x=x;
         this.y=y;
     }
-    public Point(float x, float y, boolean isLineSegmentEndpoint){
+    public Point(float x, float y, boolean isLineSegmentEndpoint, Wall partOf){
         this(x, y);
         this.isLineSegmentEndpoint = isLineSegmentEndpoint;
+        this.partOf.add(partOf);
     }
     public boolean isLineSegmentEndpoint(){
         return this.isLineSegmentEndpoint;
@@ -92,6 +96,10 @@ public class Point{
         return Float.compare(point.x, x) == 0 &&
                 Float.compare(point.y, y) == 0;
     }
+    public boolean pointIsPartOf(Wall wall){
+        return partOf.contains(wall);
+    }
+
 
     @Override
     public String toString() {

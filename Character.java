@@ -53,11 +53,12 @@ public class Character implements Renderable{
 
     @Override
     public void render(){
+        location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
         List<Ray> rays = getRays();
         rays.forEach(Ray::render);
         //allWalls.forEach(Wall::render);
-        drawVision(rays);
+        //drawVision(rays);
     }
 
     private List<Ray> getRays(){
@@ -129,6 +130,9 @@ public class Character implements Renderable{
             Point intersect = ray.intersects(wall);
             if(!wall.equals(wallToTouch) && intersect != null &&
                     (wallToTouch == null || !intersect.equals(wallToTouch.getStart()) && !intersect.equals(wallToTouch.getEnd()))){
+                if(!ray.isMainRay() && intersect.isLineSegmentEndpoint()){
+                    continue;
+                }
                 return true;
             }
         }
@@ -163,9 +167,10 @@ public class Character implements Renderable{
                 Point intersection = auxiliaryRay.intersects(collideWith);
                 boolean isBlocked = false;
                 for(Wall block : allWalls){
-                    if(!block.equals(collideWith) && !block.equals(wallToIgnore) && auxiliaryRay.intersects(block) != null &&
-                       !block.areDistinct(collideWith) && !block.areDistinct(wallToIgnore)){
-                        System.out.println("blocked at " + auxiliaryRay.intersects(block));
+                    Point blockingPoint = auxiliaryRay.intersects(block);
+                    if(!block.equals(collideWith) && !block.equals(wallToIgnore) && blockingPoint != null &&
+                       !block.areDistinct(collideWith) && !block.areDistinct(wallToIgnore) && !blockingPoint.isLineSegmentEndpoint()
+                        && !blockingPoint.pointIsPartOf(block)){
                         isBlocked = true;
                     }
                 }

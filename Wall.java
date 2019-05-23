@@ -11,14 +11,16 @@ public class Wall implements Renderable{
      */
     private Point end;
 
+
+
     /**
      * Constructor for Wall.
      * @param start Start point of the wall.
      * @param end End point of the wall.
      */
     public Wall(Point start, Point end){
-        this.start = new Point(start.getX(), start.getY(), true);
-        this.end = new Point(end.getX(), end.getY(), true);
+        this.start = new Point(start.getX(), start.getY(), true, this);
+        this.end = new Point(end.getX(), end.getY(), true, this);
     }
 
     @Override

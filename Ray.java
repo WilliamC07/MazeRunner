@@ -1,35 +1,15 @@
 public class Ray implements Renderable, Comparable<Ray>{
-    private Point start;
+    private final Point start;
     private Point end;
-    /**
-     * To optimize ray tracing, we are drawing a line segment from the character position to a wall endpoint. However,
-     * to prevent a choppy view, we have to draw another ray of a certain degree away from this line segment. Since we
-     * only know the certain degree away and not where it will land, we have to make it a ray.
-     */
-    private boolean isRay;
+    private final boolean isMainRay;
+    private Wall pointOf;
+    private Ray auxiliaryRay;
 
-    /**
-     * Creates a ray given the start position and end position from the character.
-     * @param start The character's location
-     * @param end The end of the line
-     */
-    public Ray(Point start, Point end){
+    public Ray(Point start, Point end, boolean isMainRay, Wall pointOf) {
         this.start = start;
         this.end = end;
-        this.isRay = false;
-    }
-
-    /**
-     * Creates a ray given the start position and the degree of slope
-     * @param start Start point of the ray
-     * @param slope The slope of the line
-     */
-    public Ray(Point start, float slope){
-        this.start = start;
-        this.isRay = true;
-
-        // TODO: the negative slope is BADDDD
-        this.end = new Point(start.getX() + 1, start.getY() + slope);
+        this.isMainRay = isMainRay;
+        this.pointOf = pointOf;
     }
 
     /**
@@ -48,8 +28,8 @@ public class Ray implements Renderable, Comparable<Ray>{
 
         float t = result[0];
         float u = result[1];
-        if(isRay){
-            if(u <= 1 && u >= 0){
+        if(!isMainRay){
+            if(t>= 0 && u <= 1 && u >= 0){
                 Point wallStart = wall.getStart();
                 Point wallEnd = wall.getEnd();
                 float intersectX = (wallStart.getX() + u * (wallEnd.getX() - wallStart.getX()));
@@ -103,13 +83,42 @@ public class Ray implements Renderable, Comparable<Ray>{
         return end;
     }
 
+    public Ray getAuxiliaryRay() {
+        return auxiliaryRay;
+    }
+
+    public void setAuxiliaryRay(Ray auxiliaryRay) {
+        this.auxiliaryRay = auxiliaryRay;
+    }
+
+    public void setEnd(Point end) {
+        if(isMainRay){
+            throw new IllegalStateException("Cannot reset end point for main ray");
+        }
+        this.end = end;
+    }
+
+    public Wall getPointOf() {
+        return pointOf;
+    }
+
+    public void setPointOf(Wall pointOf){
+        if(isMainRay){
+            throw new IllegalStateException("Cannot reset wall for main ray");
+        }
+        this.pointOf = pointOf;
+    }
+
     @Override
     public int compareTo(Ray ray) {
-        return (int) (Math.atan2(ray.end.getY() - start.getY(), ray.end.getX()- start.getX()) * 1000 - Math.atan2(end.getY()- start.getY(), end.getX()- start.getX()) * 1000);
+        return (int) (Math.atan2(ray.end.getY() - start.getY(), ray.end.getX()- start.getX()) * 100000 - Math.atan2(end.getY()- start.getY(), end.getX()- start.getX()) * 100000);
     }
 
     @Override
     public void render() {
-        Main.getInstance().line(start.getX(), start.getY(), end.getX(), end.getY());
+//        Main.getInstance().line(start.getX(), start.getY(), end.getX(), end.getY());
+//        if(auxiliaryRay != null){
+//            Main.getInstance().line(auxiliaryRay.start.getX(), auxiliaryRay.start.getY(), auxiliaryRay.end.getX(), auxiliaryRay.end.getY());
+//        }
     }
 }

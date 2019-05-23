@@ -5,37 +5,27 @@ import java.util.Set;
 
 public class Character implements Renderable{
     private Point location;
-    private List<Wall> walls;
-    private Point[] borderPoints;
     private Wall[] borderWall;
     private List<Wall> allWalls;
-    /**
-     * When we construct a ray from the the character location to a wall endpoint, we need to generate two other rays
-     * that is +/- this value.
-     */
-    private final float SLOPE_DELTA = .01F;
 
     public Character(Point location, List<Wall> walls){
         this.location = location;
         // TODO: update when the Maze.java is finished. I have some testing code for now
-        this.walls = walls;
         Main main = Main.getInstance();
-        this.borderPoints = new Point[]{
-                new Point(0, 0),
-                new Point(0, main.height),
-                new Point(main.width, 0),
-                new Point(main.width, main.height)
-        };
+
+        Point a = new Point(1, 1);
+        Point b = new Point(main.width - 2, 1);
+        Point c = new Point(main.width - 2, main.height - 2);
+        Point d = new Point(1, main.height - 2);
         this.borderWall = new Wall[]{
-                new Wall(new Point(1, 1), new Point(main.width - 1, 1)),
-                new Wall(new Point(1, 1), new Point(1, main.height - 1)),
-                new Wall(new Point(1, main.height-1), new Point(main.width -1 , main.height-1)),
-                new Wall(new Point(main.width-1, 1), new Point(main.width-1, main.height-1))
+                new Wall(a, b),
+                new Wall(a, d),
+                new Wall(d, c),
+                new Wall(b, c)
         };
         allWalls = new ArrayList<>(walls);
         for(Wall border : borderWall){
             allWalls.add(border);
-            border.render();
         }
     }
 
@@ -52,66 +42,66 @@ public class Character implements Renderable{
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
         List<Ray> rays = getRays();
         rays.forEach(Ray::render);
-        for(int i = 0; i < rays.size(); i++){
-            Point current = rays.get(i).getEnd();
-            Point next = rays.get((i + 1) % rays.size()).getEnd();
-            Main.getInstance().fill(100);
-            Main.getInstance().triangle(location.getX(), location.getY(), current.getX(), current.getY(), next.getX(), next.getY());
-        }
+        //allWalls.forEach(Wall::render);
+        drawVision(rays);
     }
 
-    /**
-     * Finds all the rays that determines the extend of the user's vision.
-     * @return Sorted list by slope of all the rays the user can see
-     */
     private List<Ray> getRays(){
         List<Ray> rays = new ArrayList<>();
-        // n^2 algorithm yikes
-        // find intersections for walls in the maze
-        for(Wall wall : walls){
-            // draw a ray to start and end point
-            Ray toStart = new Ray(location, wall.getStart());
-            Ray toEnd = new Ray(location, wall.getEnd());
 
-            List<Ray> additionalRays = new ArrayList<>(4);
-            if(!isBlocked(toStart, wall)){
-                rays.add(toStart);
-                float slope = location.slope(toStart.getEnd());
-                additionalRays.add(new Ray(location, slope + SLOPE_DELTA));
-                additionalRays.add(new Ray(location, slope - SLOPE_DELTA));
-            }
-            if(!isBlocked(toEnd, wall)){
-                rays.add(toEnd);
-                float slope = location.slope(toEnd.getEnd());
-                additionalRays.add(new Ray(location, slope + SLOPE_DELTA));
-                additionalRays.add(new Ray(location, slope - SLOPE_DELTA));
-            }
+        // Draw a ray to each endpoint if there is not a wall blocking the way
+        for(Wall wall : allWalls){
+            Ray mainRayStart = new Ray(location, wall.getStart(), true, wall);
+            Ray mainRayEnd = new Ray(location, wall.getEnd(), true, wall);
 
-            // find where the additional ray ends, we need to include the border walls now
-            for(Ray ray : additionalRays){
-                // find where the ray intersects another wall
-                for(Wall wallCollision : allWalls){
-                    Point collision = ray.intersects(wallCollision);
-                    if(collision != null){
-                        // make sure that there is no other wall blocking the way
-                        if(!isBlocked(ray, wallCollision)){
-                            rays.add(new Ray(location, collision));
-                        }
-                    }
+            // If a ray cannot be drawn, do not keep track of it
+            // If the ray can be drawn, keep track of it and generate the auxiliary ray
+            if(!isBlocked(mainRayStart, wall)){
+                rays.add(mainRayStart);
+                mainRayStart.setAuxiliaryRay(createAuxiliaryRay(mainRayStart, wall));
+            }
+            if(!isBlocked(mainRayEnd, wall)){
+                rays.add(mainRayEnd);
+                mainRayEnd.setAuxiliaryRay(createAuxiliaryRay(mainRayEnd, wall));
+            }
+        }
+
+        // counter clockwise sorting
+        Collections.sort(rays);
+        return rays;
+    }
+
+    private void drawVision(List<Ray> rays){
+        Main.getInstance().fill(255, 0, 0);
+        Main.getInstance().stroke(255, 0, 0);
+        for(int i = 0; i < rays.size(); i++){
+            Ray current = rays.get(i);
+            Ray next = rays.get((i + 1) % rays.size());
+            if(current.getPointOf().shareCommonEnd(next.getPointOf())){
+                // if the ray is drawing to the same wall, then use the main lines to connect
+                Main.getInstance().triangle(location.getX(), location.getY(),
+                                            current.getEnd().getX(), current.getEnd().getY(),
+                                            next.getEnd().getX(), next.getEnd().getY());
+            }else{
+                // The rays are not drawn to the same point
+                // If a ray cannot be drawn to the midpoint between the two auxiliary rays, we must connect
+                // auxiliary to main
+                Ray currentAuxiliary = current.getAuxiliaryRay();
+                Ray nextAuxiliary = next.getAuxiliaryRay();
+                Point midpoint = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
+                if(!isRayToBorder(current) && isBlocked(new Ray(location, midpoint, true, null), null)){
+                    // connecting auxiliary does not work
+                    Main.getInstance().triangle(location.getX(), location.getY(),
+                                                currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                                                next.getEnd().getX(), next.getEnd().getY());
+                }else{
+                    // connecting auxiliary does work
+                    Main.getInstance().triangle(location.getX(), location.getY(),
+                            currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                            nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                 }
             }
         }
-
-        // Draw rays to corner of screen to complete ray casting
-        for(Point borderPoint : borderPoints){
-            Ray toBorderPoint = new Ray(location, borderPoint);
-            if(!isBlocked(toBorderPoint, null)){
-                rays.add(toBorderPoint);
-            }
-        }
-
-        Collections.sort(rays);
-        return rays;
     }
 
     /**
@@ -121,11 +111,59 @@ public class Character implements Renderable{
      * @return True if the ray is blocked, false otherwise
      */
     private boolean isBlocked(Ray ray, Wall wallToTouch){
-        for(Wall wall : walls){
-            if(wall != wallToTouch && ray.intersects(wall) != null){
+        for(Wall wall : allWalls){
+            Point intersect = ray.intersects(wall);
+            if(!wall.equals(wallToTouch) && intersect != null &&
+                    (wallToTouch == null || !intersect.equals(wallToTouch.getStart()) && !intersect.equals(wallToTouch.getEnd()))){
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Determines if the given ray is drawn to a border edge.
+     * @param ray A main ray to check if it is drawn to the edge of a border
+     * @return True if the ray is drawn to a border endpoint, false otherwise.
+     */
+    private boolean isRayToBorder(Ray ray){
+        for(Wall border : borderWall){
+            if(border.isAEndPoint(ray.getEnd())){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Ray createAuxiliaryRay(Ray mainRay, Wall wallToIgnore){
+        // if the may ray is drawn to the border wall, the auxiliary ray is itself
+        for(Wall borderWall : borderWall){
+            if(borderWall.equals(mainRay.getPointOf())){
+                return mainRay;
+            }
+        }
+
+        for(Wall collideWith : allWalls){
+            if(!collideWith.equals(wallToIgnore)){
+                Ray auxiliaryRay = new Ray(location, mainRay.getEnd(), false, null);
+                Point intersection = auxiliaryRay.intersects(collideWith);
+                boolean isBlocked = false;
+                for(Wall block : allWalls){
+                    if(!block.equals(collideWith) && !block.equals(wallToIgnore) && auxiliaryRay.intersects(block) != null &&
+                       !block.areDistinct(collideWith) && !block.areDistinct(wallToIgnore)){
+                        System.out.println("blocked at " + auxiliaryRay.intersects(block));
+                        isBlocked = true;
+                    }
+                }
+                if(intersection != null && !isBlocked){
+                    auxiliaryRay.setEnd(intersection);
+                    auxiliaryRay.setPointOf(collideWith);
+                    return auxiliaryRay;
+                }
+            }
+        }
+        //return null;
+        System.out.println(wallToIgnore);
+        throw new IllegalStateException("Cannot generate auxiliary ray");
     }
 }

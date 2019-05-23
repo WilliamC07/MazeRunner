@@ -26,11 +26,16 @@ public class Character implements Renderable{
                 new Point(main.width, 0),
                 new Point(main.width, main.height)
         };
+
+        Point a = new Point(1, 1);
+        Point b = new Point(main.width - 2, 1);
+        Point c = new Point(main.width - 2, main.height - 2);
+        Point d = new Point(1, main.height - 2);
         this.borderWall = new Wall[]{
-                new Wall(new Point(1, 1), new Point(main.width - 1, 1)),
-                new Wall(new Point(1, 1), new Point(1, main.height - 1)),
-                new Wall(new Point(1, main.height-1), new Point(main.width -1 , main.height-1)),
-                new Wall(new Point(main.width-1, 1), new Point(main.width-1, main.height-1))
+                new Wall(a, b),
+                new Wall(a, d),
+                new Wall(d, c),
+                new Wall(b, c)
         };
         allWalls = new ArrayList<>(walls);
         for(Wall border : borderWall){
@@ -52,6 +57,7 @@ public class Character implements Renderable{
         List<Ray> rays = getRays();
         rays.forEach(Ray::render);
         allWalls.forEach(Wall::render);
+        drawVision(rays);
 //        for(int i = 0; i < rays.size(); i++){
 //            Point current = rays.get(i).getEnd();
 //            Point next = rays.get((i + 1) % rays.size()).getEnd();
@@ -80,7 +86,23 @@ public class Character implements Renderable{
             }
         }
 
+        // counter clockwise sorting
+        Collections.sort(rays);
         return rays;
+    }
+
+    private void drawVision(List<Ray> rays){
+        for(int i = 0; i < rays.size(); i++){
+            Ray current = rays.get(i);
+            Ray next = rays.get((i + 1) % rays.size());
+            if(current.getPointOf().equals(next.getPointOf())){
+                // if the ray is drawing to the same wall, then use the main lines to connect
+                Main.getInstance().fill(255, 0, 0);
+                Main.getInstance().triangle(location.getX(), location.getY(),
+                                            current.getEnd().getX(), current.getEnd().getY(),
+                                            next.getEnd().getX(), next.getEnd().getY());
+            }
+        }
     }
 
     /**
@@ -121,6 +143,7 @@ public class Character implements Renderable{
                 }
                 if(intersection != null && !isBlocked){
                     auxiliaryRay.setEnd(intersection);
+                    auxiliaryRay.setPointOf(collideWith);
                     return auxiliaryRay;
                 }
             }

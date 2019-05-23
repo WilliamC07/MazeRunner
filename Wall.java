@@ -32,6 +32,42 @@ public class Wall implements Renderable{
         return (int) start.getX() * 1000 + (int) start.getY() * 100 + (int) end.getX() * 10 + (int) end.getY();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Wall wall = (Wall) o;
+        return start.equals(wall.start) &&
+                end.equals(wall.end);
+    }
+
+    @Override
+    public String toString() {
+        return "Wall{" +
+                "start=" + start +
+                ", end=" + end +
+                '}';
+    }
+
+    public boolean shareCommonEnd(Wall other){
+        return other.end.equals(end) || other.end.equals(start) ||
+                other.start.equals(end) || other.start.equals(start);
+    }
+
+    public boolean areDistinct(Wall other){
+        return !other.end.equals(end) && !other.end.equals(start) &&
+                !other.start.equals(end) && !other.start.equals(start);
+    }
+
+    /**
+     * Determines if the point is part of the line segment.
+     * @param p Point to check if it is part of this wall
+     * @return True if the point is an endpoint, false otherwise
+     */
+    public boolean isAEndPoint(Point p){
+        return start.equals(p) || end.equals(p);
+    }
+
     public Point getStart() {
         return start;
     }

@@ -12,6 +12,7 @@ public class Point{
     * The ordinate.
     */
     private float y;
+    private boolean isLineSegmentEndpoint = false;
     /**
     * Constructs a Point given an abscissa and an ordinate.
     *@param x the abscissa for the Point
@@ -20,6 +21,13 @@ public class Point{
     public Point(float x, float y){
         this.x=x;
         this.y=y;
+    }
+    public Point(float x, float y, boolean isLineSegmentEndpoint){
+        this(x, y);
+        this.isLineSegmentEndpoint = isLineSegmentEndpoint;
+    }
+    public boolean isLineSegmentEndpoint(){
+        return this.isLineSegmentEndpoint;
     }
     /**
     * Accessor for the abscissa.

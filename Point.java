@@ -65,6 +65,17 @@ public class Point{
         return deltaY / deltaX;
     }
 
+    /**
+     * Finds the midpoint of the two points.
+     * This can overflow and break.
+     * @param a A point
+     * @param b A point
+     * @return The midpoint of a and b.
+     */
+    public static Point midpoint(Point a, Point b){
+        return new Point((a.x + b.x) / 2, (a.y + b.y) / 2);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

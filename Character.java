@@ -57,8 +57,7 @@ public class Character implements Renderable{
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
         List<Ray> rays = getRays();
         rays.forEach(Ray::render);
-        //allWalls.forEach(Wall::render);
-        //drawVision(rays);
+        drawVision(rays);
 
 //        Point a = new Point(20, 20);
 //        Point b = new Point(20, 100); // shared
@@ -97,16 +96,27 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-        Main.getInstance().fill(255, 0, 0);
+
         Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
+            Main.getInstance().fill(i * 25, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
-            if(current.getPointOf().shareCommonEnd(next.getPointOf())){
+
+            boolean shareWall = false;
+            for(Wall wall : allWalls){
+                if(wall.isAEndPoint(current.getEnd()) && wall.isAEndPoint(next.getEnd())){
+                    shareWall = true;
+                }
+            }
+
+            if(shareWall){
                 // if the ray is drawing to the same wall, then use the main lines to connect
                 Main.getInstance().triangle(location.getX(), location.getY(),
                                             current.getEnd().getX(), current.getEnd().getY(),
                                             next.getEnd().getX(), next.getEnd().getY());
+                //Main.getInstance().fill(0, 0, 255);
+                //Main.getInstance().text("same", current.getEnd().getX(), current.getEnd().getY());
             }else{
                 // The rays are not drawn to the same point
                 // If a ray cannot be drawn to the midpoint between the two auxiliary rays, we must connect
@@ -117,8 +127,8 @@ public class Character implements Renderable{
                 if(!isRayToBorder(current) && isBlocked(new Ray(location, midpoint, true, null), null)){
                     // connecting auxiliary does not work
                     Main.getInstance().triangle(location.getX(), location.getY(),
-                                                currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
-                                                next.getEnd().getX(), next.getEnd().getY());
+                            currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                            next.getEnd().getX(), next.getEnd().getY());
                 }else{
                     // connecting auxiliary does work
                     Main.getInstance().triangle(location.getX(), location.getY(),

@@ -124,7 +124,8 @@ public class Ray implements Renderable, Comparable<Ray>{
         if(auxiliaryRay != null){
             Main.getInstance().line(auxiliaryRay.start.getX(), auxiliaryRay.start.getY(), auxiliaryRay.end.getX(), auxiliaryRay.end.getY());
             Main.getInstance().circle(auxiliaryRay.end.getX(), auxiliaryRay.end.getY(), 10);
-            System.out.println(auxiliaryRay.end);
+            Main.getInstance().fill(0);
+            Main.getInstance().text(auxiliaryRay.end.toString(), auxiliaryRay.end.getX(), auxiliaryRay.end.getY());
         }
     }
 }

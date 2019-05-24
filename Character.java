@@ -59,6 +59,16 @@ public class Character implements Renderable{
         rays.forEach(Ray::render);
         //allWalls.forEach(Wall::render);
         //drawVision(rays);
+
+//        Point a = new Point(20, 20);
+//        Point b = new Point(20, 100); // shared
+//        Point c = new Point(200, 100);
+//        Main main = Main.getInstance();
+//        Ray ray = new Ray(new Point(main.mouseX, main.mouseY), b, true, allWalls.get(0));
+//        Ray aux = createAuxiliaryRay(ray, allWalls.get(0));
+//        ray.setAuxiliaryRay(aux);
+//        ray.render();
+//        //aux.render();
     }
 
     private List<Ray> getRays(){
@@ -73,11 +83,11 @@ public class Character implements Renderable{
             // If the ray can be drawn, keep track of it and generate the auxiliary ray
             if(!isBlocked(mainRayStart, wall)){
                 rays.add(mainRayStart);
-                mainRayStart.setAuxiliaryRay(createAuxiliaryRay(mainRayStart, wall));
+                mainRayStart.setAuxiliaryRay(createAuxiliaryRay(mainRayStart));
             }
             if(!isBlocked(mainRayEnd, wall)){
                 rays.add(mainRayEnd);
-                mainRayEnd.setAuxiliaryRay(createAuxiliaryRay(mainRayEnd, wall));
+                mainRayEnd.setAuxiliaryRay(createAuxiliaryRay(mainRayEnd));
             }
         }
 
@@ -129,10 +139,7 @@ public class Character implements Renderable{
         for(Wall wall : allWalls){
             Point intersect = ray.intersects(wall);
             if(!wall.equals(wallToTouch) && intersect != null &&
-                    (wallToTouch == null || !intersect.equals(wallToTouch.getStart()) && !intersect.equals(wallToTouch.getEnd()))){
-                if(!ray.isMainRay() && intersect.isLineSegmentEndpoint()){
-                    continue;
-                }
+                    (wallToTouch == null || !intersect.equals(wallToTouch.getStart()) && !wall.isAEndPoint(intersect))){
                 return true;
             }
         }
@@ -153,7 +160,7 @@ public class Character implements Renderable{
         return false;
     }
 
-    private Ray createAuxiliaryRay(Ray mainRay, Wall wallToIgnore){
+    private Ray createAuxiliaryRay(Ray mainRay){
         // if the may ray is drawn to the border wall, the auxiliary ray is itself
         for(Wall borderWall : borderWall){
             if(borderWall.equals(mainRay.getPointOf())){
@@ -162,27 +169,38 @@ public class Character implements Renderable{
         }
 
         for(Wall collideWith : allWalls){
-            if(!collideWith.equals(wallToIgnore)){
+            if(!collideWith.equals(mainRay.getPointOf())){
                 Ray auxiliaryRay = new Ray(location, mainRay.getEnd(), false, null);
                 Point intersection = auxiliaryRay.intersects(collideWith);
-                boolean isBlocked = false;
-                for(Wall block : allWalls){
-                    Point blockingPoint = auxiliaryRay.intersects(block);
-                    if(!block.equals(collideWith) && !block.equals(wallToIgnore) && blockingPoint != null &&
-                       !block.areDistinct(collideWith) && !block.areDistinct(wallToIgnore) && !blockingPoint.isLineSegmentEndpoint()
-                        && !blockingPoint.pointIsPartOf(block)){
-                        isBlocked = true;
+                if(intersection != null && !intersection.equals(mainRay.getEnd())){
+                    boolean isBlocked = false;
+                    for(Wall block : allWalls){
+                        Point blockingPoint = auxiliaryRay.intersects(block);
+                        if(!block.equals(collideWith) && !block.equals(mainRay.getPointOf()) &&
+                                blockingPoint != null && !blockingPoint.equals(intersection) &&
+                                !blockingPoint.equals(mainRay.getEnd())){
+                            // make sure a ray drawn to blocking wall is not blocked by the collide with
+                            Ray checkActualCollision = new Ray(location, blockingPoint, true, null);
+                            if(checkActualCollision.intersects(collideWith) != null){
+                                continue;
+                            }
+
+                            isBlocked = true;
+                            System.out.println("blocked by " + block);
+                            break;
+                        }
                     }
-                }
-                if(intersection != null && !isBlocked){
-                    auxiliaryRay.setEnd(intersection);
-                    auxiliaryRay.setPointOf(collideWith);
-                    return auxiliaryRay;
+                    if(!isBlocked){
+                        auxiliaryRay.setEnd(intersection);
+                        auxiliaryRay.setPointOf(collideWith);
+                        return auxiliaryRay;
+                    }
                 }
             }
         }
-        //return null;
-        System.out.println(wallToIgnore);
-        throw new IllegalStateException("Cannot generate auxiliary ray");
+        System.out.println("Main ray end point: " + mainRay.getEnd());
+        System.out.println("Main ray wall to " + mainRay.getPointOf());
+        return null;
+        //throw new IllegalStateException("Cannot generate auxiliary ray");
     }
 }

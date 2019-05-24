@@ -125,7 +125,18 @@ public class Character implements Renderable{
                 // If a ray cannot be drawn to the midpoint between the two auxiliary rays, we must connect
                 // auxiliary to main
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
-                if(!isRayToBorder(current) && !isRayToBorder(next) && isBlocked(new Ray(location, midpointAuxAux, true, currentAuxiliary.getPointOf()), null)){
+                boolean isMidpointBlocked = false;
+                Ray toMidPoint = new Ray(location, midpointAuxAux, true, null);
+                for(Wall blockCheck : walls){
+                    Point intersection = toMidPoint.intersects(blockCheck);
+                    if(intersection != null && !blockCheck.equals(currentAuxiliary.getPointOf()) && !blockCheck.equals(nextAuxiliary.getPointOf())){
+                        isMidpointBlocked = true;
+                        break;
+                    }
+                }
+
+
+                if(!isRayToBorder(current) && !isRayToBorder(next) && !isMidpointBlocked){
                     // Cannot connect the aux
                     // if the main can be drawn to the aux, then it is valid
                     Ray mainToAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);

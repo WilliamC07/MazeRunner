@@ -11,6 +11,7 @@ public class Wall implements Renderable{
      */
     private Point end;
 
+    private final Direction direction;
 
 
     /**
@@ -21,6 +22,14 @@ public class Wall implements Renderable{
     public Wall(Point start, Point end){
         this.start = start;
         this.end = end;
+
+        if(start.getX() == end.getX()){
+            direction = Direction.VERTICAL;
+        }else if(start.getY() == end.getY()){
+            direction = Direction.HORIZONTAL;
+        }else{
+            throw new IllegalStateException(String.format("Cannot draw this line.\nStart: %s\nEnd: %s", start, end));
+        }
     }
 
     @Override
@@ -76,5 +85,10 @@ public class Wall implements Renderable{
 
     public Point getEnd() {
         return end;
+    }
+
+    private enum Direction{
+        HORIZONTAL,
+        VERTICAL
     }
 }

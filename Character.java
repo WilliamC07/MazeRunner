@@ -124,8 +124,12 @@ public class Character implements Renderable{
                 Ray currentAuxiliary = current.getAuxiliaryRay();
                 Ray nextAuxiliary = next.getAuxiliaryRay();
                 Point midpoint = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
-                if(!isRayToBorder(current) && isBlocked(new Ray(location, midpoint, true, null), null)){
+                if(!isRayToBorder(current) &&
+                        isBlocked(new Ray(location, midpoint, true, null), null)){
                     // connecting auxiliary does not work
+                    // TODO: fix
+                    // Bug description:
+                    // It is not guaranteed that drawing aux to next main ray will work
                     Main.getInstance().triangle(location.getX(), location.getY(),
                             currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                             next.getEnd().getX(), next.getEnd().getY());

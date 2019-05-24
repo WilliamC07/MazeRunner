@@ -118,21 +118,35 @@ public class Character implements Renderable{
                 //Main.getInstance().fill(0, 0, 255);
                 //Main.getInstance().text("same", current.getEnd().getX(), current.getEnd().getY());
             }else{
+                Ray currentAuxiliary = current.getAuxiliaryRay();
+                Ray nextAuxiliary = next.getAuxiliaryRay();
+
                 // The rays are not drawn to the same point
                 // If a ray cannot be drawn to the midpoint between the two auxiliary rays, we must connect
                 // auxiliary to main
-                Ray currentAuxiliary = current.getAuxiliaryRay();
-                Ray nextAuxiliary = next.getAuxiliaryRay();
-                Point midpoint = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
-                if(!isRayToBorder(current) &&
-                        isBlocked(new Ray(location, midpoint, true, null), null)){
-                    // connecting auxiliary does not work
-                    // TODO: fix
-                    // Bug description:
-                    // It is not guaranteed that drawing aux to next main ray will work
-                    Main.getInstance().triangle(location.getX(), location.getY(),
-                            currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
-                            next.getEnd().getX(), next.getEnd().getY());
+                Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
+                if(!isRayToBorder(current) && isBlocked(new Ray(location, midpointAuxAux, true, currentAuxiliary.getPointOf()), null)){
+                    // Cannot connect the aux
+                    // if the main can be drawn to the aux, then it is valid
+                    Ray mainToAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);
+                    boolean canDrawMainToAux = true;
+                    // check if the ray can be drawn without intersecting the
+                    for(Wall intersect : allWalls){
+                        Point intersectionPoint = mainToAux.intersects(intersect);
+                        if(intersectionPoint != null && !intersectionPoint.equals(current.getEnd()) && !intersectionPoint.equals(mainToAux.getEnd())){
+                            canDrawMainToAux = false;
+                        }
+                    }
+
+                    if(canDrawMainToAux){
+                        Main.getInstance().triangle(location.getX(), location.getY(),
+                                current.getEnd().getX(), current.getEnd().getY(),
+                                nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
+                    }else{
+                        Main.getInstance().triangle(location.getX(), location.getY(),
+                                currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                                next.getEnd().getX(), next.getEnd().getY());
+                    }
                 }else{
                     // connecting auxiliary does work
                     Main.getInstance().triangle(location.getX(), location.getY(),
@@ -143,6 +157,7 @@ public class Character implements Renderable{
         }
     }
 
+
     /**
      * Checks if the ray is blocked by a wall between the start of the ray and the end of the ray.
      * @param ray Ray to check for collision with a wall other than the one it is aiming for
@@ -150,6 +165,7 @@ public class Character implements Renderable{
      * @return True if the ray is blocked, false otherwise
      */
     private boolean isBlocked(Ray ray, Wall wallToTouch){
+        // TODO: fix the code to deal with wallToTouch == null
         for(Wall wall : allWalls){
             Point intersect = ray.intersects(wall);
             if(!wall.equals(wallToTouch) && intersect != null &&
@@ -200,7 +216,6 @@ public class Character implements Renderable{
                             }
 
                             isBlocked = true;
-                            System.out.println("blocked by " + block);
                             break;
                         }
                     }

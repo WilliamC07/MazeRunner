@@ -186,7 +186,9 @@ public class Character implements Renderable{
             }
 
             Point intersect = ray.intersects(wall);
-            if(intersect != null && !wall.isPointOnWall(intersect)){
+            // Make sure there is an intersection and
+            // the intersection is not the point the ray ends at
+            if(intersect != null && !intersect.equals(ray.getEnd())){
                 return true;
             }
         }

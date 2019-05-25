@@ -112,6 +112,10 @@ public class Wall implements Renderable{
         throw new IllegalStateException("Direction is invalid");
     }
 
+    public Direction getDirection(){
+        return this.direction;
+    }
+
     /**
      * Determines if the point can be found on the wall.
      * @param p Point to check if it lies on this wall
@@ -128,7 +132,7 @@ public class Wall implements Renderable{
         throw new IllegalStateException("Direction is invalid");
     }
 
-    private enum Direction{
+    public enum Direction{
         HORIZONTAL,
         VERTICAL
     }

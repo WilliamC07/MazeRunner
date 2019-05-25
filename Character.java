@@ -216,57 +216,35 @@ public class Character implements Renderable{
                 return mainRay;
             }
         }
+        for(Wall collideWith : allWalls){
+            if(!collideWith.equals(mainRay.getPointOf())){
+                Ray auxiliaryRay = new Ray(location, mainRay.getEnd(), false, null);
+                Point intersection = auxiliaryRay.intersects(collideWith);
+                if(intersection != null && !intersection.equals(mainRay.getEnd())){
+                    boolean isBlocked = false;
+                    for(Wall block : allWalls){
+                        Point blockingPoint = auxiliaryRay.intersects(block);
+                        if(!block.equals(collideWith) && !block.equals(mainRay.getPointOf()) &&
+                                blockingPoint != null && !blockingPoint.equals(intersection) &&
+                                !blockingPoint.equals(mainRay.getEnd())){
+                            // make sure a ray drawn to blocking wall is not blocked by the collide with
+                            Ray checkActualCollision = new Ray(location, blockingPoint, true, null);
+                            if(checkActualCollision.intersects(collideWith) != null){
+                                continue;
+                            }
 
-        // mainRay.getEnd() gives the direction of the ray
-        Ray auxiliary = new Ray(location, mainRay.getEnd(), false, null);
-        for(Wall collisionWall : allWalls){
-            Point collisionPoint = auxiliary.intersects(collisionWall);
-            // Make sure there is a collision and the collision point is not the directional point (which is itself a collision point)
-            if(collisionPoint != null && !collisionPoint.equals(auxiliary.getEnd())){
-                boolean isValidAuxiliary = true;
-                // Make sure the wall is in the way and not behind the actual collision spot
-                // We can check if a main ray can be drawn from the mainRay end point to the wall without collision
-                if(!isMainRayBlocked(new Ray(mainRay.getEnd(), collisionPoint, true, null), collisionWall)){
-                    isValidAuxiliary = false;
-                }
-
-                if(isValidAuxiliary){
-                    auxiliary.setEnd(collisionPoint);
-                    auxiliary.setPointOf(collisionWall);
-                    return auxiliary;
+                            isBlocked = true;
+                            break;
+                        }
+                    }
+                    if(!isBlocked){
+                        auxiliaryRay.setEnd(intersection);
+                        auxiliaryRay.setPointOf(collideWith);
+                        return auxiliaryRay;
+                    }
                 }
             }
         }
-
-//        for(Wall collideWith : allWalls){
-//            if(!collideWith.equals(mainRay.getPointOf())){
-//                Ray auxiliaryRay = new Ray(location, mainRay.getEnd(), false, null);
-//                Point intersection = auxiliaryRay.intersects(collideWith);
-//                if(intersection != null && !intersection.equals(mainRay.getEnd())){
-//                    boolean isBlocked = false;
-//                    for(Wall block : allWalls){
-//                        Point blockingPoint = auxiliaryRay.intersects(block);
-//                        if(!block.equals(collideWith) && !block.equals(mainRay.getPointOf()) &&
-//                                blockingPoint != null && !blockingPoint.equals(intersection) &&
-//                                !blockingPoint.equals(mainRay.getEnd())){
-//                            // make sure a ray drawn to blocking wall is not blocked by the collide with
-//                            Ray checkActualCollision = new Ray(location, blockingPoint, true, null);
-//                            if(checkActualCollision.intersects(collideWith) != null){
-//                                continue;
-//                            }
-//
-//                            isBlocked = true;
-//                            break;
-//                        }
-//                    }
-//                    if(!isBlocked){
-//                        auxiliaryRay.setEnd(intersection);
-//                        auxiliaryRay.setPointOf(collideWith);
-//                        return auxiliaryRay;
-//                    }
-//                }
-//            }
-//        }
         System.out.println("Main ray end point: " + mainRay.getEnd());
         System.out.println("Main ray wall to " + mainRay.getPointOf());
         return null;

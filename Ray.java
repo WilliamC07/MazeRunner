@@ -79,6 +79,10 @@ public class Ray implements Renderable, Comparable<Ray>{
         return new float[]{t, u};
     }
 
+    public Point getStart(){
+        return start;
+    }
+
     public Point getEnd() {
         return end;
     }
@@ -111,7 +115,7 @@ public class Ray implements Renderable, Comparable<Ray>{
 
     @Override
     public int compareTo(Ray ray) {
-        return (int) (Math.atan2(ray.end.getY() - start.getY(), ray.end.getX()- start.getX()) * 100000 - Math.atan2(end.getY()- start.getY(), end.getX()- start.getX()) * 100000);
+        return (int) (Math.atan2(ray.end.getY() - start.getY(), ray.end.getX()- start.getX()) * 1_000_000 - Math.atan2(end.getY()- start.getY(), end.getX()- start.getX()) * 1_000_000);
     }
 
     public boolean isMainRay(){
@@ -121,7 +125,6 @@ public class Ray implements Renderable, Comparable<Ray>{
     @Override
     public void render() {
         Main.getInstance().line(start.getX(), start.getY(), end.getX(), end.getY());
-        Main.getInstance().fill(0, 0, 255);
         Main.getInstance().text(end.toString(), end.getX(), end.getY()-20);
         if(auxiliaryRay != null){
             Main.getInstance().line(auxiliaryRay.start.getX(), auxiliaryRay.start.getY(), auxiliaryRay.end.getX(), auxiliaryRay.end.getY());

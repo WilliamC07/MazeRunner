@@ -125,7 +125,6 @@ public class Character implements Renderable{
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
                 boolean isMidpointBlocked = false;
                 Ray toMidPoint = new Ray(location, midpointAuxAux, true, null);
-                toMidPoint.render();
                 for(Wall blockCheck : walls){
                     Point intersection = toMidPoint.intersects(blockCheck);
                     // make sure the wall is not between the two line segment
@@ -138,21 +137,20 @@ public class Character implements Renderable{
 
                 if(isMidpointBlocked){
                     // Cannot connect the aux
-                    // If a main ray can be drawn from character's location to midpoint of current main ray and next
-                    // auxiliary end points, then it is valid
-                    boolean isMidpointMainAuxBlocked = false;
-                    Point midpointMainAux = Point.midpoint(current.getEnd(), nextAuxiliary.getEnd());
-                    Ray testMainAux = new Ray(location, midpointMainAux, true, null);
-                    for(Wall blockCheck : walls){
-                        Point intersection = testMainAux.intersects(blockCheck);
-                        if(intersection != null &&
-                           !intersection.equals(midpointMainAux)){
-                            isMidpointMainAuxBlocked = true;
+
+                    boolean canDrawMainAux = true;
+                    // if the main cannot be drawn to the aux midpoint without intersecting a wall at another point other
+                    // than the start of the main ray or the aux endpoint, it is not valid
+                    Ray checkBlocking = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);
+                    for(Wall block : allWalls){
+                        Point intersection = checkBlocking.intersects(block);
+                        if(intersection != null && !intersection.equals(current.getEnd()) && !intersection.equals(nextAuxiliary.getEnd())){
+                            canDrawMainAux = false;
                             break;
                         }
                     }
 
-                    if(!isMidpointMainAuxBlocked){
+                    if(canDrawMainAux){
                         Main.getInstance().triangle(location.getX(), location.getY(),
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());

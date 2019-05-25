@@ -103,7 +103,7 @@ public class Character implements Renderable{
 
             boolean shareWall = false;
             for(Wall wall : allWalls){
-                if(wall.isAEndPoint(current.getEnd()) && wall.isAEndPoint(next.getEnd())){
+                if(wall.isPointOnWall(current.getEnd()) && wall.isPointOnWall(next.getEnd())){
                     shareWall = true;
                 }
             }
@@ -136,7 +136,6 @@ public class Character implements Renderable{
                     }
                 }
 
-
                 if(isMidpointBlocked){
                     // Cannot connect the aux
                     // If a main ray can be drawn from character's location to midpoint of current main ray and next
@@ -163,7 +162,7 @@ public class Character implements Renderable{
                                 next.getEnd().getX(), next.getEnd().getY());
                     }
                 }else{
-                    // connecting auxiliary does work
+                    //connecting auxiliary does work
                     Main.getInstance().triangle(location.getX(), location.getY(),
                             currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                             nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());

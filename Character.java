@@ -242,8 +242,8 @@ public class Character implements Renderable{
                 }
 
                 // make sure the blocking wall is not blocked by the collision wall
-                Ray blockingToCollision = new Ray(auxiliary.getStart(), blockingPoint, true, null);
-                if(blockingToCollision.intersects(blockingWall) != null){
+                Ray startToCollision = new Ray(auxiliary.getStart(), collisionPoint, true, null);
+                if(startToCollision.intersects(blockingWall) == null){
                     continue;
                 }
 

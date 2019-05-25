@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class Character implements Renderable{
     private Point location;
@@ -57,7 +56,7 @@ public class Character implements Renderable{
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
         List<Ray> rays = getRays();
         rays.forEach(Ray::render);
-        drawVision(rays);
+//        drawVision(rays);
 
 //        Point a = new Point(20, 20);
 //        Point b = new Point(20, 100); // shared
@@ -80,11 +79,11 @@ public class Character implements Renderable{
 
             // If a ray cannot be drawn, do not keep track of it
             // If the ray can be drawn, keep track of it and generate the auxiliary ray
-            if(!isBlocked(mainRayStart, wall)){
+            if(!isMainRayBlocked(mainRayStart, wall)){
                 rays.add(mainRayStart);
                 mainRayStart.setAuxiliaryRay(createAuxiliaryRay(mainRayStart));
             }
-            if(!isBlocked(mainRayEnd, wall)){
+            if(!isMainRayBlocked(mainRayEnd, wall)){
                 rays.add(mainRayEnd);
                 mainRayEnd.setAuxiliaryRay(createAuxiliaryRay(mainRayEnd));
             }
@@ -99,7 +98,7 @@ public class Character implements Renderable{
 
         Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
-            Main.getInstance().fill(i * 25, 0, 0);
+            Main.getInstance().fill(i * 10, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
 
@@ -129,14 +128,15 @@ public class Character implements Renderable{
                 Ray toMidPoint = new Ray(location, midpointAuxAux, true, null);
                 for(Wall blockCheck : walls){
                     Point intersection = toMidPoint.intersects(blockCheck);
-                    if(intersection != null && !blockCheck.equals(currentAuxiliary.getPointOf()) && !blockCheck.equals(nextAuxiliary.getPointOf())){
+                    // make sure the wall is not between the two line segment
+                    if(intersection != null && !blockCheck.equals(currentAuxiliary.getPointOf()) && !blockCheck.equals(nextAuxiliary.getPointOf()) && !blockCheck.isBetweenTwoPoints(currentAuxiliary.getEnd(), nextAuxiliary.getEnd())){
                         isMidpointBlocked = true;
                         break;
                     }
                 }
 
 
-                if(!isRayToBorder(current) && !isRayToBorder(next) && !isMidpointBlocked){
+                if(!isRayToBorder(current) && !isRayToBorder(next) && isMidpointBlocked){
                     // Cannot connect the aux
                     // if the main can be drawn to the aux, then it is valid
                     Ray mainToAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);
@@ -149,7 +149,10 @@ public class Character implements Renderable{
                         }
                     }
 
-                    if(canDrawMainToAux){
+                    // make a ray can be drawn out from the character's location to the midpoint
+                    Point midpointMainAux = Point.midpoint(current.getEnd(), nextAuxiliary.getEnd());
+                    Ray testMainAux = new Ray(location, midpointMainAux, true, null);
+                    if(canDrawMainToAux && !isMainRayBlocked(testMainAux, null)){
                         Main.getInstance().triangle(location.getX(), location.getY(),
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
@@ -175,12 +178,15 @@ public class Character implements Renderable{
      * @param wallToTouch Wall the ray is attempting to collide with. Null if the ray is pointing to a point
      * @return True if the ray is blocked, false otherwise
      */
-    private boolean isBlocked(Ray ray, Wall wallToTouch){
-        // TODO: fix the code to deal with wallToTouch == null
+    private boolean isMainRayBlocked(Ray ray, Wall wallToTouch){
         for(Wall wall : allWalls){
+            // The ray will always touch the wall it is aiming to touch
+            if(wall.equals(wallToTouch)){
+                continue;
+            }
+
             Point intersect = ray.intersects(wall);
-            if(!wall.equals(wallToTouch) && intersect != null &&
-                    (wallToTouch == null || !intersect.equals(wallToTouch.getStart()) && !wall.isAEndPoint(intersect))){
+            if(intersect != null && !wall.isPointOnWall(intersect)){
                 return true;
             }
         }

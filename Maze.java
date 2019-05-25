@@ -5,6 +5,7 @@ public class Maze implements Renderable{
     private ArrayList<Wall> flatMaze;
     private boolean[][] maze;
     private int length;
+    private Wall[][] wallsFormatted;
     private int width;
     private PApplet sketch;
     public Maze(int rows, int cols, PApplet sketch){
@@ -17,6 +18,7 @@ public class Maze implements Renderable{
         generate(0,0,walls);
         convertToBool(walls);
         convertToList(walls);
+        this.wallsFormatted = generateWallFormatted(walls);
     }
     public void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;
@@ -154,6 +156,27 @@ public class Maze implements Renderable{
     public int getWidth(){
         return width;
     }
+
+    private Wall[][] generateWallFormatted(Wall[][] walls){
+        Wall[][] output = new Wall[length][width];
+        for(Wall[] row : walls){
+            for(int c = 0; c < width; c++){
+                Wall wall = row[c];
+                if(wall == null){
+                    // there is a empty space for the user to walk on
+                    continue;
+                }
+
+            }
+        }
+
+        return output;
+    }
+
+    public Wall[][] getWallsFormatted(){
+        return this.wallsFormatted;
+    }
+
     @Override
     public void render(){
         sketch.stroke(0);

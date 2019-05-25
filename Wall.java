@@ -34,6 +34,13 @@ public class Wall implements Renderable{
             }
         }else if(start.getY() == end.getY()){
             direction = Direction.HORIZONTAL;
+            if(start.getX() > end.getX()){
+                this.start = end;
+                this.end = start;
+            }else{
+                this.start = start;
+                this.end = end;
+            }
         }else{
             throw new IllegalStateException(String.format("Cannot draw this line.\nStart: %s\nEnd: %s", start, end));
         }

@@ -4,6 +4,8 @@
 public class Wall implements Renderable{
     /**
      * The first point of the wall.
+     * If the wall is vertical, the y value is less than the y value of {@link #end}. (Top of)
+     * If the wall is horizontal, the x value is less than the x value of {@link #end}. (Left of)
      */
     private Point start;
     /**
@@ -20,11 +22,16 @@ public class Wall implements Renderable{
      * @param end End point of the wall.
      */
     public Wall(Point start, Point end){
-        this.start = start;
-        this.end = end;
-
         if(start.getX() == end.getX()){
             direction = Direction.VERTICAL;
+            // order points such that start is above the end
+            if(start.getY() > end.getY()){
+                this.start = end;
+                this.end = start;
+            }else{
+                this.start = start;
+                this.end = end;
+            }
         }else if(start.getY() == end.getY()){
             direction = Direction.HORIZONTAL;
         }else{
@@ -85,6 +92,33 @@ public class Wall implements Renderable{
 
     public Point getEnd() {
         return end;
+    }
+
+    public boolean isBetweenTwoPoints(Point a, Point b){
+        switch(direction){
+            case VERTICAL:
+                return start.getX() == a.getX() && start.getX() == b.getX();
+            case HORIZONTAL:
+                return start.getY() == a.getY() && start.getY() == b.getY();
+        }
+
+        throw new IllegalStateException("Direction is invalid");
+    }
+
+    /**
+     * Determines if the point can be found on the wall.
+     * @param p Point to check if it lies on this wall
+     * @return True if the point is one the wall, false otherwise
+     */
+    public boolean isPointOnWall(Point p){
+        switch(direction){
+            case VERTICAL:
+                return p.getY() >= start.getY() && p.getY() <= end.getY();
+            case HORIZONTAL:
+                return p.getX() >= end.getY() && p.getX() <= end.getX();
+        }
+
+        throw new IllegalStateException("Direction is invalid");
     }
 
     private enum Direction{

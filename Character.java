@@ -56,7 +56,7 @@ public class Character implements Renderable{
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
         List<Ray> rays = getRays();
         rays.forEach(Ray::render);
-//        drawVision(rays);
+        drawVision(rays);
 
 //        Point a = new Point(20, 20);
 //        Point b = new Point(20, 100); // shared
@@ -104,7 +104,7 @@ public class Character implements Renderable{
 
             boolean shareWall = false;
             for(Wall wall : allWalls){
-                if(wall.isAEndPoint(current.getEnd()) && wall.isAEndPoint(next.getEnd())){
+                if(wall.isPointOnWall(current.getEnd()) && wall.isPointOnWall(next.getEnd())){
                     shareWall = true;
                 }
             }

@@ -35,12 +35,25 @@ public class Main extends PApplet{
 
 	@Override
 	public void setup(){
-		Maze maze = new Maze(25,25,this);
-		renderables.add(maze);
-		float startX = width/10f+2f*width/5/maze.getWidth();
-		float startY = height/10f+2f*height/5/maze.getLength();
-		character = new Character(new Point(startX,startY), maze.getFlat());
-		renderables.add(character);
+    boolean testRayMode = true;
+
+		if(testRayMode){
+			List<Wall> walls = new ArrayList<>();
+			Point a = new Point(20, 20);
+			Point b = new Point(20, 100);
+			Point c = new Point(100, 100);
+			walls.add(new Wall(a, b));
+			walls.add(new Wall(b, c));
+			renderables.addAll(walls);
+
+			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
+			renderables.add(character);
+		}else{
+			Maze maze = new Maze(50,50,this);
+			renderables.add(maze);
+			character = new Character(new Point((float) width / 2, (float) height / 2), maze.convertToList());
+			renderables.add(character);
+		}
 	}
 
 	@Override

@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -55,6 +57,7 @@ public class Point{
         return Float.compare(point.x, x) == 0 &&
                 Float.compare(point.y, y) == 0;
     }
+
 
     @Override
     public String toString() {

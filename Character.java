@@ -5,27 +5,14 @@ import java.util.List;
 public class Character implements Renderable{
     private Point location;
     private List<Wall> walls;
-    private Point[] borderPoints;
     private Wall[] borderWall;
     private List<Wall> allWalls;
-    /**
-     * When we construct a ray from the the character location to a wall endpoint, we need to generate two other rays
-     * that is +/- this value.
-     */
-    private final float SLOPE_DELTA = .01F;
 
     public Character(Point location, List<Wall> walls){
         this.location = location;
         // TODO: update when the Maze.java is finished. I have some testing code for now
         this.walls = walls;
         Main main = Main.getInstance();
-        this.borderPoints = new Point[]{
-                new Point(0, 0),
-                new Point(0, main.height),
-                new Point(main.width, 0),
-                new Point(main.width, main.height)
-        };
-
         Point a = new Point(1, 1);
         Point b = new Point(main.width - 2, 1);
         Point c = new Point(main.width - 2, main.height - 2);
@@ -54,19 +41,7 @@ public class Character implements Renderable{
     public void render(){
         location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
-        List<Ray> rays = getRays();
-        rays.forEach(Ray::render);
-        drawVision(rays);
-
-//        Point a = new Point(20, 20);
-//        Point b = new Point(20, 100); // shared
-//        Point c = new Point(200, 100);
-//        Main main = Main.getInstance();
-//        Ray ray = new Ray(new Point(main.mouseX, main.mouseY), b, true, allWalls.get(0));
-//        Ray aux = createAuxiliaryRay(ray, allWalls.get(0));
-//        ray.setAuxiliaryRay(aux);
-//        ray.render();
-//        //aux.render();
+        drawVision(getRays());
     }
 
     private List<Ray> getRays(){
@@ -95,12 +70,9 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-        // if the player is on the wall, don't do anything. This code is from testing purposes, the actual game
-        // will not allow the player to go through walls
-
         Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
-            Main.getInstance().fill(i * 10, 0, 0);
+            Main.getInstance().fill(255, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
 
@@ -116,8 +88,6 @@ public class Character implements Renderable{
                 Main.getInstance().triangle(location.getX(), location.getY(),
                                             current.getEnd().getX(), current.getEnd().getY(),
                                             next.getEnd().getX(), next.getEnd().getY());
-                //Main.getInstance().fill(0, 0, 255);
-                //Main.getInstance().text("same", current.getEnd().getX(), current.getEnd().getY());
             }else{
                 Ray currentAuxiliary = current.getAuxiliaryRay();
                 Ray nextAuxiliary = next.getAuxiliaryRay();
@@ -191,20 +161,6 @@ public class Character implements Renderable{
             // Make sure there is an intersection and
             // the intersection is not the point the ray ends at
             if(intersect != null && !intersect.equals(ray.getEnd())){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Determines if the given ray is drawn to a border edge.
-     * @param ray A main ray to check if it is drawn to the edge of a border
-     * @return True if the ray is drawn to a border endpoint, false otherwise.
-     */
-    private boolean isRayToBorder(Ray ray){
-        for(Wall border : borderWall){
-            if(border.isAEndPoint(ray.getEnd())){
                 return true;
             }
         }

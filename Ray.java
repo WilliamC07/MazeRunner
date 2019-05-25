@@ -1,4 +1,4 @@
-public class Ray implements Renderable, Comparable<Ray>{
+public class Ray implements Comparable<Ray>{
     private final Point start;
     private Point end;
     private final boolean isMainRay;
@@ -120,17 +120,5 @@ public class Ray implements Renderable, Comparable<Ray>{
 
     public boolean isMainRay(){
         return this.isMainRay;
-    }
-
-    @Override
-    public void render() {
-        Main.getInstance().line(start.getX(), start.getY(), end.getX(), end.getY());
-        Main.getInstance().text(end.toString(), end.getX(), end.getY()-20);
-        if(auxiliaryRay != null){
-            Main.getInstance().line(auxiliaryRay.start.getX(), auxiliaryRay.start.getY(), auxiliaryRay.end.getX(), auxiliaryRay.end.getY());
-            Main.getInstance().circle(auxiliaryRay.end.getX(), auxiliaryRay.end.getY(), 10);
-            Main.getInstance().fill(0);
-            Main.getInstance().text(auxiliaryRay.end.toString(), auxiliaryRay.end.getX(), auxiliaryRay.end.getY());
-        }
     }
 }

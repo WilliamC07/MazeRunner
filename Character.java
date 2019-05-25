@@ -95,7 +95,6 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-
         Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
             Main.getInstance().fill(i * 10, 0, 0);
@@ -104,7 +103,7 @@ public class Character implements Renderable{
 
             boolean shareWall = false;
             for(Wall wall : allWalls){
-                if(wall.isPointOnWall(current.getEnd()) && wall.isPointOnWall(next.getEnd())){
+                if(wall.isAEndPoint(current.getEnd()) && wall.isAEndPoint(next.getEnd())){
                     shareWall = true;
                 }
             }
@@ -126,17 +125,19 @@ public class Character implements Renderable{
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
                 boolean isMidpointBlocked = false;
                 Ray toMidPoint = new Ray(location, midpointAuxAux, true, null);
+                toMidPoint.render();
                 for(Wall blockCheck : walls){
                     Point intersection = toMidPoint.intersects(blockCheck);
                     // make sure the wall is not between the two line segment
-                    if(intersection != null && !blockCheck.equals(currentAuxiliary.getPointOf()) && !blockCheck.equals(nextAuxiliary.getPointOf()) && !blockCheck.isBetweenTwoPoints(currentAuxiliary.getEnd(), nextAuxiliary.getEnd())){
+                    if(intersection != null &&
+                       !intersection.equals(midpointAuxAux)){
                         isMidpointBlocked = true;
                         break;
                     }
                 }
 
 
-                if(!isRayToBorder(current) && !isRayToBorder(next) && isMidpointBlocked){
+                if(isMidpointBlocked){
                     // Cannot connect the aux
                     // if the main can be drawn to the aux, then it is valid
                     Ray mainToAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);

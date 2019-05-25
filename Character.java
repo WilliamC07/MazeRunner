@@ -139,21 +139,21 @@ public class Character implements Renderable{
 
                 if(isMidpointBlocked){
                     // Cannot connect the aux
-                    // if the main can be drawn to the aux, then it is valid
-                    Ray mainToAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);
-                    boolean canDrawMainToAux = true;
-                    // check if the ray can be drawn without intersecting the
-                    for(Wall intersect : allWalls){
-                        Point intersectionPoint = mainToAux.intersects(intersect);
-                        if(intersectionPoint != null && !intersectionPoint.equals(current.getEnd()) && !intersectionPoint.equals(mainToAux.getEnd())){
-                            canDrawMainToAux = false;
+                    // If a main ray can be drawn from character's location to midpoint of current main ray and next
+                    // auxiliary end points, then it is valid
+                    boolean isMidpointMainAuxBlocked = false;
+                    Point midpointMainAux = Point.midpoint(current.getEnd(), nextAuxiliary.getEnd());
+                    Ray testMainAux = new Ray(location, midpointMainAux, true, null);
+                    for(Wall blockCheck : walls){
+                        Point intersection = testMainAux.intersects(blockCheck);
+                        if(intersection != null &&
+                           !intersection.equals(midpointMainAux)){
+                            isMidpointMainAuxBlocked = true;
+                            break;
                         }
                     }
 
-                    // make a ray can be drawn out from the character's location to the midpoint
-                    Point midpointMainAux = Point.midpoint(current.getEnd(), nextAuxiliary.getEnd());
-                    Ray testMainAux = new Ray(location, midpointMainAux, true, null);
-                    if(canDrawMainToAux && !isMainRayBlocked(testMainAux, null)){
+                    if(!isMidpointMainAuxBlocked){
                         Main.getInstance().triangle(location.getX(), location.getY(),
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());

@@ -120,9 +120,9 @@ public class Wall implements Renderable{
     public boolean isPointOnWall(Point p){
         switch(direction){
             case VERTICAL:
-                return p.getY() >= start.getY() && p.getY() <= end.getY();
+                return p.getY() >= start.getY() && p.getY() <= end.getY() && p.getX() == this.getStart().getX();
             case HORIZONTAL:
-                return p.getX() >= end.getY() && p.getX() <= end.getX();
+                return p.getX() >= end.getY() && p.getX() <= end.getX() && p.getY() == this.getStart().getY();
         }
 
         throw new IllegalStateException("Direction is invalid");

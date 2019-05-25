@@ -11,7 +11,6 @@ public class Character implements Renderable{
     public Character(Point location, List<Wall> walls){
         this.location = location;
         // TODO: update when the Maze.java is finished. I have some testing code for now
-        this.walls = walls;
         Main main = Main.getInstance();
         Point a = new Point(1, 1);
         Point b = new Point(main.width - 2, 1);

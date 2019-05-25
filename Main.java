@@ -29,13 +29,13 @@ public class Main extends PApplet{
 	@Override
 	public void settings(){
 		instance = this;
-		size(1000, 1000);
+		size(750, 750);
 		renderables = new ArrayList<>();
 	}
 
 	@Override
 	public void setup(){
-		boolean testRayMode = true;
+    boolean testRayMode = true;
 
 		if(testRayMode){
 			List<Wall> walls = new ArrayList<>();

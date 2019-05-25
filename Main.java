@@ -51,7 +51,6 @@ public class Main extends PApplet{
 		}else{
 			Maze maze = new Maze(50,50,this);
 			renderables.add(maze);
-			character = new Character(new Point((float) width / 2, (float) height / 2), maze.convertToList());
 			renderables.add(character);
 		}
 	}

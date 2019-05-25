@@ -4,7 +4,6 @@ import java.util.List;
 
 public class Character implements Renderable{
     private Point location;
-    private List<Wall> walls;
     private Wall[] borderWall;
     private List<Wall> allWalls;
 
@@ -98,7 +97,7 @@ public class Character implements Renderable{
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
                 boolean isMidpointBlocked = false;
                 Ray toMidPoint = new Ray(location, midpointAuxAux, true, null);
-                for(Wall blockCheck : walls){
+                for(Wall blockCheck : allWalls){
                     Point intersection = toMidPoint.intersects(blockCheck);
                     // make sure the wall is not between the two line segment
                     if(intersection != null &&

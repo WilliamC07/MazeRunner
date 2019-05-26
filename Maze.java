@@ -1,5 +1,6 @@
 import processing.core.PApplet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 public class Maze implements Renderable{
     private ArrayList<Wall> flatMaze;
@@ -8,6 +9,17 @@ public class Maze implements Renderable{
     private Wall[][] wallsFormatted;
     private int width;
     private PApplet sketch;
+
+    /**
+     * Each cell in a wall 2D array is a square of this side length in pixels
+     */
+    private final float WALL_SCALE = 50;
+    /**
+     * Offset is so the edge of the maze doesn't touch the border of the window
+     */
+    private final float OFF_SET_Y = 50;
+    private final float OFF_SET_X = 50;
+
     public Maze(int rows, int cols, PApplet sketch){
         length = rows;
         width = cols;
@@ -18,7 +30,18 @@ public class Maze implements Renderable{
         generate(0,0,walls);
         convertToBool(walls);
         convertToList(walls);
-        this.wallsFormatted = generateWallFormatted(walls);
+        this.wallsFormatted = generateWallFormatted(maze);
+
+        for(int r = 0; r < maze.length; r++){
+            for(int c = 0; c < maze[r].length; c++){
+                if(maze[r][c]){
+                    System.out.print("#");
+                }else{
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
     }
     public void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;
@@ -157,20 +180,69 @@ public class Maze implements Renderable{
         return width;
     }
 
-    private Wall[][] generateWallFormatted(Wall[][] walls){
+    private Wall[][] generateWallFormatted(boolean[][] walls){
         Wall[][] output = new Wall[length][width];
-        for(Wall[] row : walls){
+
+        // create horizontal walls
+        for(int r = 0; r < length; r++){
             for(int c = 0; c < width; c++){
-                Wall wall = row[c];
-                if(wall == null){
-                    // there is a empty space for the user to walk on
+                // (make sure there is a wall at the spot (false means no wall)) and
+                // (there is a wall to the right or a border)
+                if(!walls[r][c] && (c + 1 > width || !walls[r][c + 1])){
                     continue;
+                }
+
+                Point startPoint;
+                Point endPoint;
+                // if a horizontal wall is next to the border, it needs to be extended to touch it
+                float startY = OFF_SET_Y + r * WALL_SCALE + // Top edge
+                               WALL_SCALE / 2;              // to center
+                if(c == 0){
+                    // border to left
+                    float x = OFF_SET_X + c * WALL_SCALE - // left edge
+                            WALL_SCALE / 2;                // to reach border
+                    startPoint = new Point(x, startY);
+                }else if(c == width - 1){
+                    // border to right
+                    float x = OFF_SET_X + c * WALL_SCALE + // left edge
+                            WALL_SCALE / 2;                // to reach border
+                    startPoint = new Point(x, startY);
+                }else{
+                    // start at middle of the cell if not adjacent to border
+                    startPoint = middleOfCellPoint(r, c);
+                }
+
+                // if there is a wall to the right, there must be a continuous horizontal wall
+                // find how many cells it spans
+                int endColumn = c;
+                while(++endColumn < width && walls[r][c]);
+
+                // if the end wall is next to the border, it needs to be extended. it can only touch the right border
+                if(endColumn == width - 1){
+                    float x = OFF_SET_X + c * WALL_SCALE + // left edge
+                            WALL_SCALE / 2;                // to reach border
+                    float y = OFF_SET_Y + r * WALL_SCALE;
+                    endPoint = new Point(x, y);
+                }else{
+                    // end at the midpoint
+                    endPoint = middleOfCellPoint(r, endColumn);
                 }
 
             }
         }
 
+        // create vertical walls
+
         return output;
+    }
+
+    private Point middleOfCellPoint(int row, int column){
+        float x = OFF_SET_X + column * WALL_SCALE +    // left edge of cell horizontally
+                  WALL_SCALE / 2;                      // center horizontally
+        float y = OFF_SET_Y + row * WALL_SCALE +       // top edge of cell vertically
+                  WALL_SCALE / 2;                      // center vertically
+        return new Point(x, y);
+
     }
 
     public Wall[][] getWallsFormatted(){

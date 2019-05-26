@@ -35,7 +35,7 @@ public class Main extends PApplet{
 
 	@Override
 	public void setup(){
-    boolean testRayMode = true;
+    boolean testRayMode = false;
 
 		if(testRayMode){
 			List<Wall> walls = new ArrayList<>();
@@ -47,10 +47,11 @@ public class Main extends PApplet{
 			renderables.addAll(walls);
 
 			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
-			renderables.add(character);
+			//renderables.add(character);
 		}else{
 			Maze maze = new Maze(50,50,this);
 			renderables.add(maze);
+			character = new Character(new Point((float) width / 2, (float) height / 2), maze.getFlat());
 			renderables.add(character);
 		}
 	}

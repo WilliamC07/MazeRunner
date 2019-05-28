@@ -207,4 +207,41 @@ public class Maze implements Renderable{
             wall.render();
         }
     }
+    private class Cell{
+        int x,y;
+        Cell up,down,left,right;
+        int f,g,h;
+        public Cell(int x, int y){
+            this.x=x;
+            this.y=y;
+            f = 0;
+            g = 0;
+            h = 0;
+        }
+        public Cell(int x, int y, int goalX, int goalY, Cell parent){
+            this.x=x;
+            this.y=y;
+            h = Math.abs(goalX-x)+Math.abs(goalY-y);
+            g = parent.getG()+1;
+            f = g+h;
+        }
+        public int getG(){
+            return g;
+        }
+        public int getF(){
+            return f;
+        }
+        public Cell getUp(){
+            return up;
+        }
+        public Cell getDown(){
+            return down;
+        }
+        public Cell getLeft(){
+            return left;
+        }
+        public Cell getRight(){
+            return right;
+        }
+    }
 }

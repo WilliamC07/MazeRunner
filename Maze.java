@@ -192,6 +192,7 @@ public class Maze implements Renderable{
     public ArrayList<Cell> solve(int startX, int startY, int endX, int endY){
         ArrayList<Cell> closed = new ArrayList<Cell>();
         ArrayList<Cell> open = new ArrayList<Cell>();
+        ArrayList<Cell> path = new ArrayList<Cell>();
         open.add(new Cell(startX,startY));
         while(open.size()>0){
             open = Collections.sort(open,Collections.reverseOrder());
@@ -214,17 +215,16 @@ public class Maze implements Renderable{
                 adjacent.add(new Cell(current.getX(),current.getY()+1,endX,endY,current));
             }
             for(Cell neighbor : adjacent){
-                if(contains(closed,neighbor)){
+                if(contains(closed,neighbor) && find(closed,neighbor).getF()<=neighbor.getF()){
                     continue;
                 }
-                if(!contains(open,neighbor)){
-                    open.add(neighbor);
-                } else if(find(open,neighbor).getF()<=neighbor.getF()){
+                if(contains(open,neighbor) && find(open,neighbor).getF()<=neighbor.getF()){
                     continue;
                 }
+                open.add(neighbor);
             }
         }
-        return closed;
+
     }
     @Override
     public void render(){
@@ -274,6 +274,9 @@ public class Maze implements Renderable{
         }
         public Cell getParent(){
             return parent;
+        }
+        public boolean hasParent(){
+            return parent==null;
         }
     }
 }

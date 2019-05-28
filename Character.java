@@ -209,6 +209,6 @@ public class Character implements Renderable{
                 return new Ray(mainRay.getStart(), collisionPoint, true, collideWall);
             }
         }
-        throw new IllegalStateException("Cannot generate auxiliary ray");
+        return mainRay;
     }
 }

@@ -127,17 +127,36 @@ public class Maze implements Renderable{
                 if(walls[i][j]!=null){
                     if(i%2==0){
                         maze[i][j*2+1]=true;
+                        if(i<walls.length-1 && walls[i+2][j]!=null){
+                            maze[i+1][j*2+1]=true;
+                        }
                     } else {
                         maze[i][j*2]=true;
-                        if(j<length-1 && walls[i-1][j]!=null){
+                        if(j<length-1 && (walls[i-1][j]!=null || walls[i][j+1]!=null)){
                             maze[i][j*2+1]=true;
                         }
                         if(j>0 && walls[i-1][j-1]!=null){
                             maze[i][j*2-1]=true;
                         }
+                        if(j<length-1 && walls[i+1][j]!=null){
+                            maze[i][j*2+1]=true;
+                        }
+                        if(j>0 && walls[i+1][j-1]!=null){
+                            maze[i][j*2-1]=true;
+                        }
                     }
                 }
             }
+        }
+        for(int i = 0; i < maze.length; i++){
+            for(int j = 0; j < maze[i].length; j++){
+                if(maze[i][j]){
+                    System.out.print("#");
+                } else {
+                    System.out.print(".");
+                }
+            }
+            System.out.println();
         }
     }
     public void convertToList(Wall[][] walls){

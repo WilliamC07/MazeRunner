@@ -206,8 +206,13 @@ public class Maze implements Renderable{
                 adjacent.add(new Cell(current.getX(),current.getY()+1,endX,endY,current));
             }
             for(Cell neighbor : adjacent){
-                if(contains(open,neighbor)){
+                if(contains(path,neighbor)){
                     continue;
+                }
+                if(contains(open,neighbor)){
+
+                } else {
+                    open.add
                 }
             }
         }
@@ -227,6 +232,7 @@ public class Maze implements Renderable{
     private class Cell extends Comparable<Cell>{
         int x,y;
         int f,g,h;
+        Cell parent;
         public Cell(int x, int y){
             this.x=x;
             this.y=y;
@@ -237,9 +243,11 @@ public class Maze implements Renderable{
         public Cell(int x, int y, int goalX, int goalY, Cell parent){
             this.x=x;
             this.y=y;
+            this.parent=parent;
             h = Math.abs(goalX-x)+Math.abs(goalY-y);
             g = parent.getG()+1;
             f = g+h;
+
         }
         public int getG(){
             return g;
@@ -255,6 +263,9 @@ public class Maze implements Renderable{
         }
         public int compareTo(Cell other){
             return f-other.getF();
+        }
+        public Cell getParent(){
+            return parent;
         }
     }
 }

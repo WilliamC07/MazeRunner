@@ -173,9 +173,26 @@ public class Maze implements Renderable{
     public int getWidth(){
         return width;
     }
-    public ArrayList<Integer[]> solve(int startX, int startY, int endX, int endY){
-        ArrayList<Integer[]> path = new ArrayList<Integer[]>();
-        ArrayList<Integer[]> open = new ArrayList<Integer[]>();
+    public ArrayList<int[]> solve(int startX, int startY, int endX, int endY){
+        ArrayList<int[]> path = new ArrayList<int[]>();
+        ArrayList<int[]> open = new ArrayList<int[]>();
+        open.add(new int[]{startX,startY});
+        while(open.size()>0){
+            int[] current = open.remove(open.size()-1);
+            ArrayList<int[]> adjacent = new ArrayList<int[]>();
+            if(current[0]-1>0){
+                adjacent.add(new int[]{startX-1,startY});
+            }
+            if(current[0]+1<width){
+                adjacent.add(new int[]{startX+1,startY});
+            }
+            if(current[1]-1>0){
+                adjacent.add(new int[]{startX,startY-1});
+            }
+            if(current[1]-1<length){
+                adjacent.add(new int[]{startX,startY+1});
+            }
+        }
         return path;
 
     }

@@ -173,13 +173,14 @@ public class Maze implements Renderable{
     public int getWidth(){
         return width;
     }
-    public ArrayList<int[]> solve(int startX, int startY, int endX, int endY){
-        ArrayList<int[]> path = new ArrayList<int[]>();
-        ArrayList<int[]> open = new ArrayList<int[]>();
-        open.add(new int[]{startX,startY});
+    public ArrayList<Cell> solve(int startX, int startY, int endX, int endY){
+        ArrayList<Cell> path = new ArrayList<Cell>();
+        ArrayList<Cell> open = new ArrayList<Cell>();
+        open.add(new Cell(startX,startY));
         while(open.size()>0){
-            int[] current = open.remove(open.size()-1);
-            ArrayList<int[]> adjacent = new ArrayList<int[]>();
+            open = Collections.sort(open,Collections.reverseOrder());
+            Cell current = open.remove(open.size()-1);
+            /*ArrayList<int[]> adjacent = new ArrayList<int[]>();
             if(current[0]-1>0 && !maze[2*current[0]-1][2*current[1]]){
                 adjacent.add(new int[]{current[0]-1,current[1]});
             }
@@ -191,10 +192,9 @@ public class Maze implements Renderable{
             }
             if(current[1]-1<length && !maze[2*current[0]][2*current[1]-1]){
                 adjacent.add(new int[]{current[0],current[1]+1});
-            }
+            }*/
         }
         return path;
-
     }
     @Override
     public void render(){
@@ -207,9 +207,8 @@ public class Maze implements Renderable{
             wall.render();
         }
     }
-    private class Cell{
+    private class Cell extends Comparable<Cell>{
         int x,y;
-        Cell up,down,left,right;
         int f,g,h;
         public Cell(int x, int y){
             this.x=x;
@@ -231,17 +230,14 @@ public class Maze implements Renderable{
         public int getF(){
             return f;
         }
-        public Cell getUp(){
-            return up;
+        public int getX(){
+            return x;
         }
-        public Cell getDown(){
-            return down;
+        public int getY(){
+            return y;
         }
-        public Cell getLeft(){
-            return left;
-        }
-        public Cell getRight(){
-            return right;
+        public int compareTo(Cell other){
+            return f-other.getF();     
         }
     }
 }

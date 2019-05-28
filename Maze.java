@@ -123,7 +123,7 @@ public class Maze implements Renderable{
                 }
             }
         }
-        for(int i = 0; i < maze.length; i++){
+        /*for(int i = 0; i < maze.length; i++){
             for(int j = 0; j < maze[i].length; j++){
                 if(maze[i][j]){
                     System.out.print("#");
@@ -132,7 +132,7 @@ public class Maze implements Renderable{
                 }
             }
             System.out.println();
-        }
+        }*/
     }
     public void convertToList(Wall[][] walls){
         flatMaze = new ArrayList<Wall>();
@@ -195,7 +195,7 @@ public class Maze implements Renderable{
         ArrayList<Cell> path = new ArrayList<Cell>();
         open.add(new Cell(startX,startY));
         while(open.size()>0){
-            open = Collections.sort(open,Collections.reverseOrder());
+            Collections.sort(open,Collections.reverseOrder());
             Cell current = open.remove(open.size()-1);
             closed.add(current);
             if(current.getX()==endX && current.getY()==endY){
@@ -242,7 +242,7 @@ public class Maze implements Renderable{
             wall.render();
         }
     }
-    private class Cell extends Comparable<Cell>{
+    private class Cell implements Comparable<Cell>{
         int x,y;
         int f,g,h;
         Cell parent;

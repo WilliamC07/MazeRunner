@@ -42,6 +42,22 @@ public class Maze implements Renderable{
             }
             System.out.println();
         }
+
+        System.out.println("my generated");
+        Wall[][] w = generateWallFormatted(maze);
+        for(int r = 0; r < length; r++){
+            for(int c = 0; c < width; c++){
+                Wall here = w[r][c];
+                if(here != null){
+                    System.out.print("#");
+                }else{
+                    System.out.print(" ");
+                }
+                System.out.println();
+            }
+        }
+
+
     }
     public void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;
@@ -204,7 +220,7 @@ public class Maze implements Renderable{
 
         // create horizontal walls
         for(int r = 0; r < length; r++){
-            for(int c = 0; c < width; c++){
+            for(int c = 0; c < width;){
                 // (make sure there is a wall at the spot (false means no wall)) and
                 // (there is a wall to the right or a border)
                 if(!walls[r][c] && (c + 1 > width || !walls[r][c + 1])){
@@ -234,7 +250,9 @@ public class Maze implements Renderable{
                 // if there is a wall to the right, there must be a continuous horizontal wall
                 // find how many cells it spans
                 int endColumn = c;
-                while(++endColumn < width && walls[r][c]);
+                while(endColumn < width && walls[r][endColumn]){
+                    endColumn++;
+                }
 
                 // if the end wall is next to the border, it needs to be extended. it can only touch the right border
                 if(endColumn == width - 1){
@@ -247,6 +265,13 @@ public class Maze implements Renderable{
                     endPoint = middleOfCellPoint(r, endColumn);
                 }
 
+                Wall wall = new Wall(startPoint, endPoint);
+                // fill up the 2d array
+                for(int startColumn = c; startColumn < endColumn; startColumn++){
+                    output[r][startColumn] = wall;
+                }
+
+                c = endColumn + 1;
             }
         }
 

@@ -224,7 +224,12 @@ public class Maze implements Renderable{
                 open.add(neighbor);
             }
         }
-
+        Cell visited = closed.get(closed.size()-1);
+        while(visited.hasParent()){
+            path.add(visited);
+            visited = visited.getParent();
+        }
+        return path;
     }
     @Override
     public void render(){

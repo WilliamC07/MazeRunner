@@ -180,19 +180,19 @@ public class Maze implements Renderable{
         while(open.size()>0){
             open = Collections.sort(open,Collections.reverseOrder());
             Cell current = open.remove(open.size()-1);
-            /*ArrayList<int[]> adjacent = new ArrayList<int[]>();
-            if(current[0]-1>0 && !maze[2*current[0]-1][2*current[1]]){
-                adjacent.add(new int[]{current[0]-1,current[1]});
+            ArrayList<Cell> adjacent = new ArrayList<Cell>();
+            if(current.getX()-1>0 && !maze[2*current.getX()-1][2*current.getY()]){
+                adjacent.add(new Cell(current.getX()-1,current.getY()));
             }
-            if(current[0]+1<width && !maze[2*current[0]+1][2*current[1]]){
-                adjacent.add(new int[]{current[0]+1,current[1]});
+            if(current.getX()+1<width && !maze[2*current.getX()+1][2*current.getY()]){
+                adjacent.add(new Cell(current.getX()+1,current.getY()));
             }
-            if(current[1]-1>0 && !maze[2*current[0]][2*current[1]+1]){
-                adjacent.add(new int[]{current[0],current[1]-1});
+            if(current.getY()-1>0 && !maze[2*current.getX()][2*current.getY()+1]){
+                adjacent.add(new Cell(current.getX(),current.getY()-1));
             }
-            if(current[1]-1<length && !maze[2*current[0]][2*current[1]-1]){
-                adjacent.add(new int[]{current[0],current[1]+1});
-            }*/
+            if(current.getY()-1<length && !maze[2*current.getX()][2*current.getY()-1]){
+                adjacent.add(new Cell(current.getX(),current.getY()+1));
+            }
         }
         return path;
     }
@@ -237,7 +237,7 @@ public class Maze implements Renderable{
             return y;
         }
         public int compareTo(Cell other){
-            return f-other.getF();     
+            return f-other.getF();
         }
     }
 }

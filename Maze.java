@@ -173,6 +173,12 @@ public class Maze implements Renderable{
     public int getWidth(){
         return width;
     }
+    public ArrayList<Integer[]> solve(int startX, int startY, int endX, int endY){
+        ArrayList<Integer[]> path = new ArrayList<Integer[]>();
+        ArrayList<Integer[]> open = new ArrayList<Integer[]>();
+        return path;
+
+    }
     @Override
     public void render(){
         sketch.stroke(0);

@@ -173,6 +173,14 @@ public class Maze implements Renderable{
     public int getWidth(){
         return width;
     }
+    private boolean contains(ArrayList<Cell> list, Cell target){
+        for(Cell check : list){
+            if(check.getX()==target.getX() && check.getY()==target.getY()){
+                return true;
+            }
+        }
+        return false;
+    }
     public ArrayList<Cell> solve(int startX, int startY, int endX, int endY){
         ArrayList<Cell> path = new ArrayList<Cell>();
         ArrayList<Cell> open = new ArrayList<Cell>();
@@ -180,18 +188,27 @@ public class Maze implements Renderable{
         while(open.size()>0){
             open = Collections.sort(open,Collections.reverseOrder());
             Cell current = open.remove(open.size()-1);
+            path.add(current);
+            if(current.getX()==endX && current.getY()==endY){
+                break;
+            }
             ArrayList<Cell> adjacent = new ArrayList<Cell>();
             if(current.getX()-1>0 && !maze[2*current.getX()-1][2*current.getY()]){
-                adjacent.add(new Cell(current.getX()-1,current.getY()));
+                adjacent.add(new Cell(current.getX()-1,current.getY(),endX,endY,current));
             }
             if(current.getX()+1<width && !maze[2*current.getX()+1][2*current.getY()]){
-                adjacent.add(new Cell(current.getX()+1,current.getY()));
+                adjacent.add(new Cell(current.getX()+1,current.getY(),endX,endY,current));
             }
             if(current.getY()-1>0 && !maze[2*current.getX()][2*current.getY()+1]){
-                adjacent.add(new Cell(current.getX(),current.getY()-1));
+                adjacent.add(new Cell(current.getX(),current.getY()-1,endX,endY,current));
             }
             if(current.getY()-1<length && !maze[2*current.getX()][2*current.getY()-1]){
-                adjacent.add(new Cell(current.getX(),current.getY()+1));
+                adjacent.add(new Cell(current.getX(),current.getY()+1,endX,endY,current));
+            }
+            for(Cell neighbor : adjacent){
+                if(contains(open,neighbor)){
+                    continue;
+                }
             }
         }
         return path;

@@ -243,6 +243,7 @@ public class Maze implements Renderable{
         }
         ArrayList<Cell> solution = solve(0,0,width-1,length-1);
         for(Cell square : solution){
+            System.out.println(square.getX()+" "+square.getY());
             float x = sketch.width/10f+2f*sketch.width/5/width+square.getX()*4f*sketch.width/5/width;
 		    float y = sketch.height/10f+2f*sketch.height/5/length+square.getY()*4f*sketch.height/5/length;
             sketch.fill(0,255,0);
@@ -288,7 +289,7 @@ public class Maze implements Renderable{
             return parent;
         }
         public boolean hasParent(){
-            return parent==null;
+            return parent!=null;
         }
     }
 }

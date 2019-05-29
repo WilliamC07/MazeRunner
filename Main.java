@@ -8,9 +8,9 @@ public class Main extends PApplet{
 	private Character character;
 	private List<Renderable> renderables;
 	/**
-	 * Singleton design pattern so we don't need to keep passing reference to this class around. We need
-	 * the draw methods inside PApplet (like ellipse(float, float, float, float))
-	 */
+	* Singleton design pattern so we don't need to keep passing reference to this class around. We need
+	* the draw methods inside PApplet (like ellipse(float, float, float, float))
+	*/
 	private static Main instance;
 
 	public static void main(String[] args){
@@ -18,10 +18,10 @@ public class Main extends PApplet{
 	}
 
 	/**
-	 * Access the singleton.
-	 * Use this to access draw methods (the ellipse(), line() and more).
-	 * @return Get the single instance of this class.
-	 */
+	* Access the singleton.
+	* Use this to access draw methods (the ellipse(), line() and more).
+	* @return Get the single instance of this class.
+	*/
 	public static Main getInstance(){
 		return instance;
 	}
@@ -35,7 +35,7 @@ public class Main extends PApplet{
 
 	@Override
 	public void setup(){
-    boolean testRayMode = false;
+		boolean testRayMode = false;
 
 		if(testRayMode){
 			List<Wall> walls = new ArrayList<>();
@@ -49,7 +49,7 @@ public class Main extends PApplet{
 			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
 			renderables.add(character);
 		}else{
-			Maze maze = new Maze(50,50,this);
+			Maze maze = new Maze(25,25,this);
 			List<Wall> walls = maze.getFlat();
 			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
 			renderables.add(maze);
@@ -62,8 +62,10 @@ public class Main extends PApplet{
 	public void draw(){
 		background(255);
 		renderables.forEach(Renderable::render);
+		character.move();
 	}
 
+<<<<<<< Updated upstream
   public void keyPressed(){
 		if(key=='W' || key=='w'){
 			character.move(0f,-5f);
@@ -74,5 +76,15 @@ public class Main extends PApplet{
 		} else if(key=='D' || key=='d'){
 			character.move(5f,0f);
 		}
+=======
+	@Override
+	public void keyPressed(){
+		character.setVelocity(keyCode,true);
+	}
+
+	@Override
+	public void keyReleased(){
+		character.setVelocity(keyCode,false);
+>>>>>>> Stashed changes
 	}
 }

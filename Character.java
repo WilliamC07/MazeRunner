@@ -29,8 +29,22 @@ public class Character implements Renderable{
         }
     }
 
-    public void move(float dx, float dy){
-        location = new Point(location.getX()+dx,location.getY()+dy);
+    public void move(){
+        int dx = 0;
+        int dy = 0;
+        if(movingLeft){
+            dx-=1;
+        }
+        if(movingRight){
+            dx+=1;
+        }
+        if(movingUp){
+            dy-=1;
+        }
+        if(movingDown){
+            dy+=1;
+        }
+        location = new Point(location.getX()+5f*dx,location.getY()+5f*dy);
     }
 
     public Point getPos(){
@@ -43,24 +57,28 @@ public class Character implements Renderable{
             case 'w':
             case KeyEvent.VK_UP:
                 movingUp = toggle;
+                break;
             case 'S':
             case 's':
             case KeyEvent.VK_DOWN:
                 movingDown = toggle;
+                break;
             case 'A':
             case 'a':
             case KeyEvent.VK_LEFT:
                 movingLeft = toggle;
+                break;
             case 'D':
             case 'd':
             case KeyEvent.VK_RIGHT:
                 movingRight = toggle;
+                break;
         }
     }
 
     @Override
     public void render(){
-        location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
+        //location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
         Main.getInstance().fill(255,0,0);
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
         drawVision(getRays());

@@ -47,7 +47,7 @@ Constructs Maze w/ All Walls Filled
 Completed Maze Generation - Recursively Remove Walls  
 Bug Fixes - Incorrect Visit Checks  
 5/21/19   
-Completed Flattening of Maze
+Completed Flattening of Maze  
 Changed Character to Take Flattened Maze  
 5/22/19  
 Initial Attempt at Converting Maze to Boolean Array   
@@ -61,3 +61,7 @@ Camping, No Work Done
 Fixed Boolean Conversion - Missing Walls At Intersections  
 5/28/19  
 Started and Finished A* Maze Solving  
+5/29/19  
+Upgraded Movement - Arrow Keys  
+Smooth Movement  
+Diagonal Movement

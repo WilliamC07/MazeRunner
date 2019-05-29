@@ -65,18 +65,6 @@ public class Main extends PApplet{
 		character.move();
 	}
 
-<<<<<<< Updated upstream
-  public void keyPressed(){
-		if(key=='W' || key=='w'){
-			character.move(0f,-5f);
-		} else if(key=='S' || key=='s'){
-			character.move(0f,5f);
-		} else if(key=='A' || key=='a'){
-			character.move(-5f,0f);
-		} else if(key=='D' || key=='d'){
-			character.move(5f,0f);
-		}
-=======
 	@Override
 	public void keyPressed(){
 		character.setVelocity(keyCode,true);
@@ -85,6 +73,5 @@ public class Main extends PApplet{
 	@Override
 	public void keyReleased(){
 		character.setVelocity(keyCode,false);
->>>>>>> Stashed changes
 	}
 }

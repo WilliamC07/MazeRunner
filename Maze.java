@@ -47,8 +47,8 @@ public class Maze implements Renderable{
 
         System.out.println("my generated");
         Wall[][] w = generateWallFormatted(maze);
-        for(int r = 0; r < length; r++){
-            for(int c = 0; c < width; c++){
+        for(int r = 0; r < trueHeight; r++){
+            for(int c = 0; c < trueWidth; c++){
                 Wall here = w[r][c];
                 if(here != null){
                     System.out.print("#");
@@ -281,6 +281,22 @@ public class Maze implements Renderable{
         }
 
         // create vertical walls
+        for(int c = 0; c < trueWidth; c++){
+            for(int r = 0; r < trueHeight;){
+                if(!(walls[r][c] && (r + 1 == trueHeight || walls[r+1][c]))){
+                    r++;
+                    continue;
+                }
+
+                Point startPoint = null;
+                Point endPoint = null;
+
+                // TODO: End point and start point
+
+
+
+            }
+        }
 
         return output;
     }

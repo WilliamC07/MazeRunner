@@ -8,6 +8,7 @@ public class Maze implements Renderable{
     private int length;
     private Wall[][] wallsFormatted;
     private int width;
+    private int trueHeight, trueWidth;
     private PApplet sketch;
 
     /**
@@ -25,7 +26,9 @@ public class Maze implements Renderable{
         width = cols;
         this.sketch = sketch;
         Wall[][] walls = new Wall[2*rows-1][];
-        maze = new boolean[2*length-1][2*width-1];
+        this.trueHeight = 2*length-1;
+        this.trueWidth = 2*width-1;
+        maze = new boolean[trueHeight][trueWidth];
         fillWalls(length,width,walls);
         generate(0,0,walls);
         convertToBool(walls);
@@ -217,15 +220,14 @@ public class Maze implements Renderable{
     }
 
     private Wall[][] generateWallFormatted(boolean[][] walls){
-        Wall[][] output = new Wall[length][width];
+        Wall[][] output = new Wall[trueHeight][trueWidth];
 
         // create horizontal walls
-        for(int r = 0; r < length; r++){
-            for(int c = 0; c < width;){
-                System.out.println("row " + r + "column " + c);
+        for(int r = 0; r < trueHeight; r++){
+            for(int c = 0; c < trueWidth;){
                 // (make sure there is a wall at the spot (false means no wall)) and
                 // (there is a wall to the right or a border)
-                if(!(walls[r][c] && (c + 1 == width || walls[r][c+1]))){
+                if(!(walls[r][c] && (c + 1 == trueWidth || walls[r][c+1]))){
                     c++;
                     continue;
                 }
@@ -240,7 +242,7 @@ public class Maze implements Renderable{
                     float x = OFF_SET_X + c * WALL_SCALE - // left edge
                             WALL_SCALE / 2;                // to reach border
                     startPoint = new Point(x, startY);
-                }else if(c == width - 1){
+                }else if(c == trueWidth - 1){
                     // border to right
                     float x = OFF_SET_X + c * WALL_SCALE + // left edge
                             WALL_SCALE / 2;                // to reach border
@@ -253,13 +255,12 @@ public class Maze implements Renderable{
                 // if there is a wall to the right, there must be a continuous horizontal wall
                 // find how many cells it spans
                 int endColumn = c;
-                while(endColumn < width && walls[r][endColumn]){
-                    System.out.println("stuck in endcolumn " + c);
+                while(endColumn < trueWidth && walls[r][endColumn]){
                     endColumn++;
                 }
 
                 // if the end wall is next to the border, it needs to be extended. it can only touch the right border
-                if(endColumn == width - 1){
+                if(endColumn == trueWidth - 1){
                     float x = OFF_SET_X + c * WALL_SCALE + // left edge
                             WALL_SCALE / 2;                // to reach border
                     float y = OFF_SET_Y + r * WALL_SCALE;
@@ -272,7 +273,6 @@ public class Maze implements Renderable{
                 Wall wall = new Wall(startPoint, endPoint);
                 // fill up the 2d array
                 for(int startColumn = c; startColumn < endColumn; startColumn++){
-                    System.out.println("stuck in replacing walls " + c);
                     output[r][startColumn] = wall;
                 }
 

@@ -123,16 +123,6 @@ public class Maze implements Renderable{
                 }
             }
         }
-        /*for(int i = 0; i < maze.length; i++){
-            for(int j = 0; j < maze[i].length; j++){
-                if(maze[i][j]){
-                    System.out.print("#");
-                } else {
-                    System.out.print(".");
-                }
-            }
-            System.out.println();
-        }*/
     }
     public void convertToList(Wall[][] walls){
         flatMaze = new ArrayList<Wall>();
@@ -241,13 +231,13 @@ public class Maze implements Renderable{
         for(Wall wall : flatMaze){
             wall.render();
         }
-        ArrayList<Cell> solution = solve(0,0,width-1,length-1);
+        /*ArrayList<Cell> solution = solve(0,0,width-1,length-1);
         for(Cell square : solution){
             float x = sketch.width/10f+2f*sketch.width/5/width+square.getY()*4f*sketch.width/5/width;
 		    float y = sketch.height/10f+2f*sketch.height/5/length+square.getX()*4f*sketch.height/5/length;
             sketch.fill(0,255,0);
             sketch.ellipse(x,y,10,10);
-        }
+        }*/
     }
     private class Cell implements Comparable<Cell>{
         int x,y;

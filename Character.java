@@ -1,11 +1,13 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.awt.event.KeyEvent;
 
 public class Character implements Renderable{
     private Point location;
     private Wall[] borderWall;
     private List<Wall> allWalls;
+    public boolean movingUp,movingDown,movingLeft,movingRight;
 
     public Character(Point location, List<Wall> walls){
         this.location = location;
@@ -33,6 +35,27 @@ public class Character implements Renderable{
 
     public Point getPos(){
         return location;
+    }
+
+    public void setVelocity(int key, boolean toggle){
+        switch(key){
+            case 'W':
+            case 'w':
+            case KeyEvent.VK_UP:
+                movingUp = toggle;
+            case 'S':
+            case 's':
+            case KeyEvent.VK_DOWN:
+                movingDown = toggle;
+            case 'A':
+            case 'a':
+            case KeyEvent.VK_LEFT:
+                movingLeft = toggle;
+            case 'D':
+            case 'd':
+            case KeyEvent.VK_RIGHT:
+                movingRight = toggle;
+        }
     }
 
     @Override

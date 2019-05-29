@@ -31,6 +31,7 @@ public class Main extends PApplet{
 		instance = this;
 		size(750, 750);
 		renderables = new ArrayList<>();
+		noLoop();
 	}
 
 	@Override
@@ -73,5 +74,6 @@ public class Main extends PApplet{
 		} else if(key=='D' || key=='d'){
 			character.move(5f,0f);
 		}
+		redraw();
 	}
 }

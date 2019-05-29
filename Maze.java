@@ -199,16 +199,21 @@ public class Maze implements Renderable{
             Cell current = open.remove(open.size()-1);
             closed.add(current);
             if(current.getX()==endX && current.getY()==endY){
+                while(current.hasParent()){
+                    path.add(current);
+                    current = current.getParent();
+                }
+                path.add(current);
                 break;
             }
             ArrayList<Cell> adjacent = new ArrayList<Cell>();
-            if(current.getX()-1>0 && !maze[2*current.getX()-1][2*current.getY()]){
+            if(current.getX()-1>=0 && !maze[2*current.getX()-1][2*current.getY()]){
                 adjacent.add(new Cell(current.getX()-1,current.getY(),endX,endY,current));
             }
             if(current.getX()+1<width && !maze[2*current.getX()+1][2*current.getY()]){
                 adjacent.add(new Cell(current.getX()+1,current.getY(),endX,endY,current));
             }
-            if(current.getY()-1>0 && !maze[2*current.getX()][2*current.getY()-1]){
+            if(current.getY()-1>=0 && !maze[2*current.getX()][2*current.getY()-1]){
                 adjacent.add(new Cell(current.getX(),current.getY()-1,endX,endY,current));
             }
             if(current.getY()+1<length && !maze[2*current.getX()][2*current.getY()+1]){
@@ -224,11 +229,6 @@ public class Maze implements Renderable{
                 open.add(neighbor);
             }
         }
-        Cell visited = closed.get(closed.size()-1);
-        while(visited.hasParent()){
-            path.add(visited);
-            visited = visited.getParent();
-        }
         return path;
     }
     @Override
@@ -243,9 +243,8 @@ public class Maze implements Renderable{
         }
         ArrayList<Cell> solution = solve(0,0,width-1,length-1);
         for(Cell square : solution){
-            System.out.println(square.getX()+" "+square.getY());
-            float x = sketch.width/10f+2f*sketch.width/5/width+square.getX()*4f*sketch.width/5/width;
-		    float y = sketch.height/10f+2f*sketch.height/5/length+square.getY()*4f*sketch.height/5/length;
+            float x = sketch.width/10f+2f*sketch.width/5/width+square.getY()*4f*sketch.width/5/width;
+		    float y = sketch.height/10f+2f*sketch.height/5/length+square.getX()*4f*sketch.height/5/length;
             sketch.fill(0,255,0);
             sketch.ellipse(x,y,10,10);
         }

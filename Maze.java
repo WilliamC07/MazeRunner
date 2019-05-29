@@ -208,10 +208,10 @@ public class Maze implements Renderable{
             if(current.getX()+1<width && !maze[2*current.getX()+1][2*current.getY()]){
                 adjacent.add(new Cell(current.getX()+1,current.getY(),endX,endY,current));
             }
-            if(current.getY()-1>0 && !maze[2*current.getX()][2*current.getY()+1]){
+            if(current.getY()-1>0 && !maze[2*current.getX()][2*current.getY()-1]){
                 adjacent.add(new Cell(current.getX(),current.getY()-1,endX,endY,current));
             }
-            if(current.getY()-1<length && !maze[2*current.getX()][2*current.getY()-1]){
+            if(current.getY()+1<length && !maze[2*current.getX()][2*current.getY()+1]){
                 adjacent.add(new Cell(current.getX(),current.getY()+1,endX,endY,current));
             }
             for(Cell neighbor : adjacent){

@@ -38,8 +38,9 @@ public class Character implements Renderable{
     @Override
     public void render(){
         location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
+        Main.getInstance().fill(255,0,0);
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
-        drawVision(getRays());
+        //drawVision(getRays());
     }
 
     private List<Ray> getRays(){

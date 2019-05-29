@@ -30,7 +30,6 @@ public class Maze implements Renderable{
         generate(0,0,walls);
         convertToBool(walls);
         convertToList(walls);
-        this.wallsFormatted = generateWallFormatted(maze);
 
         for(int r = 0; r < maze.length; r++){
             for(int c = 0; c < maze[r].length; c++){
@@ -53,9 +52,11 @@ public class Maze implements Renderable{
                 }else{
                     System.out.print(" ");
                 }
-                System.out.println();
             }
+            System.out.println();
         }
+
+        System.out.println("finished");
 
 
     }
@@ -221,9 +222,11 @@ public class Maze implements Renderable{
         // create horizontal walls
         for(int r = 0; r < length; r++){
             for(int c = 0; c < width;){
+                System.out.println("row " + r + "column " + c);
                 // (make sure there is a wall at the spot (false means no wall)) and
                 // (there is a wall to the right or a border)
-                if(!walls[r][c] && (c + 1 > width || !walls[r][c + 1])){
+                if(!(walls[r][c] && (c + 1 == width || walls[r][c+1]))){
+                    c++;
                     continue;
                 }
 
@@ -251,6 +254,7 @@ public class Maze implements Renderable{
                 // find how many cells it spans
                 int endColumn = c;
                 while(endColumn < width && walls[r][endColumn]){
+                    System.out.println("stuck in endcolumn " + c);
                     endColumn++;
                 }
 
@@ -268,6 +272,7 @@ public class Maze implements Renderable{
                 Wall wall = new Wall(startPoint, endPoint);
                 // fill up the 2d array
                 for(int startColumn = c; startColumn < endColumn; startColumn++){
+                    System.out.println("stuck in replacing walls " + c);
                     output[r][startColumn] = wall;
                 }
 

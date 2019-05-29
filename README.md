@@ -35,7 +35,7 @@ Working on converting a boolean[][] of where walls are to a 2D grid of walls
 
 # Eric  
 5/17/19  
-Finished Renderable Interface
+Finished Renderable Interface  
 Finished Skeleton of Point Class  
 5/18/19  
 Finished Skeleton of Ray Class (Constructors,Accessors)  

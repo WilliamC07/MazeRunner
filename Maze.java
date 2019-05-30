@@ -288,8 +288,10 @@ public class Maze implements Renderable{
                     continue;
                 }
 
-                Point startPoint = null;
-                Point endPoint = null;
+                Point startPoint = new Point(0, 0);
+                Point endPoint = new Point(0, 0);
+
+
 
                 // TODO: End point and start point
                 // find where the vertical wall ends
@@ -300,9 +302,10 @@ public class Maze implements Renderable{
 
                 // populate the output
                 Wall wall = new Wall(startPoint, endPoint);
-                for(int startRow = r; r < endRow; startRow++){
+                for(int startRow = r; startRow < endRow; startRow++){
                     output[startRow][c] = wall;
                 }
+                r = endRow + 1;
             }
         }
 

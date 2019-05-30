@@ -292,9 +292,13 @@ public class Maze implements Renderable{
                 Point endPoint = null;
 
                 // TODO: End point and start point
+                // find where the vertical wall ends
+                int endRow = r;
+                while(endRow < trueHeight && walls[endRow][c]){
+                  endRow++;
+                }
 
-
-
+                // populate the output
             }
         }
 

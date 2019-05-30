@@ -31,7 +31,15 @@ Continued work on ray casting
 5/25/19
 Finished ray casting and removed testing code
 Merged ray casting fix to master  
-Working on converting a boolean[][] of where walls are to a 2D grid of walls 
+Working on converting a boolean[][] of where walls are to a 2D grid of walls
+5/28/19  
+Continued working on wall Generation  
+Merged working branch to deal with merge conflict early  
+5/29/19  
+Fixed generating horizontal walls (fixed infinite loop)  
+Starting working on vertical walls  
+5/30/19  
+
 
 # Eric  
 5/17/19  

@@ -221,6 +221,9 @@ public class Maze implements Renderable{
         }
         return path;
     }
+    public void hint(Point position, int length){
+
+    }
     @Override
     public void render(){
         sketch.stroke(0);
@@ -240,9 +243,9 @@ public class Maze implements Renderable{
         }*/
     }
     private class Cell implements Comparable<Cell>{
-        int x,y;
-        int f,g,h;
-        Cell parent;
+        private int x,y;
+        private int f,g,h;
+        private Cell parent;
         public Cell(int x, int y){
             this.x=x;
             this.y=y;

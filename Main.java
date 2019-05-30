@@ -6,6 +6,7 @@ import java.util.Set;
 
 public class Main extends PApplet{
 	private Character character;
+	private Maze maze;
 	private List<Renderable> renderables;
 	/**
 	* Singleton design pattern so we don't need to keep passing reference to this class around. We need
@@ -49,7 +50,7 @@ public class Main extends PApplet{
 			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
 			renderables.add(character);
 		}else{
-			Maze maze = new Maze(25,25,this);
+			maze = new Maze(25,25,this);
 			List<Wall> walls = maze.getFlat();
 			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
 			renderables.add(maze);
@@ -67,7 +68,15 @@ public class Main extends PApplet{
 
 	@Override
 	public void keyPressed(){
-		character.setVelocity(keyCode,true);
+		switch(key){
+			case 'H':
+			case 'h':
+				maze.hint(character.getPos(),10);
+				break;
+			default:
+				character.setVelocity(keyCode,true);
+				break;
+		}
 	}
 
 	@Override

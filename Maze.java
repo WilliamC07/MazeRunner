@@ -223,12 +223,12 @@ public class Maze implements Renderable{
         return path;
     }
     public void hint(Point position, int length){
-        float posX = position.geX();
+        float posX = position.getX();
         float posY = position.getY();
         posX-=sketch.width/10f;
         posY-=sketch.height/10f;
-        int cellX = (int)posX/(4f*sketch.width/5/width);
-        int cellY = (int)posY/(4f*sketch.height/5/height);
+        int cellX = (int)(posX/(4f*sketch.width/5/width));
+        int cellY = (int)(posY/(4f*sketch.height/5/length));
         ArrayList<Cell> fullPath = solve(cellX, cellY, width-1, length-1);
         for(int i = 0; i<10; i++){
             hint[i] = fullPath.get(i);

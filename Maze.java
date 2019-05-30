@@ -236,10 +236,12 @@ public class Maze implements Renderable{
             wall.render();
         }
         for(Cell square : hint){
-            float x = sketch.width/10f+2f*sketch.width/5/width+square.getY()*4f*sketch.width/5/width;
-		    float y = sketch.height/10f+2f*sketch.height/5/length+square.getX()*4f*sketch.height/5/length;
-            sketch.fill(0,255,0);
-            sketch.ellipse(x,y,10,10);
+            if(square!=null){
+                float x = sketch.width/10f+2f*sketch.width/5/width+square.getY()*4f*sketch.width/5/width;
+    		    float y = sketch.height/10f+2f*sketch.height/5/length+square.getX()*4f*sketch.height/5/length;
+                sketch.fill(0,255,0);
+                sketch.ellipse(x,y,10,10);
+            }
         }
     }
     private class Cell implements Comparable<Cell>{

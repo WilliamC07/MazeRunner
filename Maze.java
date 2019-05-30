@@ -223,7 +223,12 @@ public class Maze implements Renderable{
         return path;
     }
     public void hint(Point position, int length){
-
+        float posX = position.geX();
+        float posY = position.getY();
+        posX-=sketch.width/10f;
+        posY-=sketch.height/10f;
+        int cellX = (int)posX/(4f*sketch.width/5/width);
+        int cellY = (int)posY/(4f*sketch.height/5/height);
     }
     @Override
     public void render(){

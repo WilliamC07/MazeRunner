@@ -8,11 +8,12 @@ public class Character implements Renderable{
     private Wall[] borderWall;
     private List<Wall> allWalls;
     public boolean movingUp,movingDown,movingLeft,movingRight;
+    private PApplet sketch;
 
     public Character(Point location, List<Wall> walls){
         this.location = location;
         // TODO: update when the Maze.java is finished. I have some testing code for now
-        Main main = Main.getInstance();
+        Main main = sketch;
         Point a = new Point(1, 1);
         Point b = new Point(main.width - 2, 1);
         Point c = new Point(main.width - 2, main.height - 2);
@@ -27,6 +28,7 @@ public class Character implements Renderable{
         for(Wall border : borderWall){
             allWalls.add(border);
         }
+        sketch = Main.getInstance();
     }
 
     public void move(){
@@ -44,7 +46,9 @@ public class Character implements Renderable{
         if(movingDown){
             dy+=1;
         }
-        location = new Point(location.getX()+3f*dx,location.getY()+3f*dy);
+        float newX = sketch.constrain(location.getX()+3f*dx,sketch.width/10f+10,9*sketch.width/10f-10);
+        float newY = sketch.constrain(location.getY()+3f*dy,sketch.height/10f+10,9*sketch.height/10f-10)
+        location = new Point(newX,newY);
     }
 
     public Point getPos(){
@@ -78,10 +82,10 @@ public class Character implements Renderable{
 
     @Override
     public void render(){
-        //location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
-        Main.getInstance().fill(255,0,0);
-        Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
-        //drawVision(getRays());
+        //location = new Point(sketch.mouseX, sketch.mouseY);
+        sketch.fill(255,0,0);
+        sketch.ellipse(location.getX(), location.getY(), 20, 20);
+        drawVision(getRays());
     }
 
     private List<Ray> getRays(){
@@ -110,9 +114,9 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-        Main.getInstance().stroke(255, 0, 0);
+        sketch.stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
-            Main.getInstance().fill(255, 0, 0);
+            sketch.fill(255, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
 
@@ -125,7 +129,7 @@ public class Character implements Renderable{
 
             if(shareWall){
                 // if the ray is drawing to the same wall, then use the main lines to connect
-                Main.getInstance().triangle(location.getX(), location.getY(),
+                sketch.triangle(location.getX(), location.getY(),
                                             current.getEnd().getX(), current.getEnd().getY(),
                                             next.getEnd().getX(), next.getEnd().getY());
             }else{
@@ -165,17 +169,17 @@ public class Character implements Renderable{
                     }
 
                     if(canDrawMainAux){
-                        Main.getInstance().triangle(location.getX(), location.getY(),
+                        sketch.triangle(location.getX(), location.getY(),
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                     }else{
-                        Main.getInstance().triangle(location.getX(), location.getY(),
+                        sketch.triangle(location.getX(), location.getY(),
                                 currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                                 next.getEnd().getX(), next.getEnd().getY());
                     }
                 }else{
                     //connecting auxiliary does work
-                    Main.getInstance().triangle(location.getX(), location.getY(),
+                    sketch.triangle(location.getX(), location.getY(),
                             currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                             nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                 }

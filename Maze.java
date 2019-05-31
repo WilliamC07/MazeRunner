@@ -2,8 +2,10 @@ import processing.core.PApplet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+
 public class Maze implements Renderable{
-    private ArrayList<Wall> flatMaze;
+    private List<Wall> flatMaze = new ArrayList<>();
     private boolean[][] maze;
     private int length;
     private Wall[][] wallsFormatted;
@@ -33,35 +35,7 @@ public class Maze implements Renderable{
         generate(0,0,walls);
         convertToBool(walls);
         convertToList(walls);
-
-        for(int r = 0; r < maze.length; r++){
-            for(int c = 0; c < maze[r].length; c++){
-                if(maze[r][c]){
-                    System.out.print("#");
-                }else{
-                    System.out.print(" ");
-                }
-            }
-            System.out.println();
-        }
-
-        System.out.println("my generated");
-        Wall[][] w = generateWallFormatted(maze);
-        for(int r = 0; r < trueHeight; r++){
-            for(int c = 0; c < trueWidth; c++){
-                Wall here = w[r][c];
-                if(here != null){
-                    System.out.print("#");
-                }else{
-                    System.out.print(" ");
-                }
-            }
-            System.out.println();
-        }
-
-        System.out.println("finished");
-
-
+        wallsFormatted = generateWallFormatted(maze);
     }
     public void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;
@@ -180,7 +154,6 @@ public class Maze implements Renderable{
         }
     }
     public void convertToList(Wall[][] walls){
-        flatMaze = new ArrayList<Wall>();
         for(int i = 0; i < walls.length; i++){
             for(int j = 0; j < walls[i].length; j++){
                 if(walls[i][j]!=null){
@@ -201,7 +174,6 @@ public class Maze implements Renderable{
                             index++;
                         }
                     }
-                    flatMaze.add(new Wall(start,end));
                 }
             }
         }
@@ -209,7 +181,7 @@ public class Maze implements Renderable{
     public boolean[][] getBool(){
         return maze;
     }
-    public ArrayList<Wall> getFlat(){
+    public List<Wall> getFlat(){
         return flatMaze;
     }
     public int getLength(){
@@ -271,6 +243,7 @@ public class Maze implements Renderable{
                 }
 
                 Wall wall = new Wall(startPoint, endPoint);
+                flatMaze.add(wall);
                 // fill up the 2d array
                 for(int startColumn = c; startColumn < endColumn; startColumn++){
                     output[r][startColumn] = wall;
@@ -320,6 +293,7 @@ public class Maze implements Renderable{
 
                 // populate the output
                 Wall wall = new Wall(startPoint, endPoint);
+                flatMaze.add(wall);
                 for(int startRow = r; startRow < endRow; startRow++){
                     output[startRow][c] = wall;
                 }

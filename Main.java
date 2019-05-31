@@ -49,12 +49,11 @@ public class Main extends PApplet{
 			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
 			//renderables.add(character);
 		}else{
-			Maze maze = new Maze(50,50,this);
+			Maze maze = new Maze(10,10,this);
 			List<Wall> walls = maze.getFlat();
 			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
 			renderables.add(maze);
-			character = new Character(new Point((float) width / 2, (float) height / 2), maze.getFlat());
-			renderables.add(character);
+			//renderables.add(character);
 		}
 	}
 

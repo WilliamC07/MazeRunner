@@ -7,11 +7,12 @@ public class Maze implements Renderable{
     private int length;
     private int width;
     private PApplet sketch;
-    private Cell[] hint = new Cell[10];
+    private ArrayList<Cell> hint;
     public Maze(int rows, int cols, PApplet sketch){
         length = rows;
         width = cols;
         this.sketch = sketch;
+        hint = new ArrayList<Cell>();
         Wall[][] walls = new Wall[2*rows-1][];
         maze = new boolean[2*length-1][2*width-1];
         fillWalls(length,width,walls);
@@ -230,9 +231,9 @@ public class Maze implements Renderable{
         int cellX = (int)(posY/(4f*sketch.height/5/length));
         int cellY = (int)(posX/(4f*sketch.width/5/width));
         ArrayList<Cell> fullPath = solve(cellX, cellY, length-1, width-1);
-        hint = new Cell[10];
+        hint = new ArrayList<Cell>();
         for(int i = 0; i<fullPath.size()-1 && i<pathLength; i++){
-            hint[i] = fullPath.get(fullPath.size()-i-2);
+            hint.add(fullPath.get(fullPath.size()-i-2));
         }
     }
     @Override

@@ -73,6 +73,10 @@ public class Main extends PApplet{
 			case 'h':
 				maze.hint(character.getPos(),10);
 				break;
+			case 'G':
+			case 'g':
+				maze.hint(character.getPos(),maze.getLength()*maze.getWidth());
+				break;
 			default:
 				character.setVelocity(keyCode,true);
 				break;

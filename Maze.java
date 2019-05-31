@@ -16,12 +16,12 @@ public class Maze implements Renderable{
     /**
      * Each cell in a wall 2D array is a square of this side length in pixels
      */
-    private final float WALL_SCALE = 50;
+    private final float WALL_SCALE = 20;
     /**
      * Offset is so the edge of the maze doesn't touch the border of the window
      */
-    private final float OFF_SET_Y = 50;
-    private final float OFF_SET_X = 50;
+    private final float OFF_SET_Y = 10;
+    private final float OFF_SET_X = 10;
 
     public Maze(int rows, int cols, PApplet sketch){
         length = rows;
@@ -214,11 +214,6 @@ public class Maze implements Renderable{
                     float x = OFF_SET_X + c * WALL_SCALE - // left edge
                             WALL_SCALE / 2;                // to reach border
                     startPoint = new Point(x, startY);
-                }else if(c == trueWidth - 1){
-                    // border to right
-                    float x = OFF_SET_X + c * WALL_SCALE + // left edge
-                            WALL_SCALE / 2;                // to reach border
-                    startPoint = new Point(x, startY);
                 }else{
                     // start at middle of the cell if not adjacent to border
                     startPoint = middleOfCellPoint(r, c);
@@ -233,9 +228,9 @@ public class Maze implements Renderable{
 
                 // if the end wall is next to the border, it needs to be extended. it can only touch the right border
                 if(endColumn == trueWidth - 1){
-                    float x = OFF_SET_X + c * WALL_SCALE + // left edge
+                    float x = OFF_SET_X + (c + 1) * WALL_SCALE + // right edge
                             WALL_SCALE / 2;                // to reach border
-                    float y = OFF_SET_Y + r * WALL_SCALE;
+                    float y = OFF_SET_Y + r * WALL_SCALE + WALL_SCALE / 2;
                     endPoint = new Point(x, y);
                 }else{
                     // end at the midpoint
@@ -320,10 +315,10 @@ public class Maze implements Renderable{
     @Override
     public void render(){
         sketch.stroke(0);
-        sketch.line(sketch.width/10,sketch.height/10,9*sketch.width/10,sketch.height/10);
-        sketch.line(sketch.width/10,sketch.height/10,sketch.width/10,9*sketch.height/10);
-        sketch.line(9*sketch.width/10,sketch.height/10,9*sketch.width/10,9*sketch.height/10);
-        sketch.line(sketch.width/10,9*sketch.height/10,9*sketch.width/10,9*sketch.height/10);
+//        sketch.line(sketch.width/10,sketch.height/10,9*sketch.width/10,sketch.height/10);
+//        sketch.line(sketch.width/10,sketch.height/10,sketch.width/10,9*sketch.height/10);
+//        sketch.line(9*sketch.width/10,sketch.height/10,9*sketch.width/10,9*sketch.height/10);
+//        sketch.line(sketch.width/10,9*sketch.height/10,9*sketch.width/10,9*sketch.height/10);
         for(Wall wall : flatMaze){
             wall.render();
         }

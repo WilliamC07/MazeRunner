@@ -233,7 +233,8 @@ public class Maze implements Renderable{
         System.out.print(" "+cellX+" "+cellY);
         System.out.println();
         ArrayList<Cell> fullPath = solve(cellX, cellY, length-1, width-1);
-        for(int i = 0; i<fullPath.size() && i<pathLength; i++){
+        for(int i = 0; i<fullPath.size()-1 && i<pathLength; i++){
+            System.out.println(i);
             hint[i] = fullPath.get(fullPath.size()-i-2);
         }
     }

@@ -1,5 +1,9 @@
 # MazeRunner
-AP Computer Science Spring Term Final Project 2019
+AP Computer Science Spring Term Final Project 2019  
+Controls:  
+WASD or Arrow Keys to move  
+H for a hint  
+G to give up, shows way out  
 
 # William  
 5/17/19:  
@@ -64,4 +68,8 @@ Started and Finished A* Maze Solving
 5/29/19  
 Upgraded Movement - Arrow Keys  
 Smooth Movement  
-Diagonal Movement
+Diagonal Movement  
+5/30/19  
+Started and Finished Hints  
+Fixed Many Bugs Associated w/ Hints = See Commits  
+Added Give Up System - Displays Path Out  

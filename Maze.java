@@ -288,24 +288,34 @@ public class Maze implements Renderable{
                     continue;
                 }
 
-                Point startPoint = new Point(0, 0);
-                Point endPoint = new Point(0, 0);
+                Point startPoint;
+                Point endPoint;
                 float startX = OFF_SET_X + c * WALL_SCALE + // left edge
                                WALL_SCALE / 2; // to reach the center
                 if(r == 0){
                     // border to the Top
                     float y = OFF_SET_Y + r * WALL_SCALE - // to the top edge
                               WALL_SCALE / 2; // to reach the border
-                    startPoint = new Point(startX, startY);
+                    startPoint = new Point(startX, y);
                 }else{
                     startPoint = middleOfCellPoint(r, c);
                 }
 
-                // TODO: End point and start point
                 // find where the vertical wall ends
                 int endRow = r;
                 while(endRow < trueHeight && walls[endRow][c]){
                     endRow++;
+                }
+
+                // find the end point
+                if(endRow == trueHeight - 1){
+                    float x = OFF_SET_X + c * WALL_SCALE + // left edge
+                              WALL_SCALE / 2;              // to reach middle
+                    float y = OFF_SET_Y + r * WALL_SCALE + // to reach bottom edge
+                              WALL_SCALE / 2;              // to reach bottom border
+                    endPoint = new Point(x, y);
+                }else{
+                    endPoint = middleOfCellPoint(endRow, c);
                 }
 
                 // populate the output

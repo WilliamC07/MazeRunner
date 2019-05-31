@@ -197,9 +197,14 @@ public class Maze implements Renderable{
         // create horizontal walls
         for(int r = 0; r < trueHeight; r++){
             for(int c = 0; c < trueWidth;){
-                // (make sure there is a wall at the spot (false means no wall)) and
-                // (there is a wall to the right or a border)
-                if(!(walls[r][c] && (c + 1 == trueWidth || walls[r][c+1]))){
+                // continue if there is not wall
+                if(!walls[r][c]){
+                    c++;
+                    continue;
+                }
+
+                // continue if the wall is not adjacent to a border or next to another wall
+                if(!(c == 0 || c == trueWidth - 1 || maze[r][c + 1])){
                     c++;
                     continue;
                 }

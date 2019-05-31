@@ -44,7 +44,7 @@ public class Character implements Renderable{
         if(movingDown){
             dy+=1;
         }
-        location = new Point(location.getX()+5f*dx,location.getY()+5f*dy);
+        location = new Point(location.getX()+3f*dx,location.getY()+3f*dy);
     }
 
     public Point getPos(){
@@ -81,7 +81,7 @@ public class Character implements Renderable{
         //location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
         Main.getInstance().fill(255,0,0);
         Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
-        drawVision(getRays());
+        //drawVision(getRays());
     }
 
     private List<Ray> getRays(){

@@ -256,7 +256,14 @@ public class Maze implements Renderable{
         // create vertical walls
         for(int c = 0; c < trueWidth; c++){
             for(int r = 0; r < trueHeight;){
-                if(!(walls[r][c] && (r + 1 == trueHeight || walls[r+1][c]))){
+                // continue if there is no wall
+                if(!walls[r][c]){
+                    r++;
+                    continue;
+                }
+
+                // continue if the wall is not adjacent to a border or another vertical wall
+                if(!(r == 0 || r == trueHeight - 1 || walls[r+1][c])){
                     r++;
                     continue;
                 }

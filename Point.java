@@ -58,6 +58,10 @@ public class Point{
                 Float.compare(point.y, y) == 0;
     }
 
+    @Override
+    public int hashCode(){
+        return (int) (x * 10_000 + y);
+    }
 
     @Override
     public String toString() {

@@ -16,7 +16,7 @@ public class Maze implements Renderable{
     /**
      * Each cell in a wall 2D array is a square of this side length in pixels
      */
-    private final float WALL_SCALE = 20;
+    private final float WALL_SCALE = 50;
     /**
      * Offset is so the edge of the maze doesn't touch the border of the window
      */
@@ -254,15 +254,35 @@ public class Maze implements Renderable{
         }
 
         // create vertical walls
-//        for(int c = 0; c < trueWidth; c++) {
-//            for (int r = 0; r < trueHeight; ) {
-//                if (!walls[r][c] ||  // continue if there is no wall
-//                    !(r == 0 || r == trueHeight - 1 || walls[r + 1][c])) {  // continue if the wall is not adjacent to a border or another vertical wall
-//                    r++;
-//                    continue;
-//                }
-//            }
-//        }
+        for(int c = 0; c < trueWidth; c++) {
+            for (int r = 0; r < trueHeight; ) {
+                if (!walls[r][c] ||  // continue if there is no wall
+                    !(r == 0 || r == trueHeight - 1 || walls[r + 1][c])) {  // continue if the wall is not adjacent to a border or another vertical wall
+                    r++;
+                    continue;
+                }
+
+                // because the wall is vertical, the start and end share the same x
+                float x = OFF_SET_X + (c / 2 + 1) * WALL_SCALE;
+                Point start = new Point(x,OFF_SET_Y + ((r + 1) / 2) * WALL_SCALE);
+                Point end;
+
+                // find the span of the wall
+                int endRow = r;
+                while(endRow < trueHeight && walls[endRow][c]){
+                    endRow++;
+                }
+                end = new Point(x, OFF_SET_Y + ((endRow + 1) / 2) * WALL_SCALE);
+
+                Wall wall = new Wall(start, end);
+                flatMaze.add(wall);
+                // populate the output
+                for(int i = r; i < endRow; i++){
+                    output[i][c] = wall;
+                }
+                r = endRow + 1;
+            }
+        }
 
         return output;
     }

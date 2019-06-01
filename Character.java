@@ -37,28 +37,12 @@ public class Character implements Renderable{
 
         // Draw a ray to each endpoint if there is not a wall blocking the way
         for(Point vertex : verticies){
-            Ray mainRay = new Ray(location, vertex, true, null);
+            Ray mainRay = new Ray(location, vertex, true);
             if(!isMainRayBlocked(mainRay)){
                 mainRay.setAuxiliaryRay(createAuxiliaryRay(mainRay));
                 rays.add(mainRay);
             }
         }
-//        for(Wall wall : allWalls){
-//            Ray mainRayStart = new Ray(location, wall.getStart(), true, wall);
-//            Ray mainRayEnd = new Ray(location, wall.getEnd(), true, wall);
-//
-//            // If a ray cannot be drawn, do not keep track of it
-//            // If the ray can be drawn, keep track of it and generate the auxiliary ray
-//            if(!isMainRayBlocked(mainRayStart, wall)){
-//                rays.add(mainRayStart);
-//                mainRayStart.setAuxiliaryRay(createAuxiliaryRay(mainRayStart));
-//            }
-//            if(!isMainRayBlocked(mainRayEnd, wall)){
-//                rays.add(mainRayEnd);
-//                mainRayEnd.setAuxiliaryRay(createAuxiliaryRay(mainRayEnd));
-//            }
-//        }
-
         // counter clockwise sorting
         Collections.sort(rays);
         return rays;
@@ -67,7 +51,7 @@ public class Character implements Renderable{
     private void drawVision(List<Ray> rays){
         Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
-            Main.getInstance().fill(i*10, 0, 0);
+            Main.getInstance().fill(255, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
 
@@ -93,7 +77,7 @@ public class Character implements Renderable{
 
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
                 boolean isMidpointBlocked = false;
-                Ray toMidPoint = new Ray(location, midpointAuxAux, true, null);
+                Ray toMidPoint = new Ray(location, midpointAuxAux, true);
                 for(Wall blockCheck : allWalls){
                     Point intersection = toMidPoint.intersects(blockCheck);
                     // make sure the wall is not between the two line segment
@@ -110,7 +94,7 @@ public class Character implements Renderable{
                     boolean canDrawMainAux = true;
                     // if the main cannot be drawn to the aux midpoint without intersecting a wall at another point other
                     // than the start of the main ray or the aux endpoint, it is not valid
-                    Ray checkBlockingMainAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);
+                    Ray checkBlockingMainAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true);
                     for(Wall block : allWalls){
                         Point intersection = checkBlockingMainAux.intersects(block);
                         if(intersection != null && !intersection.equals(current.getEnd()) && !intersection.equals(nextAuxiliary.getEnd())){
@@ -126,7 +110,7 @@ public class Character implements Renderable{
                     }else{
                         // make sure the auxiliary to main can be drawn
                         boolean canDrawAuxMain = true;
-                        Ray checkBlockingAuxMain = new Ray(currentAuxiliary.getEnd(), next.getEnd(), true, null);
+                        Ray checkBlockingAuxMain = new Ray(currentAuxiliary.getEnd(), next.getEnd(), true);
                         for(Wall block : allWalls){
                             Point intersection = checkBlockingAuxMain.intersects(block);
                             if(intersection != null && !intersection.equals(currentAuxiliary.getEnd()) && !intersection.equals(next.getEnd())){
@@ -176,7 +160,7 @@ public class Character implements Renderable{
 
     private Ray createAuxiliaryRay(Ray mainRay){
         // mainRay.getEnd() gives direction of the geometric ray
-        Ray auxiliary = new Ray(mainRay.getStart(), mainRay.getEnd(), false, null);
+        Ray auxiliary = new Ray(mainRay.getStart(), mainRay.getEnd(), false);
         for(Wall collideWall : allWalls){
             Point collisionPoint = auxiliary.intersects(collideWall);
             // make sure there is an intersection and the collision point is not the directional point (since directional
@@ -199,7 +183,7 @@ public class Character implements Renderable{
                 }
 
                 // make sure the blocking wall is not blocked by the collision wall
-                Ray startToCollision = new Ray(auxiliary.getStart(), collisionPoint, true, null);
+                Ray startToCollision = new Ray(auxiliary.getStart(), collisionPoint, true);
                 if(startToCollision.intersects(blockingWall) == null){
                     continue;
                 }
@@ -209,7 +193,7 @@ public class Character implements Renderable{
             }
 
             if(!isAuxBlocked){
-                return new Ray(mainRay.getStart(), collisionPoint, true, collideWall);
+                return new Ray(mainRay.getStart(), collisionPoint, true);
             }
         }
         return mainRay;

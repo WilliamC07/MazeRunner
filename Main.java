@@ -1,8 +1,6 @@
 import processing.core.PApplet;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 
 public class Main extends PApplet{
 	private Character character;
@@ -29,32 +27,19 @@ public class Main extends PApplet{
 	@Override
 	public void settings(){
 		instance = this;
-		size(750, 750);
+		size(1000, 1000);
 		renderables = new ArrayList<>();
 	}
 
 	@Override
 	public void setup(){
-    boolean testRayMode = false;
+		Maze maze = new Maze(30,30,this);
+		List<Wall> walls = maze.getFlat();
+		Collections.addAll(walls, maze.getBorder());
+		character = new Character(new Point((float) width / 2, (float) height / 2), walls, maze.verticies());
 
-		if(testRayMode){
-			List<Wall> walls = new ArrayList<>();
-			Point a = new Point(20, 20);
-			Point b = new Point(20, 100);
-			Point c = new Point(100, 100);
-			walls.add(new Wall(a, b));
-			walls.add(new Wall(b, c));
-			renderables.addAll(walls);
-
-			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
-			//renderables.add(character);
-		}else{
-			Maze maze = new Maze(10,10,this);
-			List<Wall> walls = maze.getFlat();
-			character = new Character(new Point((float) width / 2, (float) height / 2), walls);
-			renderables.add(maze);
-			//renderables.add(character);
-		}
+		renderables.add(maze);
+		renderables.add(character);
 	}
 
 	@Override

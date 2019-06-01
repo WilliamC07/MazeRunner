@@ -2,14 +2,12 @@ public class Ray implements Comparable<Ray>{
     private final Point start;
     private Point end;
     private final boolean isMainRay;
-    private Wall pointOf;
     private Ray auxiliaryRay;
 
-    public Ray(Point start, Point end, boolean isMainRay, Wall pointOf) {
+    public Ray(Point start, Point end, boolean isMainRay) {
         this.start = start;
         this.end = end;
         this.isMainRay = isMainRay;
-        this.pointOf = pointOf;
     }
 
     /**
@@ -100,17 +98,6 @@ public class Ray implements Comparable<Ray>{
             throw new IllegalStateException("Cannot reset end point for main ray");
         }
         this.end = end;
-    }
-
-    public Wall getPointOf() {
-        return pointOf;
-    }
-
-    public void setPointOf(Wall pointOf){
-        if(isMainRay){
-            throw new IllegalStateException("Cannot reset wall for main ray");
-        }
-        this.pointOf = pointOf;
     }
 
     @Override

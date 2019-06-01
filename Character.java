@@ -70,7 +70,7 @@ public class Character implements Renderable{
     private void drawVision(List<Ray> rays){
         Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
-            Main.getInstance().fill(255, 0, 0);
+            Main.getInstance().fill(i*10, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
 
@@ -113,9 +113,9 @@ public class Character implements Renderable{
                     boolean canDrawMainAux = true;
                     // if the main cannot be drawn to the aux midpoint without intersecting a wall at another point other
                     // than the start of the main ray or the aux endpoint, it is not valid
-                    Ray checkBlocking = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);
+                    Ray checkBlockingMainAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true, null);
                     for(Wall block : allWalls){
-                        Point intersection = checkBlocking.intersects(block);
+                        Point intersection = checkBlockingMainAux.intersects(block);
                         if(intersection != null && !intersection.equals(current.getEnd()) && !intersection.equals(nextAuxiliary.getEnd())){
                             canDrawMainAux = false;
                             break;
@@ -127,9 +127,25 @@ public class Character implements Renderable{
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                     }else{
-                        Main.getInstance().triangle(location.getX(), location.getY(),
-                                currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
-                                next.getEnd().getX(), next.getEnd().getY());
+                        // make sure the auxiliary to main can be drawn
+                        boolean canDrawAuxMain = true;
+                        Ray checkBlockingAuxMain = new Ray(currentAuxiliary.getEnd(), next.getEnd(), true, null);
+                        for(Wall block : allWalls){
+                            Point intersection = checkBlockingAuxMain.intersects(block);
+                            if(intersection != null && !intersection.equals(currentAuxiliary.getEnd()) && !intersection.equals(next.getEnd())){
+                                canDrawAuxMain = false;
+                            }
+                        }
+
+                        if(canDrawAuxMain){
+                            Main.getInstance().triangle(location.getX(), location.getY(),
+                                    currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                                    next.getEnd().getX(), next.getEnd().getY());
+                        }else{
+                            Main.getInstance().triangle(location.getX(), location.getY(),
+                                    currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                                    nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
+                        }
                     }
                 }else{
                     //connecting auxiliary does work

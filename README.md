@@ -1,5 +1,9 @@
 # MazeRunner
-AP Computer Science Spring Term Final Project 2019
+AP Computer Science Spring Term Final Project 2019  
+Controls:  
+WASD or Arrow Keys to move  
+H for a hint  
+G to give up, shows way out  
 
 # William  
 5/17/19:  
@@ -39,17 +43,46 @@ Merged working branch to deal with merge conflict early
 Fixed generating horizontal walls (fixed infinite loop)  
 Starting working on vertical walls  
 5/30/19  
-
+Continued work on converting maze to walls  
+6/1/19  
+Finish converting maze to walls
+Fixed ray casting to work when two walls intersect but don't share endpoint  
+Removed unused code  
+Merged work to master
 
 # Eric  
 5/17/19  
-Boilerplate Code for Renderable and Point  
+Finished Renderable Interface  
+Finished Skeleton of Point Class  
 5/18/19  
-Boilerplate Code for Ray  
-Basic Character Movement  
+Finished Skeleton of Ray Class (Constructors,Accessors)  
+Basic Character Movement - WASD Controls  
 5/19/19  
 Initial Attempts at Basic Maze Generation  
+Constructs Maze w/ All Walls Filled  
 5/20/19  
-Completed Maze Generation Bug Fixes  
+Completed Maze Generation - Recursively Remove Walls  
+Bug Fixes - Incorrect Visit Checks  
 5/21/19   
-Completed Flattening of Maze and Combining Walls 5/22/19 Completed Converting Maze to a 2D Boolean Array
+Completed Flattening of Maze  
+Changed Character to Take Flattened Maze  
+5/22/19  
+Initial Attempt at Converting Maze to Boolean Array   
+Used for A* Algorithm  
+Used for Ray Casting  
+5/23/19-5/24/19  
+AP Tests, No Work Done  
+5/25/19-5/26/19  
+Camping, No Work Done  
+5/27/19  
+Fixed Boolean Conversion - Missing Walls At Intersections  
+5/28/19  
+Started and Finished A* Maze Solving  
+5/29/19  
+Upgraded Movement - Arrow Keys  
+Smooth Movement  
+Diagonal Movement  
+5/30/19  
+Started and Finished Hints  
+Fixed Many Bugs Associated w/ Hints = See Commits  
+Added Give Up System - Displays Path Out  

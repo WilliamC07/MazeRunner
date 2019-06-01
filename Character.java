@@ -1,34 +1,79 @@
+import processing.core.PApplet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.awt.event.KeyEvent;
 
 public class Character implements Renderable{
     private Point location;
-    private Wall[] borderWall;
     private Set<Point> verticies;
     private List<Wall> allWalls;
+    public boolean movingUp,movingDown,movingLeft,movingRight;
+    private PApplet sketch;
 
     public Character(Point location, List<Wall> walls, Set<Point> verticies){
         this.location = location;
+        sketch = Main.getInstance();
         // TODO: update when the Maze.java is finished. I have some testing code for now
-        Main main = Main.getInstance();
         this.allWalls = walls;
         this.verticies = verticies;
     }
 
-    public void move(float dx, float dy){
-        location = new Point(location.getX()+dx,location.getY()+dy);
+    public void move(){
+        int dx = 0;
+        int dy = 0;
+        if(movingLeft){
+            dx-=1;
+        }
+        if(movingRight){
+            dx+=1;
+        }
+        if(movingUp){
+            dy-=1;
+        }
+        if(movingDown){
+            dy+=1;
+        }
+        float newX = sketch.constrain(location.getX()+3f*dx,sketch.width/10f+10,9*sketch.width/10f-10);
+        float newY = sketch.constrain(location.getY()+3f*dy,sketch.height/10f+10,9*sketch.height/10f-10);
+        location = new Point(newX,newY);
     }
 
     public Point getPos(){
         return location;
     }
 
+    public void setVelocity(int key, boolean toggle){
+        switch(key){
+            case 'W':
+            case 'w':
+            case KeyEvent.VK_UP:
+                movingUp = toggle;
+                break;
+            case 'S':
+            case 's':
+            case KeyEvent.VK_DOWN:
+                movingDown = toggle;
+                break;
+            case 'A':
+            case 'a':
+            case KeyEvent.VK_LEFT:
+                movingLeft = toggle;
+                break;
+            case 'D':
+            case 'd':
+            case KeyEvent.VK_RIGHT:
+                movingRight = toggle;
+                break;
+        }
+    }
+
     @Override
     public void render(){
-        location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
-        Main.getInstance().ellipse(location.getX(), location.getY(), 20, 20);
+        //location = new Point(sketch.mouseX, sketch.mouseY);
+        sketch.fill(255,0,0);
+        sketch.ellipse(location.getX(), location.getY(), 20, 20);
         drawVision(getRays());
     }
 
@@ -49,9 +94,9 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-        Main.getInstance().stroke(255, 0, 0);
+        sketch.stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
-            Main.getInstance().fill(255, 0, 0);
+            sketch.fill(255, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
 
@@ -63,8 +108,8 @@ public class Character implements Renderable{
             }
 
             if(shareWall){
-                // if the ray is drawing to the same wall, then use the main lines to connect
-                Main.getInstance().triangle(location.getX(), location.getY(),
+                // if the ray is drawing to the same wall, then use the sketch lines to connect
+                sketch.triangle(location.getX(), location.getY(),
                                             current.getEnd().getX(), current.getEnd().getY(),
                                             next.getEnd().getX(), next.getEnd().getY());
             }else{
@@ -73,7 +118,7 @@ public class Character implements Renderable{
 
                 // The rays are not drawn to the same point
                 // If a ray cannot be drawn to the midpoint between the two auxiliary rays, we must connect
-                // auxiliary to main
+                // auxiliary to sketch
 
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
                 boolean isMidpointBlocked = false;
@@ -90,11 +135,11 @@ public class Character implements Renderable{
 
                 if(isMidpointBlocked){
                     // Cannot connect the aux
-
                     boolean canDrawMainAux = true;
                     // if the main cannot be drawn to the aux midpoint without intersecting a wall at another point other
                     // than the start of the main ray or the aux endpoint, it is not valid
                     Ray checkBlockingMainAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true);
+
                     for(Wall block : allWalls){
                         Point intersection = checkBlockingMainAux.intersects(block);
                         if(intersection != null && !intersection.equals(current.getEnd()) && !intersection.equals(nextAuxiliary.getEnd())){
@@ -104,7 +149,7 @@ public class Character implements Renderable{
                     }
 
                     if(canDrawMainAux){
-                        Main.getInstance().triangle(location.getX(), location.getY(),
+                        sketch.triangle(location.getX(), location.getY(),
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                     }else{
@@ -127,10 +172,13 @@ public class Character implements Renderable{
                                     currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                                     nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                         }
+                        sketch.triangle(location.getX(), location.getY(),
+                                currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
+                                next.getEnd().getX(), next.getEnd().getY());
                     }
                 }else{
                     //connecting auxiliary does work
-                    Main.getInstance().triangle(location.getX(), location.getY(),
+                    sketch.triangle(location.getX(), location.getY(),
                             currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                             nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                 }
@@ -196,6 +244,8 @@ public class Character implements Renderable{
                 return new Ray(mainRay.getStart(), collisionPoint, true);
             }
         }
-        return mainRay;
+
+        // cannot draw aux
+        return null;
     }
 }

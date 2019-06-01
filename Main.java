@@ -4,11 +4,12 @@ import java.util.*;
 
 public class Main extends PApplet{
 	private Character character;
+	private Maze maze;
 	private List<Renderable> renderables;
 	/**
-	 * Singleton design pattern so we don't need to keep passing reference to this class around. We need
-	 * the draw methods inside PApplet (like ellipse(float, float, float, float))
-	 */
+	* Singleton design pattern so we don't need to keep passing reference to this class around. We need
+	* the draw methods inside PApplet (like ellipse(float, float, float, float))
+	*/
 	private static Main instance;
 
 	public static void main(String[] args){
@@ -16,10 +17,10 @@ public class Main extends PApplet{
 	}
 
 	/**
-	 * Access the singleton.
-	 * Use this to access draw methods (the ellipse(), line() and more).
-	 * @return Get the single instance of this class.
-	 */
+	* Access the singleton.
+	* Use this to access draw methods (the ellipse(), line() and more).
+	* @return Get the single instance of this class.
+	*/
 	public static Main getInstance(){
 		return instance;
 	}
@@ -46,17 +47,28 @@ public class Main extends PApplet{
 	public void draw(){
 		background(255);
 		renderables.forEach(Renderable::render);
+		character.move();
 	}
 
-  public void keyPressed(){
-		if(key=='W' || key=='w'){
-			character.move(0f,-5f);
-		} else if(key=='S' || key=='s'){
-			character.move(0f,5f);
-		} else if(key=='A' || key=='a'){
-			character.move(-5f,0f);
-		} else if(key=='D' || key=='d'){
-			character.move(5f,0f);
+	@Override
+	public void keyPressed(){
+		switch(key){
+			case 'H':
+			case 'h':
+				maze.hint(character.getPos(),10);
+				break;
+			case 'G':
+			case 'g':
+				maze.hint(character.getPos(),maze.getLength()*maze.getWidth());
+				break;
+			default:
+				character.setVelocity(keyCode,true);
+				break;
 		}
+	}
+
+	@Override
+	public void keyReleased(){
+		character.setVelocity(keyCode,false);
 	}
 }

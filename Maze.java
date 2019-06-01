@@ -10,7 +10,6 @@ public class Maze implements Renderable{
     private int width;
     private int trueHeight, trueWidth;
     private PApplet sketch;
-
     /**
      * Each cell in a wall 2D array is a square of this side length in pixels
      */
@@ -21,10 +20,12 @@ public class Maze implements Renderable{
     private final float OFF_SET_Y = 30;
     private final float OFF_SET_X = 30;
 
+    private ArrayList<Cell> hint;
     public Maze(int rows, int cols, PApplet sketch){
         length = rows;
         width = cols;
         this.sketch = sketch;
+        hint = new ArrayList<Cell>();
         Wall[][] walls = new Wall[2*rows-1][];
         this.trueHeight = 2*length-1;
         this.trueWidth = 2*width-1;
@@ -167,16 +168,6 @@ public class Maze implements Renderable{
                 }
             }
         }
-        for(int i = 0; i < maze.length; i++){
-            for(int j = 0; j < maze[i].length; j++){
-                if(maze[i][j]){
-                    System.out.print("#");
-                } else {
-                    System.out.print(".");
-                }
-            }
-            System.out.println();
-        }
     }
     public void convertToList(Wall[][] walls){
         for(int i = 0; i < walls.length; i++){
@@ -215,7 +206,6 @@ public class Maze implements Renderable{
     public int getWidth(){
         return width;
     }
-
     private Wall[][] generateWallFormatted(boolean[][] walls){
         // add two for the border
         Wall[][] output = new Wall[trueHeight][trueWidth];
@@ -350,6 +340,77 @@ public class Maze implements Renderable{
         return this.wallsFormatted;
     }
 
+    private boolean contains(ArrayList<Cell> list, Cell target){
+        for(Cell check : list){
+            if(check.getX()==target.getX() && check.getY()==target.getY()){
+                return true;
+            }
+        }
+        return false;
+    }
+    private Cell find(ArrayList<Cell> list, Cell target){
+        for(Cell check : list){
+            if(check.getX()==target.getX() && check.getY()==target.getY()){
+                return check;
+            }
+        }
+        return null;
+    }
+    public ArrayList<Cell> solve(int startX, int startY, int endX, int endY){
+        ArrayList<Cell> closed = new ArrayList<Cell>();
+        ArrayList<Cell> open = new ArrayList<Cell>();
+        ArrayList<Cell> path = new ArrayList<Cell>();
+        open.add(new Cell(startX,startY));
+        while(open.size()>0){
+            Collections.sort(open,Collections.reverseOrder());
+            Cell current = open.remove(open.size()-1);
+            closed.add(current);
+            if(current.getX()==endX && current.getY()==endY){
+                while(current.hasParent()){
+                    path.add(current);
+                    current = current.getParent();
+                }
+                path.add(current);
+                break;
+            }
+            ArrayList<Cell> adjacent = new ArrayList<Cell>();
+            if(current.getX()-1>=0 && !maze[2*current.getX()-1][2*current.getY()]){
+                adjacent.add(new Cell(current.getX()-1,current.getY(),endX,endY,current));
+            }
+            if(current.getX()+1<length && !maze[2*current.getX()+1][2*current.getY()]){
+                adjacent.add(new Cell(current.getX()+1,current.getY(),endX,endY,current));
+            }
+            if(current.getY()-1>=0 && !maze[2*current.getX()][2*current.getY()-1]){
+                adjacent.add(new Cell(current.getX(),current.getY()-1,endX,endY,current));
+            }
+            if(current.getY()+1<width && !maze[2*current.getX()][2*current.getY()+1]){
+                adjacent.add(new Cell(current.getX(),current.getY()+1,endX,endY,current));
+            }
+            for(Cell neighbor : adjacent){
+                if(contains(closed,neighbor) && find(closed,neighbor).getF()<=neighbor.getF()){
+                    continue;
+                }
+                if(contains(open,neighbor) && find(open,neighbor).getF()<=neighbor.getF()){
+                    continue;
+                }
+                open.add(neighbor);
+            }
+        }
+        return path;
+    }
+    public void hint(Point position, int pathLength){
+        float posX = position.getX();
+        float posY = position.getY();
+        posX-=sketch.width/10f;
+        posY-=sketch.height/10f;
+        int cellX = (int)(posY/(4f*sketch.height/5/length));
+        int cellY = (int)(posX/(4f*sketch.width/5/width));
+        ArrayList<Cell> fullPath = solve(cellX, cellY, length-1, width-1);
+        hint = new ArrayList<Cell>();
+        for(int i = 0; i<fullPath.size()-1 && i<pathLength; i++){
+            hint.add(fullPath.get(fullPath.size()-i-2));
+        }
+    }
     @Override
     public void render(){
         sketch.stroke(0);
@@ -359,6 +420,56 @@ public class Maze implements Renderable{
 //        sketch.line(sketch.width/10,9*sketch.height/10,9*sketch.width/10,9*sketch.height/10);
         for(Wall wall : flatMaze){
             wall.render();
+        }
+        for(Cell square : hint){
+            if(square!=null){
+                float x = sketch.width/10f+2f*sketch.width/5/width+square.getY()*4f*sketch.width/5/width;
+    		    float y = sketch.height/10f+2f*sketch.height/5/length+square.getX()*4f*sketch.height/5/length;
+                sketch.fill(0,255,0);
+                sketch.ellipse(x,y,10,10);
+            }
+        }
+    }
+    private class Cell implements Comparable<Cell>{
+        private int x,y;
+        private int f,g,h;
+        private Cell parent;
+        public Cell(int x, int y){
+            this.x=x;
+            this.y=y;
+            f = 0;
+            g = 0;
+            h = 0;
+        }
+        public Cell(int x, int y, int goalX, int goalY, Cell parent){
+            this.x=x;
+            this.y=y;
+            this.parent=parent;
+            h = Math.abs(goalX-x)+Math.abs(goalY-y);
+            g = parent.getG()+1;
+            f = g+h;
+
+        }
+        public int getG(){
+            return g;
+        }
+        public int getF(){
+            return f;
+        }
+        public int getX(){
+            return x;
+        }
+        public int getY(){
+            return y;
+        }
+        public int compareTo(Cell other){
+            return f-other.getF();
+        }
+        public Cell getParent(){
+            return parent;
+        }
+        public boolean hasParent(){
+            return parent!=null;
         }
     }
 }

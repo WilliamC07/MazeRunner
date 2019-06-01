@@ -35,33 +35,6 @@ public class Maze implements Renderable{
         convertToBool(walls);
         convertToList(walls);
         wallsFormatted = generateWallFormatted(maze);
-
-        for(int r = 0; r < maze.length; r++){
-            for(int c = 0; c < maze[r].length; c++){
-                if(maze[r][c]){
-                    System.out.print("#");
-                }else{
-                    System.out.print(" ");
-                }
-            }
-            System.out.println();
-        }
-
-        System.out.println("my generated");
-        Wall[][] w = generateWallFormatted(maze);
-        for(int r = 0; r < trueHeight; r++){
-            for(int c = 0; c < trueWidth; c++){
-                Wall here = w[r][c];
-                if(here != null){
-                    System.out.print("#");
-                }else{
-                    System.out.print(" ");
-                }
-            }
-            System.out.println();
-        }
-
-        System.out.println("finished");
     }
     public void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;

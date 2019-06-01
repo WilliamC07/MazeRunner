@@ -72,6 +72,7 @@ public class Character implements Renderable{
     public void render(){
         //location = new Point(sketch.mouseX, sketch.mouseY);
         sketch.fill(255,0,0);
+        this.location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
         sketch.ellipse(location.getX(), location.getY(), 20, 20);
         drawVision(getRays());
     }
@@ -182,7 +183,6 @@ public class Character implements Renderable{
         }
     }
 
-
     /**
      * Checks if the ray is blocked by a wall between the start of the ray and the end of the ray.
      * @param ray Ray to check for collision with a wall other than the one it is aiming for
@@ -222,7 +222,7 @@ public class Character implements Renderable{
                 // the intersection is not the intersection from the wall we want to collide with and
                 // the intersection is not where the aux ray starts
                 if(blockingPoint == null || blockingPoint.equals(auxiliary.getEnd()) ||
-                   blockingPoint.equals(collisionPoint) || blockingPoint.equals(auxiliary.getStart())){
+                        blockingPoint.equals(collisionPoint) || blockingPoint.equals(auxiliary.getStart())){
                     continue;
                 }
 
@@ -240,8 +240,6 @@ public class Character implements Renderable{
                 return new Ray(mainRay.getStart(), collisionPoint, true);
             }
         }
-
-        // cannot draw aux
-        return null;
+        return mainRay;
     }
 }

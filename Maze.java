@@ -225,116 +225,44 @@ public class Maze implements Renderable{
         // create horizontal walls
         for(int r = 0; r < trueHeight; r++){
             for(int c = 0; c < trueWidth;){
-                // continue if there is not wall
-                if(!walls[r][c]){
+                if(!walls[r][c] ||  // continue if there is not wall
+                   !(c == 0 || c == trueWidth - 1 || maze[r][c + 1])){  // continue if the wall is not adjacent to a border or next to another wall
                     c++;
                     continue;
                 }
 
-                // continue if the wall is not adjacent to a border or next to another wall
-                if(!(c == 0 || c == trueWidth - 1 || maze[r][c + 1])){
-                    c++;
-                    continue;
-                }
+                // because the wall is horizontal, the start and end point share the same y
+                float y = OFF_SET_Y + (r / 2 + 1) * WALL_SCALE;
+                Point start = new Point(OFF_SET_X + ((c + 1) / 2) * WALL_SCALE, y);
+                Point end;
 
-                Point startPoint;
-                Point endPoint;
-                // if a horizontal wall is next to the border, it needs to be extended to touch it
-                float startY = OFF_SET_Y + r * WALL_SCALE + // Top edge
-                               WALL_SCALE / 2;              // to center
-                if(c == 0){
-                    // border to left
-                    float x = OFF_SET_X + c * WALL_SCALE - // left edge
-                            WALL_SCALE / 2;                // to reach border
-                    startPoint = new Point(x, startY);
-                }else{
-                    // start at middle of the cell if not adjacent to border
-                    startPoint = middleOfCellPoint(r, c);
-                }
-
-                // if there is a wall to the right, there must be a continuous horizontal wall
-                // find how many cells it spans
+                // find the span of the wall
                 int endColumn = c;
                 while(endColumn < trueWidth && walls[r][endColumn]){
                     endColumn++;
                 }
+                end = new Point(OFF_SET_X + ((endColumn + 1) / 2) * WALL_SCALE, y);
 
-                // if the end wall is next to the border, it needs to be extended. it can only touch the right border
-                if(endColumn == trueWidth - 1){
-                    float x = OFF_SET_X + (c + 1) * WALL_SCALE + // right edge
-                            WALL_SCALE / 2;                // to reach border
-                    float y = OFF_SET_Y + r * WALL_SCALE + WALL_SCALE / 2;
-                    endPoint = new Point(x, y);
-                }else{
-                    // end at the midpoint
-                    endPoint = middleOfCellPoint(r, endColumn);
-                }
-
-                Wall wall = new Wall(startPoint, endPoint);
+                Wall wall = new Wall(start, end);
                 flatMaze.add(wall);
-                // fill up the 2d array
-                for(int startColumn = c; startColumn < endColumn; startColumn++){
-                    output[r][startColumn] = wall;
+                // populate the output
+                for(int i = c; i < endColumn; i++){
+                    output[r][i] = wall;
                 }
-
                 c = endColumn + 1;
             }
         }
 
         // create vertical walls
-        for(int c = 0; c < trueWidth; c++){
-            for(int r = 0; r < trueHeight;){
-                // continue if there is no wall
-                if(!walls[r][c]){
-                    r++;
-                    continue;
-                }
-
-                // continue if the wall is not adjacent to a border or another vertical wall
-                if(!(r == 0 || r == trueHeight - 1 || walls[r+1][c])){
-                    r++;
-                    continue;
-                }
-
-                Point startPoint;
-                Point endPoint;
-                float startX = OFF_SET_X + c * WALL_SCALE + // left edge
-                               WALL_SCALE / 2; // to reach the center
-                if(r == 0){
-                    // border to the Top
-                    float y = OFF_SET_Y + r * WALL_SCALE - // to the top edge
-                              WALL_SCALE / 2; // to reach the border
-                    startPoint = new Point(startX, y);
-                }else{
-                    startPoint = middleOfCellPoint(r, c);
-                }
-
-                // find where the vertical wall ends
-                int endRow = r;
-                while(endRow < trueHeight && walls[endRow][c]){
-                    endRow++;
-                }
-
-                // find the end point
-                if(endRow == trueHeight - 1){
-                    float x = OFF_SET_X + c * WALL_SCALE + // left edge
-                              WALL_SCALE / 2;              // to reach middle
-                    float y = OFF_SET_Y + endRow * WALL_SCALE + // to reach bottom edge
-                              WALL_SCALE / 2;              // to reach bottom border
-                    endPoint = new Point(x, y);
-                }else{
-                    endPoint = middleOfCellPoint(endRow, c);
-                }
-
-                // populate the output
-                Wall wall = new Wall(startPoint, endPoint);
-                flatMaze.add(wall);
-                for(int startRow = r; startRow < endRow; startRow++){
-                    output[startRow][c] = wall;
-                }
-                r = endRow + 1;
-            }
-        }
+//        for(int c = 0; c < trueWidth; c++) {
+//            for (int r = 0; r < trueHeight; ) {
+//                if (!walls[r][c] ||  // continue if there is no wall
+//                    !(r == 0 || r == trueHeight - 1 || walls[r + 1][c])) {  // continue if the wall is not adjacent to a border or another vertical wall
+//                    r++;
+//                    continue;
+//                }
+//            }
+//        }
 
         return output;
     }

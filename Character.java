@@ -34,9 +34,17 @@ public class Character implements Renderable{
         if(movingDown){
             dy+=1;
         }
-        float newX = sketch.constrain(location.getX()+3f*dx,sketch.width/10f+10,9*sketch.width/10f-10);
-        float newY = sketch.constrain(location.getY()+3f*dy,sketch.height/10f+10,9*sketch.height/10f-10);
-        location = new Point(newX,newY);
+        float newX = location.getX()+3f*dx;
+        float newY = location.getY()+3f*dy;
+        Point newLocation = new Point(newX,newY);
+        Ray movement = new Ray(location, newLocation, true);
+        for(Wall blocking : allWalls){
+            Point intersection = movement.intersects(blocking);
+            if(intersection != null){
+                return;
+            }
+        }
+        location = newLocation;
     }
 
     public Point getPos(){
@@ -72,7 +80,6 @@ public class Character implements Renderable{
     public void render(){
         //location = new Point(sketch.mouseX, sketch.mouseY);
         sketch.fill(255,0,0);
-        this.location = new Point(Main.getInstance().mouseX, Main.getInstance().mouseY);
         sketch.ellipse(location.getX(), location.getY(), 20, 20);
         drawVision(getRays());
     }

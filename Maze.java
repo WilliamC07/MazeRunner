@@ -343,9 +343,9 @@ public class Maze implements Renderable{
         Wall[] borders = new Wall[4];
 
         // border end points
-        Point topLeft = new Point(OFF_SET_X - .5F * WALL_SCALE, OFF_SET_Y - .5F * WALL_SCALE);
-        Point topRight = new Point(OFF_SET_X + ((trueWidth) * WALL_SCALE) + .5F * WALL_SCALE, topLeft.getY());
-        Point bottomLeft = new Point(topLeft.getX(), (OFF_SET_Y + (trueHeight) * WALL_SCALE) + .5F * WALL_SCALE);
+        Point topLeft = new Point(OFF_SET_X, OFF_SET_Y);
+        Point topRight = new Point(OFF_SET_X + width * WALL_SCALE, OFF_SET_Y);
+        Point bottomLeft = new Point(OFF_SET_X, OFF_SET_Y + length * WALL_SCALE);
         Point bottomRight = new Point(topRight.getX(), bottomLeft.getY());
 
         // top border

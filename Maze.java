@@ -20,8 +20,8 @@ public class Maze implements Renderable{
     /**
      * Offset is so the edge of the maze doesn't touch the border of the window
      */
-    private final float OFF_SET_Y = 10;
-    private final float OFF_SET_X = 10;
+    private final float OFF_SET_Y = 30;
+    private final float OFF_SET_X = 30;
 
     public Maze(int rows, int cols, PApplet sketch){
         length = rows;
@@ -36,6 +36,33 @@ public class Maze implements Renderable{
         convertToBool(walls);
         convertToList(walls);
         wallsFormatted = generateWallFormatted(maze);
+
+        for(int r = 0; r < maze.length; r++){
+            for(int c = 0; c < maze[r].length; c++){
+                if(maze[r][c]){
+                    System.out.print("#");
+                }else{
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.println("my generated");
+        Wall[][] w = generateWallFormatted(maze);
+        for(int r = 0; r < trueHeight; r++){
+            for(int c = 0; c < trueWidth; c++){
+                Wall here = w[r][c];
+                if(here != null){
+                    System.out.print("#");
+                }else{
+                    System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
+
+        System.out.println("finished");
     }
     public void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;
@@ -192,6 +219,7 @@ public class Maze implements Renderable{
     }
 
     private Wall[][] generateWallFormatted(boolean[][] walls){
+        // add two for the border
         Wall[][] output = new Wall[trueHeight][trueWidth];
 
         // create horizontal walls
@@ -291,7 +319,7 @@ public class Maze implements Renderable{
                 if(endRow == trueHeight - 1){
                     float x = OFF_SET_X + c * WALL_SCALE + // left edge
                               WALL_SCALE / 2;              // to reach middle
-                    float y = OFF_SET_Y + r * WALL_SCALE + // to reach bottom edge
+                    float y = OFF_SET_Y + endRow * WALL_SCALE + // to reach bottom edge
                               WALL_SCALE / 2;              // to reach bottom border
                     endPoint = new Point(x, y);
                 }else{
@@ -309,6 +337,27 @@ public class Maze implements Renderable{
         }
 
         return output;
+    }
+
+    public Wall[] getBorder(){
+        Wall[] borders = new Wall[4];
+
+        // border end points
+        Point topLeft = new Point(OFF_SET_X - .5F * WALL_SCALE, OFF_SET_Y - .5F * WALL_SCALE);
+        Point topRight = new Point(((trueWidth + 1) * WALL_SCALE) + .5F * WALL_SCALE, topLeft.getY());
+        Point bottomLeft = new Point(topLeft.getX(), ((trueHeight + 1) * WALL_SCALE) + .5F * WALL_SCALE);
+        Point bottomRight = new Point(topRight.getX(), bottomLeft.getY());
+
+        // top border
+        borders[0] = new Wall(topLeft, topRight);
+        // left border
+        borders[1] = new Wall(topLeft, bottomLeft);
+        // bottom border
+        borders[2] = new Wall(bottomLeft, bottomRight);
+        // right border
+        borders[3] = new Wall(bottomRight, topRight);
+
+        return borders;
     }
 
     private Point middleOfCellPoint(int row, int column){

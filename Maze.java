@@ -403,6 +403,17 @@ public class Maze implements Renderable{
             }
         }
     }
+
+    /**
+     * Convert the character's position to the matrix representation.
+     * @return [row, column]
+     */
+    public int[] getMatrixPoint(Point location){
+        return new int[]{
+                (int) (location.getX() / WALL_SCALE) * 2,
+                (int) (location.getY() / WALL_SCALE) * 2
+        };
+    }
     private class Cell implements Comparable<Cell>{
         private int x,y;
         private int f,g,h;

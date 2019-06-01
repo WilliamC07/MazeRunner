@@ -15,7 +15,6 @@ public class Character implements Renderable{
     public Character(Point location, List<Wall> walls, Set<Point> verticies){
         this.location = location;
         sketch = Main.getInstance();
-        // TODO: update when the Maze.java is finished. I have some testing code for now
         this.allWalls = walls;
         this.verticies = verticies;
     }
@@ -94,9 +93,9 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-        sketch.stroke(255, 0, 0);
+        Main.getInstance().stroke(255, 0, 0);
         for(int i = 0; i < rays.size(); i++){
-            sketch.fill(255, 0, 0);
+            Main.getInstance().fill(255, 0, 0);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
 
@@ -108,17 +107,17 @@ public class Character implements Renderable{
             }
 
             if(shareWall){
-                // if the ray is drawing to the same wall, then use the sketch lines to connect
-                sketch.triangle(location.getX(), location.getY(),
-                                            current.getEnd().getX(), current.getEnd().getY(),
-                                            next.getEnd().getX(), next.getEnd().getY());
+                // if the ray is drawing to the same wall, then use the main lines to connect
+                Main.getInstance().triangle(location.getX(), location.getY(),
+                        current.getEnd().getX(), current.getEnd().getY(),
+                        next.getEnd().getX(), next.getEnd().getY());
             }else{
                 Ray currentAuxiliary = current.getAuxiliaryRay();
                 Ray nextAuxiliary = next.getAuxiliaryRay();
 
                 // The rays are not drawn to the same point
                 // If a ray cannot be drawn to the midpoint between the two auxiliary rays, we must connect
-                // auxiliary to sketch
+                // auxiliary to main
 
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
                 boolean isMidpointBlocked = false;
@@ -127,7 +126,7 @@ public class Character implements Renderable{
                     Point intersection = toMidPoint.intersects(blockCheck);
                     // make sure the wall is not between the two line segment
                     if(intersection != null &&
-                       !intersection.equals(midpointAuxAux)){
+                            !intersection.equals(midpointAuxAux)){
                         isMidpointBlocked = true;
                         break;
                     }
@@ -135,11 +134,11 @@ public class Character implements Renderable{
 
                 if(isMidpointBlocked){
                     // Cannot connect the aux
+
                     boolean canDrawMainAux = true;
                     // if the main cannot be drawn to the aux midpoint without intersecting a wall at another point other
                     // than the start of the main ray or the aux endpoint, it is not valid
                     Ray checkBlockingMainAux = new Ray(current.getEnd(), nextAuxiliary.getEnd(), true);
-
                     for(Wall block : allWalls){
                         Point intersection = checkBlockingMainAux.intersects(block);
                         if(intersection != null && !intersection.equals(current.getEnd()) && !intersection.equals(nextAuxiliary.getEnd())){
@@ -149,7 +148,7 @@ public class Character implements Renderable{
                     }
 
                     if(canDrawMainAux){
-                        sketch.triangle(location.getX(), location.getY(),
+                        Main.getInstance().triangle(location.getX(), location.getY(),
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                     }else{
@@ -172,13 +171,10 @@ public class Character implements Renderable{
                                     currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                                     nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                         }
-                        sketch.triangle(location.getX(), location.getY(),
-                                currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
-                                next.getEnd().getX(), next.getEnd().getY());
                     }
                 }else{
                     //connecting auxiliary does work
-                    sketch.triangle(location.getX(), location.getY(),
+                    Main.getInstance().triangle(location.getX(), location.getY(),
                             currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                             nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                 }

@@ -1,30 +1,20 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class Character implements Renderable{
     private Point location;
     private Wall[] borderWall;
+    private Set<Point> verticies;
     private List<Wall> allWalls;
 
-    public Character(Point location, List<Wall> walls){
+    public Character(Point location, List<Wall> walls, Set<Point> verticies){
         this.location = location;
         // TODO: update when the Maze.java is finished. I have some testing code for now
         Main main = Main.getInstance();
-        Point a = new Point(1, 1);
-        Point b = new Point(main.width - 2, 1);
-        Point c = new Point(main.width - 2, main.height - 2);
-        Point d = new Point(1, main.height - 2);
-        this.borderWall = new Wall[]{
-                new Wall(a, b),
-                new Wall(a, d),
-                new Wall(d, c),
-                new Wall(b, c)
-        };
-        allWalls = new ArrayList<>(walls);
-        for(Wall border : borderWall){
-            allWalls.add(border);
-        }
+        this.allWalls = walls;
+        this.verticies = verticies;
     }
 
     public void move(float dx, float dy){
@@ -46,21 +36,28 @@ public class Character implements Renderable{
         List<Ray> rays = new ArrayList<>();
 
         // Draw a ray to each endpoint if there is not a wall blocking the way
-        for(Wall wall : allWalls){
-            Ray mainRayStart = new Ray(location, wall.getStart(), true, wall);
-            Ray mainRayEnd = new Ray(location, wall.getEnd(), true, wall);
-
-            // If a ray cannot be drawn, do not keep track of it
-            // If the ray can be drawn, keep track of it and generate the auxiliary ray
-            if(!isMainRayBlocked(mainRayStart, wall)){
-                rays.add(mainRayStart);
-                mainRayStart.setAuxiliaryRay(createAuxiliaryRay(mainRayStart));
-            }
-            if(!isMainRayBlocked(mainRayEnd, wall)){
-                rays.add(mainRayEnd);
-                mainRayEnd.setAuxiliaryRay(createAuxiliaryRay(mainRayEnd));
+        for(Point vertex : verticies){
+            Ray mainRay = new Ray(location, vertex, true, null);
+            if(!isMainRayBlocked(mainRay)){
+                mainRay.setAuxiliaryRay(createAuxiliaryRay(mainRay));
+                rays.add(mainRay);
             }
         }
+//        for(Wall wall : allWalls){
+//            Ray mainRayStart = new Ray(location, wall.getStart(), true, wall);
+//            Ray mainRayEnd = new Ray(location, wall.getEnd(), true, wall);
+//
+//            // If a ray cannot be drawn, do not keep track of it
+//            // If the ray can be drawn, keep track of it and generate the auxiliary ray
+//            if(!isMainRayBlocked(mainRayStart, wall)){
+//                rays.add(mainRayStart);
+//                mainRayStart.setAuxiliaryRay(createAuxiliaryRay(mainRayStart));
+//            }
+//            if(!isMainRayBlocked(mainRayEnd, wall)){
+//                rays.add(mainRayEnd);
+//                mainRayEnd.setAuxiliaryRay(createAuxiliaryRay(mainRayEnd));
+//            }
+//        }
 
         // counter clockwise sorting
         Collections.sort(rays);
@@ -161,15 +158,11 @@ public class Character implements Renderable{
     /**
      * Checks if the ray is blocked by a wall between the start of the ray and the end of the ray.
      * @param ray Ray to check for collision with a wall other than the one it is aiming for
-     * @param wallToTouch Wall the ray is attempting to collide with. Null if the ray is pointing to a point
      * @return True if the ray is blocked, false otherwise
      */
-    private boolean isMainRayBlocked(Ray ray, Wall wallToTouch){
+    private boolean isMainRayBlocked(Ray ray){
         for(Wall wall : allWalls){
             // The ray will always touch the wall it is aiming to touch
-            if(wall.equals(wallToTouch)){
-                continue;
-            }
 
             Point intersect = ray.intersects(wall);
             // Make sure there is an intersection and
@@ -182,12 +175,6 @@ public class Character implements Renderable{
     }
 
     private Ray createAuxiliaryRay(Ray mainRay){
-        // if the may ray is drawn to the border wall, the auxiliary ray is itself
-        for(Wall borderWall : borderWall){
-            if(borderWall.isPointOnWall(mainRay.getEnd())){
-                return mainRay;
-            }
-        }
         // mainRay.getEnd() gives direction of the geometric ray
         Ray auxiliary = new Ray(mainRay.getStart(), mainRay.getEnd(), false, null);
         for(Wall collideWall : allWalls){

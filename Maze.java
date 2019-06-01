@@ -1,8 +1,6 @@
 import processing.core.PApplet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+
+import java.util.*;
 
 public class Maze implements Renderable{
     private List<Wall> flatMaze = new ArrayList<>();
@@ -285,6 +283,37 @@ public class Maze implements Renderable{
         }
 
         return output;
+    }
+
+    public Set<Point> verticies(){
+        Set<Point> points = new HashSet<>();
+
+        // add all endpoints of the walls
+        for (Wall wall : flatMaze) {
+            points.add(wall.getStart());
+            points.add(wall.getEnd());
+        }
+        // add the border endpoints
+        for (Wall wall : getBorder()) {
+            points.add(wall.getStart());
+            points.add(wall.getEnd());
+        }
+
+        // add all the intersection
+        for(int r = 0; r < trueHeight; r++){
+            for(int c = 0; c < trueWidth; c++){
+                // and intersection is one where a point is part of a wall that is both vertical and horizontal
+                if(maze[r][c] && //must be part of a wall
+                        (r != 0 && maze[r - 1][c]) || (r != trueHeight - 1 && maze[r + 1][c]) && // need a wall on top or bottom
+                        (c != 0 && maze[r][c-1]) || (c != trueWidth - 1 && maze[r][c+1])){ // need a wall on left or right
+
+                    float x = OFF_SET_X + ((c + 1) / 2) * WALL_SCALE;
+                    float y = OFF_SET_Y + (r / 2 + 1) * WALL_SCALE;
+                    points.add(new Point(x, y));
+                }
+            }
+        }
+        return points;
     }
 
     public Wall[] getBorder(){

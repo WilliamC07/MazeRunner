@@ -9,6 +9,7 @@ public class Maze implements Renderable{
     private int width;
     private int trueHeight, trueWidth;
     private PApplet sketch;
+    private float offsetX,offsetY;
     /**
      * Each cell in a wall 2D array is a square of this side length in pixels
      */
@@ -358,13 +359,8 @@ public class Maze implements Renderable{
         return path;
     }
     public void hint(Point position, int pathLength){
-        float posX = position.getX();
-        float posY = position.getY();
-        posX-=sketch.width/10f;
-        posY-=sketch.height/10f;
-        int cellX = (int)(posY/(4f*sketch.height/5/length));
-        int cellY = (int)(posX/(4f*sketch.width/5/width));
-        ArrayList<Cell> fullPath = solve(cellX, cellY, length-1, width-1);
+        int[] playerPoint = getMatrixPoint(position);
+        ArrayList<Cell> fullPath = solve(playerPoint[1]/2, playerPoint[0]/2, length-1, width-1);
         hint = new ArrayList<Cell>();
         for(int i = 0; i<fullPath.size()-1 && i<pathLength; i++){
             hint.add(fullPath.get(fullPath.size()-i-2));
@@ -373,17 +369,13 @@ public class Maze implements Renderable{
     @Override
     public void render(){
         sketch.stroke(0);
-//        sketch.line(sketch.width/10,sketch.height/10,9*sketch.width/10,sketch.height/10);
-//        sketch.line(sketch.width/10,sketch.height/10,sketch.width/10,9*sketch.height/10);
-//        sketch.line(9*sketch.width/10,sketch.height/10,9*sketch.width/10,9*sketch.height/10);
-//        sketch.line(sketch.width/10,9*sketch.height/10,9*sketch.width/10,9*sketch.height/10);
         for(Wall wall : flatMaze){
             wall.render();
         }
         for(Cell square : hint){
             if(square!=null){
-                float x = sketch.width/10f+2f*sketch.width/5/width+square.getY()*4f*sketch.width/5/width;
-    		    float y = sketch.height/10f+2f*sketch.height/5/length+square.getX()*4f*sketch.height/5/length;
+                float x = WALL_SCALE/2f+square.getY()*WALL_SCALE+offsetX;
+    		    float y = WALL_SCALE/2f+square.getX()*WALL_SCALE+offsetY;
                 sketch.fill(0,255,0);
                 sketch.ellipse(x,y,10,10);
             }
@@ -394,11 +386,17 @@ public class Maze implements Renderable{
      * Convert the character's position to the matrix representation.
      * @return [row, column]
      */
-    public int[] getMatrixPoint(Point location){
+    public static int[] getMatrixPoint(Point location){
         return new int[]{
                 (int) (location.getX() / WALL_SCALE) * 2,
                 (int) (location.getY() / WALL_SCALE) * 2
         };
+    }
+    public void setOffsetX(float offsetX){
+        this.offsetX=offsetX;
+    }
+    public void setOffsetY(float offsetY){
+        this.offsetY=offsetY;
     }
     private class Cell implements Comparable<Cell>{
         private int x,y;

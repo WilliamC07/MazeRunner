@@ -94,6 +94,8 @@ public class Character implements Renderable{
         // find offset for the maze, which is the distance to the center
         float offsetX = centerOfScreen.getX() - locationInMatrix.getX();
         float offsetY = centerOfScreen.getY() - locationInMatrix.getY();
+        maze.setOffsetX(offsetX);
+        maze.setOffsetY(offsetY);
         maze.refresh(offsetX, offsetY);
         this.verticies = maze.verticies(offsetX, offsetY);
         this.allWalls = maze.getWalls();

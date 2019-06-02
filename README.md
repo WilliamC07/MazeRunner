@@ -47,8 +47,10 @@ Continued work on converting maze to walls
 6/1/19  
 Finish converting maze to walls
 Fixed ray casting to work when two walls intersect but don't share endpoint  
-Removed unused code  
-Merged work to master
+Removed unused code    
+Map is moved around the screen with the player to allow for large maps without parts cutting off  
+Created god mode to view the game without ray casting  
+Merged all branches and fixed up any merging logical error (deleted too many methods)  
 
 # Eric  
 5/17/19  

@@ -91,8 +91,6 @@ public class Character implements Renderable{
 
     @Override
     public void render(){
-        sketch.fill(255,0,0);
-        sketch.ellipse(centerOfScreen.getX(), centerOfScreen.getY(), 20, 20);
         // find offset for the maze, which is the distance to the center
         float offsetX = centerOfScreen.getX() - locationInMatrix.getX();
         float offsetY = centerOfScreen.getY() - locationInMatrix.getY();
@@ -102,6 +100,8 @@ public class Character implements Renderable{
 
         this.allWalls = maze.getWalls();
         drawVision(getRays());
+        sketch.fill(255,0,0);
+        sketch.ellipse(centerOfScreen.getX(), centerOfScreen.getY(), 20, 20);
     }
 
     private List<Ray> getRays(){
@@ -121,9 +121,9 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-        Main.getInstance().stroke(255, 0, 0);
+        Main.getInstance().stroke(255);
         for(int i = 0; i < rays.size(); i++){
-            Main.getInstance().fill(255, 0, 0);
+            Main.getInstance().fill(255);
             Ray current = rays.get(i);
             Ray next = rays.get((i + 1) % rays.size());
 

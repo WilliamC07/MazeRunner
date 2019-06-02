@@ -27,9 +27,8 @@ public class Character implements Renderable{
         this.maze = maze;
         this.centerOfScreen = new Point(sketch.width / 2, sketch.height / 2);
         maze.refresh(1, 1);
-        this.verticies = maze.verticies();
-        this.allWalls = maze.getWalls();
-        this.locationInMatrix = centerOfScreen; // temp
+        // start off at the top left of the maze
+        this.locationInMatrix = new Point(Maze.WALL_SCALE / 2, Maze.WALL_SCALE / 2); // temp
     }
 
     public void move(){
@@ -47,17 +46,18 @@ public class Character implements Renderable{
         if(movingDown){
             dy+=1;
         }
-        float newX = locationInMatrix.getX()+3f*dx;
-        float newY = locationInMatrix.getY()+3f*dy;
+        float scalar = 3;
+        float newX = centerOfScreen.getX()+scalar*dx;
+        float newY = centerOfScreen.getY()+scalar*dy;
         Point newLocation = new Point(newX,newY);
-        Ray movement = new Ray(locationInMatrix, newLocation, true);
+        Ray movement = new Ray(centerOfScreen, newLocation, true);
         for(Wall blocking : allWalls){
             Point intersection = movement.intersects(blocking);
             if(intersection != null){
                 return;
             }
         }
-        locationInMatrix = newLocation;
+        locationInMatrix = new Point(locationInMatrix.getX()+scalar*dx, locationInMatrix.getY()+scalar*dy);
     }
 
     public Point getPos(){
@@ -93,6 +93,14 @@ public class Character implements Renderable{
     public void render(){
         sketch.fill(255,0,0);
         sketch.ellipse(centerOfScreen.getX(), centerOfScreen.getY(), 20, 20);
+        // find offset for the maze, which is the distance to the center
+        float offsetX = centerOfScreen.getX() - locationInMatrix.getX();
+        float offsetY = centerOfScreen.getY() - locationInMatrix.getY();
+        maze.refresh(offsetX, offsetY);
+        this.verticies = maze.verticies(offsetX, offsetY);
+        this.allWalls = maze.getWalls();
+
+        this.allWalls = maze.getWalls();
         drawVision(getRays());
     }
 
@@ -101,7 +109,7 @@ public class Character implements Renderable{
 
         // Draw a ray to each endpoint if there is not a wall blocking the way
         for(Point vertex : verticies){
-            Ray mainRay = new Ray(locationInMatrix, vertex, true);
+            Ray mainRay = new Ray(centerOfScreen, vertex, true);
             if(!isMainRayBlocked(mainRay)){
                 mainRay.setAuxiliaryRay(createAuxiliaryRay(mainRay));
                 rays.add(mainRay);
@@ -128,7 +136,7 @@ public class Character implements Renderable{
 
             if(shareWall){
                 // if the ray is drawing to the same wall, then use the main lines to connect
-                Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
+                Main.getInstance().triangle(centerOfScreen.getX(), centerOfScreen.getY(),
                         current.getEnd().getX(), current.getEnd().getY(),
                         next.getEnd().getX(), next.getEnd().getY());
             }else{
@@ -141,7 +149,7 @@ public class Character implements Renderable{
 
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
                 boolean isMidpointBlocked = false;
-                Ray toMidPoint = new Ray(locationInMatrix, midpointAuxAux, true);
+                Ray toMidPoint = new Ray(centerOfScreen, midpointAuxAux, true);
                 for(Wall blockCheck : allWalls){
                     Point intersection = toMidPoint.intersects(blockCheck);
                     // make sure the wall is not between the two line segment
@@ -168,7 +176,7 @@ public class Character implements Renderable{
                     }
 
                     if(canDrawMainAux){
-                        Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
+                        Main.getInstance().triangle(centerOfScreen.getX(), centerOfScreen.getY(),
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                     }else{
@@ -183,18 +191,18 @@ public class Character implements Renderable{
                         }
 
                         if(canDrawAuxMain){
-                            Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
+                            Main.getInstance().triangle(centerOfScreen.getX(), centerOfScreen.getY(),
                                     currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                                     next.getEnd().getX(), next.getEnd().getY());
                         }else{
-                            Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
+                            Main.getInstance().triangle(centerOfScreen.getX(), centerOfScreen.getY(),
                                     currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                                     nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                         }
                     }
                 }else{
                     //connecting auxiliary does work
-                    Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
+                    Main.getInstance().triangle(centerOfScreen.getX(), centerOfScreen.getY(),
                             currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                             nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                 }

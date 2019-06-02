@@ -49,7 +49,7 @@ public class Main extends PApplet{
 			renderables.forEach(Renderable::render);
 			character.move();
 		} else {
-
+			maze.renderMinimap();
 		}
 	}
 

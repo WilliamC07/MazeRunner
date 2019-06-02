@@ -10,6 +10,7 @@ public class Maze implements Renderable{
     private int trueHeight, trueWidth;
     private PApplet sketch;
     private float offsetX,offsetY;
+    private Cell pathKeeper;
     /**
      * Each cell in a wall 2D array is a square of this side length in pixels
      */
@@ -24,6 +25,7 @@ public class Maze implements Renderable{
         Wall[][] walls = new Wall[2*rows-1][];
         this.trueHeight = 2*length-1;
         this.trueWidth = 2*width-1;
+        pathKeeper = new Cell()
         maze = new boolean[trueHeight][trueWidth];
         fillWalls(length,width,walls);
         generate(0,0,walls);
@@ -406,6 +408,9 @@ public class Maze implements Renderable{
     public void setOffsetY(float offsetY){
         this.offsetY=offsetY;
     }
+    public void renderMinimap(){
+
+    }
     private class Cell implements Comparable<Cell>{
         private int x,y;
         private int f,g,h;
@@ -416,6 +421,11 @@ public class Maze implements Renderable{
             f = 0;
             g = 0;
             h = 0;
+        }
+        public Cell(int x, int y, Cell parent){
+            this.x=x;
+            this.y=y;
+            this.parent = parent;
         }
         public Cell(int x, int y, int goalX, int goalY, Cell parent){
             this.x=x;

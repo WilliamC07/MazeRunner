@@ -105,6 +105,7 @@ public class Character implements Renderable{
             drawVision(getRays());
         }
         sketch.fill(255,0,0);
+        sketch.getInstance().noStroke();
         sketch.ellipse(centerOfScreen.getX(), centerOfScreen.getY(), 20, 20);
     }
 
@@ -125,7 +126,7 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-        Main.getInstance().noStroke();
+        sketch.stroke(255);
         for(int i = 0; i < rays.size(); i++){
             Main.getInstance().fill(255);
             Ray current = rays.get(i);

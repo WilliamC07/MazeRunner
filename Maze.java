@@ -25,7 +25,7 @@ public class Maze implements Renderable{
         Wall[][] walls = new Wall[2*rows-1][];
         this.trueHeight = 2*length-1;
         this.trueWidth = 2*width-1;
-        pathKeeper = new Cell()
+        pathKeeper = new Cell(0,0);
         maze = new boolean[trueHeight][trueWidth];
         fillWalls(length,width,walls);
         generate(0,0,walls);
@@ -410,6 +410,15 @@ public class Maze implements Renderable{
     }
     public void renderMinimap(){
 
+    }
+    public int[] getPathKeeper(){
+        int[] cell = new int[2];
+        cell[0] = pathKeeper.getX();
+        cell[1] = pathKeeper.getY();
+        return cell;
+    }
+    public void updateCell(int x, int y){
+        pathKeeper = new Cell(x,y,pathKeeper);
     }
     private class Cell implements Comparable<Cell>{
         private int x,y;

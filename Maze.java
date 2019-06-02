@@ -372,14 +372,18 @@ public class Maze implements Renderable{
         for(Wall wall : flatMaze){
             wall.render();
         }
+        sketch.stroke(0,255,0);
+        sketch.strokeWeight(5);
+        float startX;
+        float startY;
+        float endX;
+        float endY;
         for(int i = 0; i<hint.size()-1; i++){
             if(hint.get(i)!=null){
-                float startX = WALL_SCALE/2f+hint.get(i).getY()*WALL_SCALE+offsetX;
-    		    float startY = WALL_SCALE/2f+hint.get(i).getX()*WALL_SCALE+offsetY;
-                float endX = WALL_SCALE/2f+hint.get(i+1).getY()*WALL_SCALE+offsetX;
-                float endY = WALL_SCALE/2f+hint.get(i+1).getX()*WALL_SCALE+offsetY;
-                sketch.stroke(0,255,0);
-                sketch.strokeWeight(5);
+                startX = WALL_SCALE/2f+hint.get(i).getY()*WALL_SCALE+offsetX;
+    		    startY = WALL_SCALE/2f+hint.get(i).getX()*WALL_SCALE+offsetY;
+                endX = WALL_SCALE/2f+hint.get(i+1).getY()*WALL_SCALE+offsetX;
+                endY = WALL_SCALE/2f+hint.get(i+1).getX()*WALL_SCALE+offsetY;
                 sketch.line(startX,startY,endX,endY);
             }
         }

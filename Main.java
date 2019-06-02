@@ -6,6 +6,7 @@ public class Main extends PApplet{
 	private Character character;
 	private Maze maze;
 	private List<Renderable> renderables;
+	private boolean isGodMode;
 	/**
 	* Singleton design pattern so we don't need to keep passing reference to this class around. We need
 	* the draw methods inside PApplet (like ellipse(float, float, float, float))
@@ -42,7 +43,7 @@ public class Main extends PApplet{
 
 	@Override
 	public void draw(){
-		background(0);
+		background(isGodMode ? 255 : 0);
 		renderables.forEach(Renderable::render);
 		character.move();
 	}
@@ -58,10 +59,22 @@ public class Main extends PApplet{
 			case 'g':
 				maze.hint(character.getPos(),maze.getLength()*maze.getWidth());
 				break;
+			case 'P':
+			case 'p':
+				isGodMode = !isGodMode;
+				break;
 			default:
 				character.setVelocity(keyCode,true);
 				break;
 		}
+	}
+
+	/**
+	 * God mode means you can see the whole map (ray casting off).
+	 * @return
+	 */
+	public boolean isGodMode(){
+		return isGodMode;
 	}
 
 	@Override

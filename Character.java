@@ -19,7 +19,7 @@ public class Character implements Renderable{
     private Set<Point> verticies;
     private List<Wall> allWalls;
     public boolean movingUp,movingDown,movingLeft,movingRight;
-    private PApplet sketch;
+    private Main sketch;
     private final Maze maze;
 
     public Character(Maze maze){
@@ -99,7 +99,9 @@ public class Character implements Renderable{
         this.allWalls = maze.getWalls();
 
         this.allWalls = maze.getWalls();
-        drawVision(getRays());
+        if(!sketch.isGodMode()){
+            drawVision(getRays());
+        }
         sketch.fill(255,0,0);
         sketch.ellipse(centerOfScreen.getX(), centerOfScreen.getY(), 20, 20);
     }
@@ -121,7 +123,7 @@ public class Character implements Renderable{
     }
 
     private void drawVision(List<Ray> rays){
-        Main.getInstance().stroke(255);
+        Main.getInstance().noStroke();
         for(int i = 0; i < rays.size(); i++){
             Main.getInstance().fill(255);
             Ray current = rays.get(i);

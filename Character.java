@@ -6,17 +6,30 @@ import java.util.Set;
 import java.awt.event.KeyEvent;
 
 public class Character implements Renderable{
-    private Point location;
+    /**
+     * The player does not leave the center of the screen. The map moves around the character. This gives the impression
+     * that the character is moving around the map.
+     */
+    private final Point centerOfScreen;
+    /**
+     * This is the player's location in the matrix accounted for the scaling and offset. This is not the index into
+     * the matrix.
+     */
+    private Point locationInMatrix;
     private Set<Point> verticies;
     private List<Wall> allWalls;
     public boolean movingUp,movingDown,movingLeft,movingRight;
     private PApplet sketch;
+    private final Maze maze;
 
-    public Character(Point location, List<Wall> walls, Set<Point> verticies){
-        this.location = location;
+    public Character(Maze maze){
         sketch = Main.getInstance();
-        this.allWalls = walls;
-        this.verticies = verticies;
+        this.maze = maze;
+        this.centerOfScreen = new Point(sketch.width / 2, sketch.height / 2);
+        this.verticies = maze.verticies();
+        this.allWalls = maze.getFlat();
+        this.locationInMatrix = centerOfScreen; // temp
+        Collections.addAll(allWalls, maze.getBorder());
     }
 
     public void move(){
@@ -34,21 +47,21 @@ public class Character implements Renderable{
         if(movingDown){
             dy+=1;
         }
-        float newX = location.getX()+3f*dx;
-        float newY = location.getY()+3f*dy;
+        float newX = locationInMatrix.getX()+3f*dx;
+        float newY = locationInMatrix.getY()+3f*dy;
         Point newLocation = new Point(newX,newY);
-        Ray movement = new Ray(location, newLocation, true);
+        Ray movement = new Ray(locationInMatrix, newLocation, true);
         for(Wall blocking : allWalls){
             Point intersection = movement.intersects(blocking);
             if(intersection != null){
                 return;
             }
         }
-        location = newLocation;
+        locationInMatrix = newLocation;
     }
 
     public Point getPos(){
-        return location;
+        return locationInMatrix;
     }
 
     public void setVelocity(int key, boolean toggle){
@@ -78,9 +91,8 @@ public class Character implements Renderable{
 
     @Override
     public void render(){
-        //location = new Point(sketch.mouseX, sketch.mouseY);
         sketch.fill(255,0,0);
-        sketch.ellipse(location.getX(), location.getY(), 20, 20);
+        sketch.ellipse(centerOfScreen.getX(), centerOfScreen.getY(), 20, 20);
         drawVision(getRays());
     }
 
@@ -89,7 +101,7 @@ public class Character implements Renderable{
 
         // Draw a ray to each endpoint if there is not a wall blocking the way
         for(Point vertex : verticies){
-            Ray mainRay = new Ray(location, vertex, true);
+            Ray mainRay = new Ray(locationInMatrix, vertex, true);
             if(!isMainRayBlocked(mainRay)){
                 mainRay.setAuxiliaryRay(createAuxiliaryRay(mainRay));
                 rays.add(mainRay);
@@ -116,7 +128,7 @@ public class Character implements Renderable{
 
             if(shareWall){
                 // if the ray is drawing to the same wall, then use the main lines to connect
-                Main.getInstance().triangle(location.getX(), location.getY(),
+                Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
                         current.getEnd().getX(), current.getEnd().getY(),
                         next.getEnd().getX(), next.getEnd().getY());
             }else{
@@ -129,7 +141,7 @@ public class Character implements Renderable{
 
                 Point midpointAuxAux = Point.midpoint(currentAuxiliary.getEnd(), nextAuxiliary.getEnd());
                 boolean isMidpointBlocked = false;
-                Ray toMidPoint = new Ray(location, midpointAuxAux, true);
+                Ray toMidPoint = new Ray(locationInMatrix, midpointAuxAux, true);
                 for(Wall blockCheck : allWalls){
                     Point intersection = toMidPoint.intersects(blockCheck);
                     // make sure the wall is not between the two line segment
@@ -156,7 +168,7 @@ public class Character implements Renderable{
                     }
 
                     if(canDrawMainAux){
-                        Main.getInstance().triangle(location.getX(), location.getY(),
+                        Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
                                 current.getEnd().getX(), current.getEnd().getY(),
                                 nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                     }else{
@@ -171,18 +183,18 @@ public class Character implements Renderable{
                         }
 
                         if(canDrawAuxMain){
-                            Main.getInstance().triangle(location.getX(), location.getY(),
+                            Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
                                     currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                                     next.getEnd().getX(), next.getEnd().getY());
                         }else{
-                            Main.getInstance().triangle(location.getX(), location.getY(),
+                            Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
                                     currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                                     nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                         }
                     }
                 }else{
                     //connecting auxiliary does work
-                    Main.getInstance().triangle(location.getX(), location.getY(),
+                    Main.getInstance().triangle(locationInMatrix.getX(), locationInMatrix.getY(),
                             currentAuxiliary.getEnd().getX(), currentAuxiliary.getEnd().getY(),
                             nextAuxiliary.getEnd().getX(), nextAuxiliary.getEnd().getY());
                 }

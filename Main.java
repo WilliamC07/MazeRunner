@@ -7,6 +7,7 @@ public class Main extends PApplet{
 	private Maze maze;
 	private List<Renderable> renderables;
 	private boolean isGodMode;
+	private int screen = 0; //0 for maze, 1 for minimap
 	/**
 	* Singleton design pattern so we don't need to keep passing reference to this class around. We need
 	* the draw methods inside PApplet (like ellipse(float, float, float, float))
@@ -44,27 +45,39 @@ public class Main extends PApplet{
 	@Override
 	public void draw(){
 		background(isGodMode ? 255 : 0);
-		renderables.forEach(Renderable::render);
-		character.move();
+		if(screen==0){
+			renderables.forEach(Renderable::render);
+			character.move();
+		} else {
+
+		}
 	}
 
 	@Override
 	public void keyPressed(){
+		if(screen==0){
+			switch(key){
+				case 'H':
+				case 'h':
+					maze.hint(character.getPos(),10);
+					break;
+				case 'G':
+				case 'g':
+					maze.hint(character.getPos(),maze.getLength()*maze.getWidth());
+					break;
+				default:
+					character.setVelocity(keyCode,true);
+					break;
+			}
+		}
 		switch(key){
-			case 'H':
-			case 'h':
-				maze.hint(character.getPos(),10);
-				break;
-			case 'G':
-			case 'g':
-				maze.hint(character.getPos(),maze.getLength()*maze.getWidth());
-				break;
 			case 'P':
 			case 'p':
 				isGodMode = !isGodMode;
 				break;
-			default:
-				character.setVelocity(keyCode,true);
+			case 'M':
+			case 'm':
+				screen = (screen+1)%2;
 				break;
 		}
 	}

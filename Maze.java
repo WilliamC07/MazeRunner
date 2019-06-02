@@ -6,7 +6,6 @@ public class Maze implements Renderable{
     private List<Wall> flatMaze = new ArrayList<>();
     private boolean[][] maze;
     private int length;
-    private Wall[][] wallsFormatted;
     private int width;
     private int trueHeight, trueWidth;
     private PApplet sketch;
@@ -34,7 +33,6 @@ public class Maze implements Renderable{
         generate(0,0,walls);
         convertToBool(walls);
         convertToList(walls);
-        wallsFormatted = generateWallFormatted(maze);
     }
     public void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;
@@ -170,23 +168,26 @@ public class Maze implements Renderable{
     public boolean[][] getBool(){
         return maze;
     }
-    public List<Wall> getFlat(){
-        return flatMaze;
-    }
     public int getLength(){
         return length;
     }
     public int getWidth(){
         return width;
     }
-    private Wall[][] generateWallFormatted(boolean[][] walls){
-        // add two for the border
-        Wall[][] output = new Wall[trueHeight][trueWidth];
+
+    /**
+     * Adds the walls of the maze to {@link #flatMaze}. This does not include the border. Use {@link #generateBorder()}
+     * for that.
+     */
+    private void generateFormattedWalls(){
+        // IMPORTANT:
+        // every other column is a wall, so divide by 2 and add 1
+        // every other row is a wall, so divide by 2 and add 1
 
         // create horizontal walls
         for(int r = 0; r < trueHeight; r++){
             for(int c = 0; c < trueWidth;){
-                if(!walls[r][c] ||  // continue if there is not wall
+                if(!maze[r][c] ||  // continue if there is not wall
                    !(c == 0 || c == trueWidth - 1 || maze[r][c + 1])){  // continue if the wall is not adjacent to a border or next to another wall
                     c++;
                     continue;
@@ -199,17 +200,14 @@ public class Maze implements Renderable{
 
                 // find the span of the wall
                 int endColumn = c;
-                while(endColumn < trueWidth && walls[r][endColumn]){
+                while(endColumn < trueWidth && maze[r][endColumn]){
                     endColumn++;
                 }
                 end = new Point(OFF_SET_X + ((endColumn + 1) / 2) * WALL_SCALE, y);
 
+                // keep track of the wall
                 Wall wall = new Wall(start, end);
                 flatMaze.add(wall);
-                // populate the output
-                for(int i = c; i < endColumn; i++){
-                    output[r][i] = wall;
-                }
                 c = endColumn + 1;
             }
         }
@@ -217,8 +215,8 @@ public class Maze implements Renderable{
         // create vertical walls
         for(int c = 0; c < trueWidth; c++) {
             for (int r = 0; r < trueHeight; ) {
-                if (!walls[r][c] ||  // continue if there is no wall
-                    !(r == 0 || r == trueHeight - 1 || walls[r + 1][c])) {  // continue if the wall is not adjacent to a border or another vertical wall
+                if (!maze[r][c] ||  // continue if there is no wall
+                    !(r == 0 || r == trueHeight - 1 || maze[r + 1][c])) {  // continue if the wall is not adjacent to a border or another vertical wall
                     r++;
                     continue;
                 }
@@ -230,34 +228,28 @@ public class Maze implements Renderable{
 
                 // find the span of the wall
                 int endRow = r;
-                while(endRow < trueHeight && walls[endRow][c]){
+                while(endRow < trueHeight && maze[endRow][c]){
                     endRow++;
                 }
                 end = new Point(x, OFF_SET_Y + ((endRow + 1) / 2) * WALL_SCALE);
 
+                // keep track of the wall
                 Wall wall = new Wall(start, end);
                 flatMaze.add(wall);
-                // populate the output
-                for(int i = r; i < endRow; i++){
-                    output[i][c] = wall;
-                }
                 r = endRow + 1;
             }
         }
-
-        return output;
     }
 
+    /**
+     * Generates all the intersections and endpoints of the walls of the maze including the border.
+     * @return Unique intersection and endpoints to be used by ray casting.
+     */
     public Set<Point> verticies(){
         Set<Point> points = new HashSet<>();
 
         // add all endpoints of the walls
         for (Wall wall : flatMaze) {
-            points.add(wall.getStart());
-            points.add(wall.getEnd());
-        }
-        // add the border endpoints
-        for (Wall wall : getBorder()) {
             points.add(wall.getStart());
             points.add(wall.getEnd());
         }
@@ -279,7 +271,7 @@ public class Maze implements Renderable{
         return points;
     }
 
-    public Wall[] getBorder(){
+    private Wall[] generateBorder(){
         Wall[] borders = new Wall[4];
 
         // border end points
@@ -289,15 +281,27 @@ public class Maze implements Renderable{
         Point bottomRight = new Point(topRight.getX(), bottomLeft.getY());
 
         // top border
-        borders[0] = new Wall(topLeft, topRight);
+        flatMaze.add(new Wall(topLeft, topRight));
         // left border
-        borders[1] = new Wall(topLeft, bottomLeft);
+        flatMaze.add(borders[1] = new Wall(topLeft, bottomLeft));
         // bottom border
-        borders[2] = new Wall(bottomLeft, bottomRight);
+        flatMaze.add(borders[2] = new Wall(bottomLeft, bottomRight));
         // right border
-        borders[3] = new Wall(bottomRight, topRight);
+        flatMaze.add(borders[3] = new Wall(bottomRight, topRight));
 
         return borders;
+    }
+
+    public List<Wall> getWalls(){
+        return flatMaze;
+    }
+
+    public void refresh(float offsetX, float offsetY){
+        flatMaze.clear();
+        // add the walls to the flatMaze
+        generateFormattedWalls();
+        // add the border to the flatMaze
+        generateBorder();
     }
 
     private Point middleOfCellPoint(int row, int column){
@@ -307,10 +311,6 @@ public class Maze implements Renderable{
                   WALL_SCALE / 2;                      // center vertically
         return new Point(x, y);
 
-    }
-
-    public Wall[][] getWallsFormatted(){
-        return this.wallsFormatted;
     }
 
     private boolean contains(ArrayList<Cell> list, Cell target){

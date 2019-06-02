@@ -34,13 +34,10 @@ public class Main extends PApplet{
 
 	@Override
 	public void setup(){
-		Maze maze = new Maze(30,30,this);
-		List<Wall> walls = maze.getFlat();
-		Collections.addAll(walls, maze.getBorder());
-		character = new Character(new Point((float) width / 2, (float) height / 2), walls, maze.verticies());
-
-		renderables.add(maze);
+		maze = new Maze(30,30,this);
+		character = new Character(maze);
 		renderables.add(character);
+		renderables.add(maze);
 	}
 
 	@Override

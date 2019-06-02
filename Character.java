@@ -26,10 +26,10 @@ public class Character implements Renderable{
         sketch = Main.getInstance();
         this.maze = maze;
         this.centerOfScreen = new Point(sketch.width / 2, sketch.height / 2);
+        maze.refresh(1, 1);
         this.verticies = maze.verticies();
-        this.allWalls = maze.getFlat();
+        this.allWalls = maze.getWalls();
         this.locationInMatrix = centerOfScreen; // temp
-        Collections.addAll(allWalls, maze.getBorder());
     }
 
     public void move(){

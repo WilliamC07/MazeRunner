@@ -55,7 +55,7 @@ public class Main extends PApplet{
 			case PLAYING:
 				background(isGodMode ? 255 : 0);
 				renderables.forEach(Renderable::render);
-				character.move();
+				movables.forEach(Character::move);
 				break;
 		}
 	}

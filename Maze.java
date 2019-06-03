@@ -438,6 +438,12 @@ public class Maze implements Renderable{
         cell[1] = pathKeeper.getY();
         return cell;
     }
+    public float getOffsetX(){
+        return offsetX;
+    }
+    public float getOffsetY(){
+        return offsetY;
+    }
     public void updateCell(int x, int y){
         pathKeeper = new Cell(x,y,pathKeeper);
     }

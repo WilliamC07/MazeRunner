@@ -111,13 +111,28 @@ public class TitleScreen implements Renderable{
                 break;
             case PLAY:
                 // width section clicked
-
+                if(main.mouseX >= inputAreaX - inputAreaWidth / 2 && main.mouseX <= inputAreaX + inputAreaWidth / 2 &&
+                   main.mouseY >= widthY - inputAreaHeight / 2 && main.mouseY <= widthY + inputAreaHeight / 2){
+                    System.out.println("width sec clicked");
+                }
 
                 // height section clicked
-
+                if(main.mouseX >= inputAreaX - inputAreaWidth / 2 && main.mouseX <= inputAreaX + inputAreaWidth / 2 &&
+                        main.mouseY >= heightY - inputAreaHeight / 2 && main.mouseY <= heightY + inputAreaHeight / 2){
+                    System.out.println("height sec clicked");
+                }
 
                 // monster section clicked
+                if(main.mouseX >= inputAreaX - inputAreaWidth / 2 && main.mouseX <= inputAreaX + inputAreaWidth / 2 &&
+                        main.mouseY >= monstersY - inputAreaHeight / 2 && main.mouseY <= monstersY + inputAreaHeight / 2){
+                    System.out.println("monster sec clicked");
+                }
 
+                // play button clicked
+                if(main.mouseX >= centerX - widthTitleButton / 2 && main.mouseX <= centerX + widthTitleButton / 2 &&
+                        main.mouseY >= playY - heightTitleButton / 2 && main.mouseY <= playY + heightTitleButton / 2){
+                    System.out.println("play sec clicked");
+                }
 
                 break;
             case WHAT_IS_THIS:

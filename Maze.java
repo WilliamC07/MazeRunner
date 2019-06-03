@@ -374,6 +374,11 @@ public class Maze implements Renderable{
         for(Wall wall : flatMaze){
             wall.render();
         }
+        sketch.noStroke();
+        sketch.fill(255,0,0,100);
+        sketch.square(offsetX + WALL_SCALE/2,offsetY + WALL_SCALE/2,WALL_SCALE);
+        sketch.fill(0,255,0,100);
+        sketch.square(offsetX + (width-1) * WALL_SCALE + WALL_SCALE/2,offsetY + (length-1) * WALL_SCALE + WALL_SCALE/2,WALL_SCALE);
         sketch.stroke(0,255,0);
         sketch.strokeWeight(5);
         float startX;

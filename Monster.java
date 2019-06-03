@@ -43,7 +43,6 @@ public class Monster extends Character{
         }
     }
     public void render(){
-        System.out.println(player.canSeeCharacter(player, this));
         sketch.noStroke();
         sketch.fill(160,160,160);
         sketch.ellipse(matrixX+maze.getOffsetX(),matrixY+maze.getOffsetY(),20,20);

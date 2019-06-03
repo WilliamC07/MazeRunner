@@ -162,7 +162,7 @@ public class TitleScreen implements Renderable{
                 // play button clicked
                 if(main.mouseX >= centerX - widthTitleButton / 2 && main.mouseX <= centerX + widthTitleButton / 2 &&
                         main.mouseY >= playY - heightTitleButton / 2 && main.mouseY <= playY + heightTitleButton / 2){
-                    System.out.println("play sec clicked");
+                    main.startGame(height, width, amountMonsters);
                 }
 
                 break;

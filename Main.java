@@ -39,21 +39,6 @@ public class Main extends PApplet{
 	}
 
 	@Override
-	public void setup(){
-		maze = new Maze(30,30,this);
-		character = new Character(maze);
-		movables = new ArrayList<Character>();
-		movables.add(character);
-		renderables.add(character);
-		for(int i = 0; i<1; i++){
-			Monster monster = new Monster((int)(Math.random()*maze.getWidth()),(int)(Math.random()*maze.getLength()),maze, character);
-			movables.add(monster);
-			renderables.add(monster);
-		}
-		renderables.add(maze);
-	}
-
-	@Override
 	public void draw(){
 		switch(screen){
 			case TITLE_SCREEN:
@@ -132,6 +117,21 @@ public class Main extends PApplet{
 	@Override
 	public void keyReleased(){
 		character.setVelocity(keyCode,false);
+	}
+
+	public void startGame(int rows, int columns, int amountMonsters){
+		maze = new Maze(rows, columns, this);
+		character = new Character(maze);
+		movables = new ArrayList<>();
+		movables.add(character);
+		renderables.add(character);
+		for(int i = 0; i<amountMonsters; i++){
+			Monster monster = new Monster((int)(Math.random()*maze.getWidth()),(int)(Math.random()*maze.getLength()),maze, character);
+			movables.add(monster);
+			renderables.add(monster);
+		}
+		renderables.add(maze);
+		screen = Screen.PLAYING;
 	}
 
 	private enum Screen{

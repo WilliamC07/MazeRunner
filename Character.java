@@ -197,6 +197,7 @@ public class Character implements Renderable{
                             Point intersection = checkBlockingAuxMain.intersects(block);
                             if(intersection != null && !intersection.equals(currentAuxiliary.getEnd()) && !intersection.equals(next.getEnd())){
                                 canDrawAuxMain = false;
+                                break;
                             }
                         }
 

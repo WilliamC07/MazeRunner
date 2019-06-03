@@ -441,7 +441,7 @@ public class Maze implements Renderable{
     public void updateCell(int x, int y){
         pathKeeper = new Cell(x,y,pathKeeper);
     }
-    private class Cell implements Comparable<Cell>{
+    public class Cell implements Comparable<Cell>{
         private int x,y;
         private int f,g,h;
         private Cell parent;

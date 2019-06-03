@@ -73,19 +73,25 @@ public class TitleScreen implements Renderable{
         main.imageMode(main.CENTER);
         main.rectMode(main.CENTER);
 
-        // text input area is white
-        main.fill(255);
-
         // width input
+        main.fill(255);
         main.rect(inputAreaX, widthY, inputAreaWidth, inputAreaHeight);
+        main.fill(0);
+        main.text(width, inputAreaX, widthY);
         main.image(widthImage, leftX, widthY);
 
         // height input
+        main.fill(255);
         main.rect(inputAreaX, heightY, inputAreaWidth, inputAreaHeight);
+        main.fill(0);
+        main.text(height, inputAreaX, heightY);
         main.image(heightImage, leftX, heightY);
 
         // monster amount input
+        main.fill(255);
         main.rect(inputAreaX, monstersY, inputAreaWidth, inputAreaHeight);
+        main.fill(0);
+        main.text(amountMonsters, inputAreaX, monstersY);
         main.image(monsterImage, leftX, monstersY);
 
         // play button
@@ -96,16 +102,21 @@ public class TitleScreen implements Renderable{
 
     public void feedCharacter(char key){
         if(mode == Mode.PLAY){
-            switch(playField){
-                case WIDTH:
+            if(key == '\b' && stringBuilder.length() >= 1){
+                // backspace
+                stringBuilder.replace(stringBuilder.length() - 1, stringBuilder.length(), "");
+            }
 
-                    break;
-                case HEIGHT:
+            // make sure input is a number
+            try{
+                int value = Integer.parseInt(key + "");
+                stringBuilder.append(value);
+            }catch (NumberFormatException e){
+                // cannot accept non number
+            }
 
-                    break;
-                case MONSTER:
-
-                    break;
+            if(playField != null){
+                parseInput();
             }
         }
     }
@@ -125,6 +136,10 @@ public class TitleScreen implements Renderable{
                 }
                 break;
             case PLAY:
+                // parse input when clicked
+                stringBuilder = new StringBuilder();
+                fixBounds();
+
                 // width section clicked
                 if(main.mouseX >= inputAreaX - inputAreaWidth / 2 && main.mouseX <= inputAreaX + inputAreaWidth / 2 &&
                    main.mouseY >= widthY - inputAreaHeight / 2 && main.mouseY <= widthY + inputAreaHeight / 2){
@@ -156,29 +171,43 @@ public class TitleScreen implements Renderable{
         }
     }
 
-    private void parseInput(PlayField playField, int min, int max, int defaultValue){
-        int value = defaultValue;
+    private void parseInput(){
+        int value = 0;
         try{
             value = Integer.parseInt(stringBuilder.toString());
         }catch(NumberFormatException e){
             // Cannot get the value, so just use the default one
         }
-        if(value < min){
-            value = min;
-        }else if(value > max){
-            value = max;
-        }
-
         switch (playField) {
             case HEIGHT:
                 height = value;
                 break;
             case WIDTH:
-                width = value;
+                    width = value;
                 break;
             case MONSTER:
                 amountMonsters = value;
                 break;
+        }
+    }
+
+    private void fixBounds(){
+        if(height < 10){
+            height = 10;
+        }else if(height > 50){
+            height = 50;
+        }
+
+        if(width < 10){
+            width = 10;
+        }else if(width > 50){
+            width = 50;
+        }
+
+        if(amountMonsters < 0){
+            amountMonsters = 0;
+        }else if(amountMonsters > 10){
+            amountMonsters = 10;
         }
     }
 

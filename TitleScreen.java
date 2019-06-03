@@ -9,8 +9,8 @@ public class TitleScreen implements Renderable{
     private float titleImageY = .2F * main.height;
     private float whatIsThisButtonY = .40F * main.height;
     private float playButtonY = .60F * main.height;
-    private final float width = .5F * main.width; // 50% of width
-    private final float height = .1F * main.height; // 10% of width
+    private final float widthTitleButton = .5F * main.width; // 50% of width
+    private final float heightTitleButton = .1F * main.height; // 10% of width
 
     public TitleScreen(){
         mode = Mode.TITLE;
@@ -36,10 +36,10 @@ public class TitleScreen implements Renderable{
         main.image(titleImage, centerX, titleImageY);
         main.rectMode(main.CENTER);
         main.fill(0, 105, 217);
-        main.rect(centerX, whatIsThisButtonY, width, height);
+        main.rect(centerX, whatIsThisButtonY, widthTitleButton, heightTitleButton);
         main.image(whatIsThisImage, centerX, whatIsThisButtonY);
         main.fill(33, 136, 56);
-        main.rect(centerX, playButtonY, width, height);
+        main.rect(centerX, playButtonY, widthTitleButton, heightTitleButton);
         main.image(playImage, centerX, playButtonY);
     }
 
@@ -48,7 +48,25 @@ public class TitleScreen implements Renderable{
     }
 
     public void click(){
+        switch(mode){
+            case TITLE:
+                // what is this section clicked
+                if(main.mouseX >= centerX - widthTitleButton / 2 && main.mouseX <= centerX + widthTitleButton / 2 &&
+                        main.mouseY >= whatIsThisButtonY - heightTitleButton / 2 && main.mouseY <= whatIsThisButtonY + heightTitleButton / 2){
+                    System.out.println("clicked what is this section");
+                }
+                if(main.mouseX >= centerX - widthTitleButton / 2 && main.mouseX <= centerX + widthTitleButton / 2 &&
+                        main.mouseY >= playButtonY - heightTitleButton / 2 && main.mouseY <= playButtonY + heightTitleButton / 2){
+                    System.out.println("clicked play section");
+                }
+                break;
+            case PLAY:
 
+                break;
+            case WHAT_IS_THIS:
+
+                break;
+        }
     }
 
     private enum Mode{

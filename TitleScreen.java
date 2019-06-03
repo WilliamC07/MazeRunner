@@ -47,7 +47,7 @@ public class TitleScreen implements Renderable{
         heightImage = main.loadImage("height.png");
         heightImage.resize(400, 0);
         monsterImage = main.loadImage("monsters.png");
-        monsterImage.resize(350, 0);
+        monsterImage.resize(400, 0);
     }
 
     @Override

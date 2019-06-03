@@ -72,26 +72,27 @@ public class TitleScreen implements Renderable{
     private void renderPlayMode(){
         main.imageMode(main.CENTER);
         main.rectMode(main.CENTER);
+        main.textSize(widthY * .7F);
 
         // width input
         main.fill(255);
         main.rect(inputAreaX, widthY, inputAreaWidth, inputAreaHeight);
         main.fill(0);
-        main.text(width, inputAreaX, widthY);
+        main.text(width, inputAreaX - inputAreaX * .3F, widthY + widthY * .3F);
         main.image(widthImage, leftX, widthY);
 
         // height input
         main.fill(255);
         main.rect(inputAreaX, heightY, inputAreaWidth, inputAreaHeight);
         main.fill(0);
-        main.text(height, inputAreaX, heightY);
+        main.text(height, inputAreaX - inputAreaX * .3F, heightY + widthY * .3F);
         main.image(heightImage, leftX, heightY);
 
         // monster amount input
         main.fill(255);
         main.rect(inputAreaX, monstersY, inputAreaWidth, inputAreaHeight);
         main.fill(0);
-        main.text(amountMonsters, inputAreaX, monstersY);
+        main.text(amountMonsters, inputAreaX - inputAreaX * .3F, monstersY + widthY * .3F);
         main.image(monsterImage, leftX, monstersY);
 
         // play button

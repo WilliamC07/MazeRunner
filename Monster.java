@@ -40,17 +40,29 @@ public class Monster extends Character{
                 x = matrixPoint[0]/2;
                 y = matrixPoint[1]/2;
             }
+        } else if(chase){
+            Point playerPos = player.getPos();
+            float tempX = matrixX + (playerPos.getX()-matrixX>0? 1:(playerPos.getX()-matrixX==0? 0:-1))*Maze.WALL_SCALE/velocity;
+            float tempY = matrixY + (playerPos.getY()-matrixY>0? 1:(playerPos.getY()-matrixY==0? 0:-1))*Maze.WALL_SCALE/velocity;
+            if(matrixX<playerPos.getX()){
+                matrixX = sketch.constrain(tempX,tempX,playerPos.getX());
+            } else {
+                matrixX = sketch.constrain(tempX,playerPos.getX(),tempX);
+            }
+            if(matrixY<playerPos.getY()){
+                matrixY = sketch.constrain(tempY,tempY,playerPos.getY());
+            } else {
+                matrixY  = sketch.constrain(tempY,playerPos.getY(),tempY);
+            }
         } else {
             path = generateRandomPath();
         }
     }
     public void render(){
-        sketch.noStroke();
-        sketch.fill(160,160,160);
-        sketch.ellipse(matrixX+maze.getOffsetX(),matrixY+maze.getOffsetY(),20,20);
-        sketch.fill(0,0,0);
-        sketch.text(player.canSeeCharacter(player,this)+"",matrixX+maze.getOffsetX(),matrixY+maze.getOffsetY());
         if(player.canSeeCharacter(player,this)){
+            sketch.noStroke();
+            sketch.fill(160,160,160);
+            sketch.ellipse(matrixX+maze.getOffsetX(),matrixY+maze.getOffsetY(),20,20);
             chase=true;
             int[] playerPos = Maze.getMatrixPoint(player.getPos());
             ArrayList<Cell> tempPath = maze.solve(y,x,playerPos[1]/2,playerPos[0]/2);
@@ -61,10 +73,6 @@ public class Monster extends Character{
         } else if(chase){
             chase=false;
             path = generateRandomPath();
-        }
-        for(Cell cell : path){
-            sketch.fill(0,255,0);
-            sketch.ellipse(cell.getY()*50f+maze.getOffsetX()+25,cell.getX()*50f+maze.getOffsetY()+25,20,20);
         }
     }
     public ArrayList<Cell> generateRandomPath(){

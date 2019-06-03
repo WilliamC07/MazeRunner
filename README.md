@@ -51,6 +51,9 @@ Removed unused code
 Map is moved around the screen with the player to allow for large maps without parts cutting off  
 Created god mode to view the game without ray casting  
 Merged all branches and fixed up any merging logical error (deleted too many methods)  
+6/2/19  
+Working on title screen -- added images and created title screen (missing play and what is this section)  
+6/3/19  
 
 # Eric  
 5/17/19  

@@ -60,7 +60,7 @@ public class Character implements Renderable{
         locationInMatrix = new Point(locationInMatrix.getX()+scalar*dx, locationInMatrix.getY()+scalar*dy);
         int[] currentCell = maze.getMatrixPoint(locationInMatrix);
         int[] previousCell = maze.getPathKeeper();
-        if(currentCell[0]/2!=previousCell[0] || currentCell[1]/2!=previousCell[1]){
+        if(Math.abs(currentCell[0]/2-previousCell[0])==1 ^ Math.abs(currentCell[1]/2-previousCell[1])==1){
             maze.updateCell(currentCell[0]/2,currentCell[1]/2);
         }
     }

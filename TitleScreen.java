@@ -25,6 +25,9 @@ public class TitleScreen implements Renderable{
     private float inputAreaX = .7F * main.width;
     private float inputAreaWidth = .5F * main.width;
     private float inputAreaHeight = .1F * main.height;
+    private int height = 15;
+    private int width = 15;
+    private int amountMonsters = 2;
 
     public TitleScreen(){
         mode = Mode.TITLE;
@@ -92,7 +95,19 @@ public class TitleScreen implements Renderable{
     }
 
     public void feedCharacter(char key){
+        if(mode == Mode.PLAY){
+            switch(playField){
+                case WIDTH:
 
+                    break;
+                case HEIGHT:
+
+                    break;
+                case MONSTER:
+
+                    break;
+            }
+        }
     }
 
     public void click(){
@@ -113,19 +128,19 @@ public class TitleScreen implements Renderable{
                 // width section clicked
                 if(main.mouseX >= inputAreaX - inputAreaWidth / 2 && main.mouseX <= inputAreaX + inputAreaWidth / 2 &&
                    main.mouseY >= widthY - inputAreaHeight / 2 && main.mouseY <= widthY + inputAreaHeight / 2){
-                    System.out.println("width sec clicked");
+                    playField = PlayField.WIDTH;
                 }
 
                 // height section clicked
                 if(main.mouseX >= inputAreaX - inputAreaWidth / 2 && main.mouseX <= inputAreaX + inputAreaWidth / 2 &&
                         main.mouseY >= heightY - inputAreaHeight / 2 && main.mouseY <= heightY + inputAreaHeight / 2){
-                    System.out.println("height sec clicked");
+                    playField = PlayField.HEIGHT;
                 }
 
                 // monster section clicked
                 if(main.mouseX >= inputAreaX - inputAreaWidth / 2 && main.mouseX <= inputAreaX + inputAreaWidth / 2 &&
                         main.mouseY >= monstersY - inputAreaHeight / 2 && main.mouseY <= monstersY + inputAreaHeight / 2){
-                    System.out.println("monster sec clicked");
+                    playField = PlayField.MONSTER;
                 }
 
                 // play button clicked
@@ -137,6 +152,32 @@ public class TitleScreen implements Renderable{
                 break;
             case WHAT_IS_THIS:
 
+                break;
+        }
+    }
+
+    private void parseInput(PlayField playField, int min, int max, int defaultValue){
+        int value = defaultValue;
+        try{
+            value = Integer.parseInt(stringBuilder.toString());
+        }catch(NumberFormatException e){
+            // Cannot get the value, so just use the default one
+        }
+        if(value < min){
+            value = min;
+        }else if(value > max){
+            value = max;
+        }
+
+        switch (playField) {
+            case HEIGHT:
+                height = value;
+                break;
+            case WIDTH:
+                width = value;
+                break;
+            case MONSTER:
+                amountMonsters = value;
                 break;
         }
     }

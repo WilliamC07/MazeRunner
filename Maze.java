@@ -409,7 +409,16 @@ public class Maze implements Renderable{
         this.offsetY=offsetY;
     }
     public void renderMinimap(){
-
+        Cell copy = pathKeeper;
+        sketch.stroke(0,255,0);
+        while(copy.hasParent()){
+            float startX = sketch.width/10f+2f*sketch.width/5/width+copy.getX()*4f*sketch.width/5/width;
+            float startY = sketch.height/10f+2f*sketch.height/5/length+copy.getY()*4f*sketch.height/5/length;
+            float endX = sketch.width/10f+2f*sketch.width/5/width+copy.getParent().getX()*4f*sketch.width/5/width;
+            float endY = sketch.height/10f+2f*sketch.height/5/length+copy.getParent().getY()*4f*sketch.height/5/length;
+            sketch.line(startX,startY,endX,endY);
+            copy = copy.getParent();
+        }
     }
     public int[] getPathKeeper(){
         int[] cell = new int[2];

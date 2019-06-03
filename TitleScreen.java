@@ -1,5 +1,10 @@
 import processing.core.PImage;
 
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+
 public class TitleScreen implements Renderable{
     private StringBuilder stringBuilder = new StringBuilder();
     private final Main main = Main.getInstance();
@@ -128,7 +133,12 @@ public class TitleScreen implements Renderable{
                 // what is this section clicked
                 if(main.mouseX >= centerX - widthTitleButton / 2 && main.mouseX <= centerX + widthTitleButton / 2 &&
                         main.mouseY >= whatIsThisButtonY - heightTitleButton / 2 && main.mouseY <= whatIsThisButtonY + heightTitleButton / 2){
-                    mode = Mode.WHAT_IS_THIS;
+                    Desktop desktop = Desktop.getDesktop();
+                    try{
+                        desktop.browse(new URI("https://github.com/WilliamC07/MazeRunner/blob/master/README.md"));
+                    }catch (URISyntaxException | IOException e){
+                        e.printStackTrace();
+                    }
                 }
                 // play section clicked
                 if(main.mouseX >= centerX - widthTitleButton / 2 && main.mouseX <= centerX + widthTitleButton / 2 &&
@@ -164,9 +174,6 @@ public class TitleScreen implements Renderable{
                         main.mouseY >= playY - heightTitleButton / 2 && main.mouseY <= playY + heightTitleButton / 2){
                     main.startGame(height, width, amountMonsters);
                 }
-
-                break;
-            case WHAT_IS_THIS:
 
                 break;
         }

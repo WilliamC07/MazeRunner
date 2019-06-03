@@ -116,7 +116,9 @@ public class Main extends PApplet{
 
 	@Override
 	public void keyReleased(){
-		character.setVelocity(keyCode,false);
+		if(screen == Screen.PLAYING){
+			character.setVelocity(keyCode,false);
+		}
 	}
 
 	public void startGame(int rows, int columns, int amountMonsters){

@@ -19,7 +19,7 @@ public class Character implements Renderable{
     private Set<Point> verticies;
     private List<Wall> allWalls;
     public boolean movingUp,movingDown,movingLeft,movingRight;
-    public Main sketch;
+    private Main sketch;
     private final Maze maze;
 
     public Character(Maze maze){

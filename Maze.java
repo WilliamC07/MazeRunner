@@ -257,8 +257,8 @@ public class Maze implements Renderable{
             for(int c = 0; c < trueWidth; c++){
                 // and intersection is one where a point is part of a wall that is both vertical and horizontal
                 if(maze[r][c] && //must be part of a wall
-                        (r != 0 && maze[r - 1][c]) || (r != trueHeight - 1 && maze[r + 1][c]) && // need a wall on top or bottom
-                        (c != 0 && maze[r][c-1]) || (c != trueWidth - 1 && maze[r][c+1])){ // need a wall on left or right
+                        ((r != 0 && maze[r - 1][c]) || (r != trueHeight - 1 && maze[r + 1][c])) && // need a wall on top or bottom
+                        ((c != 0 && maze[r][c-1]) || (c != trueWidth - 1 && maze[r][c+1]))){ // need a wall on left or right
 
                     float x = offsetX + ((c + 1) / 2) * WALL_SCALE;
                     float y = offsetY + (r / 2 + 1) * WALL_SCALE;

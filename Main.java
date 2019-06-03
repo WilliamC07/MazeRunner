@@ -9,6 +9,7 @@ public class Main extends PApplet{
 	private List<Renderable> renderables;
 	private boolean isGodMode;
 	private Screen screen;
+	private EndScreen endScreen;
 	/**
 	* Singleton design pattern so we don't need to keep passing reference to this class around. We need
 	* the draw methods inside PApplet (like ellipse(float, float, float, float))
@@ -35,6 +36,7 @@ public class Main extends PApplet{
 		instance = this;
 		size(1000, 1000);
 		titleScreen = new TitleScreen();
+		endScreen = new EndScreen();
 		renderables = new ArrayList<>();
 	}
 
@@ -56,6 +58,10 @@ public class Main extends PApplet{
 				background(isGodMode ? 255 : 0);
 				renderables.forEach(Renderable::render);
 				movables.forEach(Character::move);
+				break;
+			case END:
+				background(255);
+				endScreen.render();
 				break;
 		}
 	}
@@ -111,6 +117,8 @@ public class Main extends PApplet{
 	public void mouseClicked() {
 		if(screen == Screen.TITLE_SCREEN){
 			titleScreen.click();
+		}else if(screen == Screen.END){
+			endScreen.click();
 		}
 	}
 
@@ -139,10 +147,20 @@ public class Main extends PApplet{
 	public List<Character> getMovables(){
 		return movables;
 	}
+
+	public void endGame(EndScreen.EndType endType){
+		screen = Screen.END;
+		endScreen.show(endType);
+	}
+
+	public void bringToTitleScreen(){
+		this.screen = Screen.TITLE_SCREEN;
+	}
 	
 	private enum Screen{
 		PLAYING,
 		MINIMAP,
 		TITLE_SCREEN,
+		END
 	}
 }

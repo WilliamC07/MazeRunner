@@ -1,9 +1,14 @@
 # MazeRunner
-AP Computer Science Spring Term Final Project 2019  
+This is an escape-the-maze game, where walls block your line of sight.  
+You start in the top left corner and your objective is to reach the bottom right.  
+Monsters roam the maze and will chase you if you enter their line of sight.  
+To stop the monsters from chasing you, cut off their line of sight by rounding a corner.  
+
 Controls:  
 WASD or Arrow Keys to move  
 H for a hint  
 G to give up, shows way out  
+
 
 # William  
 5/17/19:  
@@ -94,3 +99,17 @@ Diagonal Movement
 Started and Finished Hints  
 Fixed Many Bugs Associated w/ Hints = See Commits  
 Added Give Up System - Displays Path Out  
+5/31/19  
+Constrained Player to Prevent Clipping Through Wall Border  
+6/2/19  
+Updated Hints to Work With Maze Movement  
+Changed Hint to Display a Line Instead of Dots  
+Added Minimap Functionality  
+Added Godmode Minimap Functionality  
+Started Monsters - Can Spawn Monsters and Roam  
+6/3/19  
+Finished Monsters - Chase Players if in Line of Sight  
+Stopped Players from Clipping Through Walls  
+Added Victory and Defeat Conditions  
+Fixed Non-Square Mazes of Greater Length Than Width  
+

@@ -46,15 +46,17 @@ public class Character implements Renderable{
         if(movingDown){
             dy+=1;
         }
-        float scalar = 3;
-        float newX = centerOfScreen.getX()+scalar*dx;
-        float newY = centerOfScreen.getY()+scalar*dy;
-        Point newLocation = new Point(newX,newY);
-        Ray movement = new Ray(centerOfScreen, newLocation, true);
-        for(Wall blocking : allWalls){
-            Point intersection = movement.intersects(blocking);
-            if(intersection != null){
-                return;
+        float scalar = sketch.isGodMode()? 7:3;
+        if(!sketch.isGodMode()){
+            float newX = centerOfScreen.getX()+scalar*dx;
+            float newY = centerOfScreen.getY()+scalar*dy;
+            Point newLocation = new Point(newX,newY);
+            Ray movement = new Ray(centerOfScreen, newLocation, true);
+            for(Wall blocking : allWalls){
+                Point intersection = movement.intersects(blocking);
+                if(intersection != null){
+                    return;
+                }
             }
         }
         locationInMatrix = new Point(locationInMatrix.getX()+scalar*dx, locationInMatrix.getY()+scalar*dy);

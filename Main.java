@@ -5,6 +5,7 @@ import java.util.*;
 public class Main extends PApplet{
 	private Character character;
 	private Maze maze;
+	private List<Character> movables;
 	private List<Renderable> renderables;
 	private boolean isGodMode;
 	private int screen = 0; //0 for maze, 1 for minimap
@@ -38,7 +39,14 @@ public class Main extends PApplet{
 	public void setup(){
 		maze = new Maze(30,30,this);
 		character = new Character(maze);
+		movables = new ArrayList<Character>();
+		movables.add(character);
 		renderables.add(character);
+		for(int i = 0; i<3; i++){
+			Monster monster = new Monster((int)(Math.random()*maze.getWidth()),(int)(Math.random()*maze.getLength()),maze);
+			movables.add(monster);
+			renderables.add(monster);
+		}
 		renderables.add(maze);
 	}
 
@@ -47,7 +55,7 @@ public class Main extends PApplet{
 		background(isGodMode ? 255 : 0);
 		if(screen==0){
 			renderables.forEach(Renderable::render);
-			character.move();
+			movables.forEach(Character::move);
 		} else {
 			maze.renderMinimap();
 			if(isGodMode){

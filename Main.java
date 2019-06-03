@@ -136,6 +136,10 @@ public class Main extends PApplet{
 		screen = Screen.PLAYING;
 	}
 
+	public List<Character> getMovables(){
+		return movables;
+	}
+	
 	private enum Screen{
 		PLAYING,
 		MINIMAP,

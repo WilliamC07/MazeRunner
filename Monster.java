@@ -70,6 +70,15 @@ public class Monster extends Character{
             path = generateRandomPath();
         }
     }
+    public int getX(){
+        return x;
+    }
+    public int getY(){
+        return y;
+    }
+    public boolean onTopOfPlayer(){
+        return matrixX==player.getPos().getX() && matrixY==player.getPos().getY();
+    }
     public ArrayList<Cell> generateRandomPath(){
         ArrayList<Cell> returnPath = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
         if(returnPath.size()>0){

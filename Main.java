@@ -32,8 +32,8 @@ public class Main extends PApplet{
 	public void settings(){
 		screen = Screen.TITLE_SCREEN;
 		instance = this;
-		titleScreen = new TitleScreen();
 		size(1000, 1000);
+		titleScreen = new TitleScreen();
 		renderables = new ArrayList<>();
 	}
 
@@ -112,6 +112,13 @@ public class Main extends PApplet{
 	 */
 	public boolean isGodMode(){
 		return isGodMode;
+	}
+
+	@Override
+	public void mouseClicked() {
+		if(screen == Screen.TITLE_SCREEN){
+			titleScreen.click();
+		}
 	}
 
 	@Override

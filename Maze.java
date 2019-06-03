@@ -419,6 +419,11 @@ public class Maze implements Renderable{
             sketch.line(startX,startY,endX,endY);
             copy = copy.getParent();
         }
+        sketch.noStroke();
+        sketch.fill(255,0,0);
+        float playerX = sketch.width/10f+2f*sketch.width/5/width+pathKeeper.getX()*4f*sketch.width/5/width;
+        float playerY = sketch.height/10f+2f*sketch.height/5/length+pathKeeper.getY()*4f*sketch.height/5/length;
+        sketch.ellipse(playerX,playerY,15,15);
     }
     public int[] getPathKeeper(){
         int[] cell = new int[2];

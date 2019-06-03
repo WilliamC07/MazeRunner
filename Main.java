@@ -42,8 +42,8 @@ public class Main extends PApplet{
 		movables = new ArrayList<Character>();
 		movables.add(character);
 		renderables.add(character);
-		for(int i = 0; i<3; i++){
-			Monster monster = new Monster((int)(Math.random()*maze.getWidth()),(int)(Math.random()*maze.getLength()),maze);
+		for(int i = 0; i<1; i++){
+			Monster monster = new Monster((int)(Math.random()*maze.getWidth()),(int)(Math.random()*maze.getLength()),maze, character);
 			movables.add(monster);
 			renderables.add(monster);
 		}

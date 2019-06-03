@@ -282,4 +282,31 @@ public class Character implements Renderable{
         }
         return mainRay;
     }
+
+    public boolean canSeeCharacter(Character character1, Character character2){
+        Point thisLocation;
+        Point otherLocation;
+        if(character1 instanceof Monster){
+            thisLocation = ((Monster) character1).location();
+        }else{
+            thisLocation = character1.centerOfScreen;
+        }
+
+        if(character2 instanceof Monster){
+            otherLocation = ((Monster) character2).location();
+        }else{
+            otherLocation = character2.centerOfScreen;
+        }
+
+        Ray vision = new Ray(thisLocation, otherLocation, true);
+        sketch.line(thisLocation.getX(), thisLocation.getY(), otherLocation.getX(), otherLocation.getY());
+        for(Wall wall : allWalls){
+            Point intersection = vision.intersects(wall);
+            if(intersection != null){
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

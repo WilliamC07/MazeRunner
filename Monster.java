@@ -7,7 +7,8 @@ public class Monster extends Character{
     private PApplet sketch;
     private Maze maze;
     private float matrixX, matrixY;
-    public Monster(int x, int y, Maze maze){
+    private Character player;
+    public Monster(int x, int y, Maze maze, Character player){
         super(maze);
         this.x=x;
         this.y=y;
@@ -17,6 +18,7 @@ public class Monster extends Character{
         path = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
         matrixX = x*Maze.WALL_SCALE+Maze.WALL_SCALE/2;
         matrixY = y*Maze.WALL_SCALE+Maze.WALL_SCALE/2;
+        this.player = player;
     }
     public void move(){
         if(chase){
@@ -41,8 +43,12 @@ public class Monster extends Character{
         }
     }
     public void render(){
+        System.out.println(player.canSeeCharacter(player, this));
         sketch.noStroke();
         sketch.fill(160,160,160);
         sketch.ellipse(matrixX+maze.getOffsetX(),matrixY+maze.getOffsetY(),20,20);
+    }
+    public Point location(){
+        return new Point(matrixX+maze.getOffsetX(), matrixY+maze.getOffsetY());
     }
 }

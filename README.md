@@ -9,11 +9,17 @@ To stop the monsters from chasing you, cut off their line of sight by rounding a
 * A* path finding algorithm for hints and solution
 
 ## How to run  
-Download the repository and run the bash script.  
+1. Download the repository and run the bash script.  
 ```chmod 755 run.sh && ./run.sh```  
+2. Click on green button that reads "play"
+3. Click on the number on next to the fields reading "width," "height," "monsters." The width and height is the amount 
+of columns and rows respectively. These values must be an integer in the range of 10 to 50 inclusive. Monsters must be 
+an integer in the range of 0 to 10 inclusive. The game will automatically fix the values if they are wrong.
+4. Click the green play button again to start.
+5. Try to get to the end the maze.
 
 ## Controls  
-```WASD``` or Arrow Keys to move.  
+```WASD``` or ```Arrow Keys``` to move.  
 ```H``` for a hint (gives a portion of the path to the end).    
 ```G``` to give up, shows way out.  
 ```P``` for god mode (can pass through walls, can see the whole maze, monsters will not appear and chase).  
@@ -56,10 +62,10 @@ Merged ray_casting_fix to master
 
 5/23/19  
 Found out ray casting is still broken  
-Continued work on ray casting  
+Continued work on ray casting (drawing diagrams and reading more on ray_casting)  
 
 5/24/19  
-Continued work on ray casting  
+Continued work on ray casting (drawing diagrams and reading more on ray_casting)  
 
 5/25/19  
 Finished ray casting and removed testing code  
@@ -67,15 +73,15 @@ Merged ray casting fix to master
 Working on converting a boolean[][] of where walls are to a 2D grid of walls  
 
 5/28/19  
-Continued working on wall Generation  
+Continued working on wall generation  
 Merged working branch to deal with merge conflict early  
 
 5/29/19  
 Fixed generating horizontal walls (fixed infinite loop)  
-Starting working on vertical walls  
+Starting working on generating vertical walls (determined condition for a vertical wall) 
 
 5/30/19  
-Continued work on converting maze to walls  
+Continued work on converting maze to walls (vertical walls start and end point)  
 
 6/1/19  
 Finish converting maze to walls  
@@ -93,6 +99,7 @@ Finished title screen mode
 Fixed too many verticies forming and causing weird rays to form  
 Added check to see if two Character can see each other (no walls blocking)  
 Started and finish end screen (win and lose) and starting a new game  
+Finished writing up the README.md (design and more information)  
 
 ### Eric  
 5/17/19  

@@ -13,6 +13,7 @@ public class Main extends PApplet{
 	* the draw methods inside PApplet (like ellipse(float, float, float, float))
 	*/
 	private static Main instance;
+	private TitleScreen titleScreen;
 
 	public static void main(String[] args){
 		PApplet.main("Main");
@@ -29,8 +30,9 @@ public class Main extends PApplet{
 
 	@Override
 	public void settings(){
-		screen = Screen.PLAYING;
+		screen = Screen.TITLE_SCREEN;
 		instance = this;
+		titleScreen = new TitleScreen();
 		size(1000, 1000);
 		renderables = new ArrayList<>();
 	}
@@ -45,17 +47,19 @@ public class Main extends PApplet{
 
 	@Override
 	public void draw(){
-		background(isGodMode ? 255 : 0);
 		switch(screen){
 			case TITLE_SCREEN:
+				background(255);
 				break;
 			case MINIMAP:
+				background(isGodMode ? 255 : 0);
 				maze.renderMinimap();
 				if(isGodMode){
 					maze.renderMinimapGod();
 				}
 				break;
 			case PLAYING:
+				background(isGodMode ? 255 : 0);
 				renderables.forEach(Renderable::render);
 				character.move();
 				break;
@@ -64,6 +68,12 @@ public class Main extends PApplet{
 
 	@Override
 	public void keyPressed(){
+		// title screen commands
+		if(screen == Screen.TITLE_SCREEN){
+			titleScreen.feedCharacter(key);
+		}
+
+		// playing only keys
 		if(screen == Screen.PLAYING){
 			switch(key){
 				case 'H':
@@ -74,20 +84,24 @@ public class Main extends PApplet{
 				case 'g':
 					maze.hint(character.getPos(),maze.getLength()*maze.getWidth());
 					break;
+				case 'P':
+				case 'p':
+					isGodMode = !isGodMode;
+					break;
 				default:
 					character.setVelocity(keyCode,true);
 					break;
 			}
 		}
-		switch(key){
-			case 'P':
-			case 'p':
-				isGodMode = !isGodMode;
-				break;
-			case 'M':
-			case 'm':
-				screen = screen == Screen.MINIMAP ? Screen.PLAYING : Screen.MINIMAP;
-				break;
+
+		// minimap and playing commands
+		if(screen == Screen.MINIMAP || screen == Screen.PLAYING){
+			switch(key){
+				case 'M':
+				case 'm':
+					screen = screen == Screen.MINIMAP ? Screen.PLAYING : Screen.MINIMAP;
+					break;
+			}
 		}
 	}
 

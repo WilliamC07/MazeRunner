@@ -114,6 +114,8 @@ public class Character implements Renderable{
         sketch.fill(255,0,0);
         sketch.getInstance().noStroke();
         sketch.ellipse(centerOfScreen.getX(), centerOfScreen.getY(), 20, 20);
+        sketch.fill(0,0,0);
+        sketch.text(didWin()+"",centerOfScreen.getX(),centerOfScreen.getY());
     }
 
     private List<Ray> getRays(){
@@ -308,5 +310,10 @@ public class Character implements Renderable{
         }
 
         return true;
+    }
+
+    public boolean didWin(){
+        int[] curPos = Maze.getMatrixPoint(locationInMatrix);
+        return curPos[0]/2==maze.getLength()-1 && curPos[1]/2==maze.getWidth()-1;
     }
 }

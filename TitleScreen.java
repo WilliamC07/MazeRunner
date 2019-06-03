@@ -17,6 +17,14 @@ public class TitleScreen implements Renderable{
     // play screen variables
     private final PImage widthImage, heightImage, monsterImage;
     private PlayField playField;
+    private float leftX = .2F * main.width;
+    private float widthY = .1F * main.height;
+    private float heightY = .3F * main.height;
+    private float monstersY = .5F * main.height;
+    private float playY = .7F * main.height;
+    private float inputAreaX = .7F * main.width;
+    private float inputAreaWidth = .5F * main.width;
+    private float inputAreaHeight = .1F * main.height;
 
     public TitleScreen(){
         mode = Mode.TITLE;
@@ -62,15 +70,22 @@ public class TitleScreen implements Renderable{
         main.imageMode(main.CENTER);
         main.rectMode(main.CENTER);
 
-        float leftX = .2F * main.width;
-        float widthY = .1F * main.height;
-        float heightY = .3F * main.height;
-        float monstersY = .5F * main.height;
-        float playY = .7F * main.height;
+        // text input area is white
+        main.fill(255);
 
+        // width input
+        main.rect(inputAreaX, widthY, inputAreaWidth, inputAreaHeight);
         main.image(widthImage, leftX, widthY);
+
+        // height input
+        main.rect(inputAreaX, heightY, inputAreaWidth, inputAreaHeight);
         main.image(heightImage, leftX, heightY);
+
+        // monster amount input
+        main.rect(inputAreaX, monstersY, inputAreaWidth, inputAreaHeight);
         main.image(monsterImage, leftX, monstersY);
+
+        // play button
         main.fill(33, 136, 56);
         main.rect(centerX, playY, widthTitleButton, heightTitleButton);
         main.image(playImage, centerX, playY);
@@ -88,12 +103,21 @@ public class TitleScreen implements Renderable{
                         main.mouseY >= whatIsThisButtonY - heightTitleButton / 2 && main.mouseY <= whatIsThisButtonY + heightTitleButton / 2){
                     mode = Mode.WHAT_IS_THIS;
                 }
+                // play section clicked
                 if(main.mouseX >= centerX - widthTitleButton / 2 && main.mouseX <= centerX + widthTitleButton / 2 &&
                         main.mouseY >= playButtonY - heightTitleButton / 2 && main.mouseY <= playButtonY + heightTitleButton / 2){
                     mode = Mode.PLAY;
                 }
                 break;
             case PLAY:
+                // width section clicked
+
+
+                // height section clicked
+
+
+                // monster section clicked
+
 
                 break;
             case WHAT_IS_THIS:

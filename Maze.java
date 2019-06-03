@@ -121,13 +121,14 @@ public class Maze implements Renderable{
                         }
                     } else {
                         maze[i][j*2]=true;
-                        if(j<length-1 && (walls[i-1][j]!=null || walls[i][j+1]!=null)){
+                        System.out.println(i+" "+j);
+                        if(j<walls[i].length-1 && (walls[i-1][j]!=null || walls[i][j+1]!=null)){
                             maze[i][j*2+1]=true;
                         }
                         if(j>0 && walls[i-1][j-1]!=null){
                             maze[i][j*2-1]=true;
                         }
-                        if(j<length-1 && walls[i+1][j]!=null){
+                        if(j<walls[i].length-1 && walls[i+1][j]!=null){
                             maze[i][j*2+1]=true;
                         }
                         if(j>0 && walls[i+1][j-1]!=null){

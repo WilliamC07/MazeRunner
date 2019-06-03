@@ -83,18 +83,14 @@ Changed Character to Take Flattened Maze
 Initial Attempt at Converting Maze to Boolean Array   
 Used for A* Algorithm  
 Used for Ray Casting  
-5/23/19-5/24/19  
-AP Tests, No Work Done  
-5/25/19-5/26/19  
-Camping, No Work Done  
 5/27/19  
 Fixed Boolean Conversion - Missing Walls At Intersections  
 5/28/19  
 Started and Finished A* Maze Solving  
 5/29/19  
 Upgraded Movement - Arrow Keys  
-Smooth Movement  
-Diagonal Movement  
+Movement Smoothed Out  
+Implemented Diagonal Movement  
 5/30/19  
 Started and Finished Hints  
 Fixed Many Bugs Associated w/ Hints = See Commits  

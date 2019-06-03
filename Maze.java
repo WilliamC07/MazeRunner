@@ -32,7 +32,7 @@ public class Maze implements Renderable{
         convertToBool(walls);
         convertToList(walls);
     }
-    public void fillWalls(int rows, int cols, Wall[][] walls){
+    private void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;
         float colWidth = 4f*sketch.width/5/cols;
         for(int i = 0; i<walls.length; i++){
@@ -61,7 +61,7 @@ public class Maze implements Renderable{
             }
         }
     }
-    public void generate(int row, int col, Wall[][] walls){
+    private void generate(int row, int col, Wall[][] walls){
         ArrayList<Integer> adjacentWalls = new ArrayList<Integer>();
         if(col!=0 && walls[2*row][col-1]!=null){
             adjacentWalls.add(0); //left
@@ -121,7 +121,6 @@ public class Maze implements Renderable{
                         }
                     } else {
                         maze[i][j*2]=true;
-                        System.out.println(i+" "+j);
                         if(j<walls[i].length-1 && (walls[i-1][j]!=null || walls[i][j+1]!=null)){
                             maze[i][j*2+1]=true;
                         }

@@ -21,32 +21,47 @@ public class Monster extends Character{
         this.player = player;
     }
     public void move(){
+        int velocity;
         if(chase){
-
+            velocity = 50;
         } else {
-            if(path.size()!=0){
-                Cell next = path.get(path.size()-1);
-                float nextMatrixX = next.getY()*Maze.WALL_SCALE+Maze.WALL_SCALE/2;
-                float nextMatrixY = next.getX()*Maze.WALL_SCALE+Maze.WALL_SCALE/2;
-                if(matrixX==nextMatrixX && matrixY==nextMatrixY){
-                    path.remove(path.size()-1);
-                } else {
-                    matrixX += (nextMatrixX-matrixX>0? 1:(nextMatrixX-matrixX==0? 0:-1))*Maze.WALL_SCALE/100;
-                    matrixY += (nextMatrixY-matrixY>0? 1:(nextMatrixY-matrixY==0? 0:-1))*Maze.WALL_SCALE/100;
-                    int[] matrixPoint = Maze.getMatrixPoint(new Point(matrixX,matrixY));
-                    x = matrixPoint[0]/2;
-                    y = matrixPoint[1]/2;
-                }
+            velocity = 100;
+        }
+        if(path.size()!=0){
+            Cell next = path.get(path.size()-1);
+            float nextMatrixX = next.getY()*Maze.WALL_SCALE+Maze.WALL_SCALE/2;
+            float nextMatrixY = next.getX()*Maze.WALL_SCALE+Maze.WALL_SCALE/2;
+            if(matrixX==nextMatrixX && matrixY==nextMatrixY){
+                path.remove(path.size()-1);
             } else {
-                path = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
+                matrixX += (nextMatrixX-matrixX>0? 1:(nextMatrixX-matrixX==0? 0:-1))*Maze.WALL_SCALE/velocity;
+                matrixY += (nextMatrixY-matrixY>0? 1:(nextMatrixY-matrixY==0? 0:-1))*Maze.WALL_SCALE/velocity;
+                int[] matrixPoint = Maze.getMatrixPoint(new Point(matrixX,matrixY));
+                x = matrixPoint[0]/2;
+                y = matrixPoint[1]/2;
             }
+        } else {
+            path = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
         }
     }
     public void render(){
-        System.out.println(player.canSeeCharacter(player, this));
         sketch.noStroke();
         sketch.fill(160,160,160);
         sketch.ellipse(matrixX+maze.getOffsetX(),matrixY+maze.getOffsetY(),20,20);
+        sketch.fill(0,0,0);
+        sketch.text(player.canSeeCharacter(player,this)+"",matrixX+maze.getOffsetX(),matrixY+maze.getOffsetY());
+        if(player.canSeeCharacter(player,this)){
+            chase=true;
+            int[] playerPos = Maze.getMatrixPoint(player.getPos());
+            path = maze.solve(y,x,playerPos[1]/2,playerPos[0]/2);
+        } else if(chase){
+            chase=false;
+            path = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
+        }
+        for(Cell cell : path){
+            sketch.fill(0,255,0);
+            sketch.ellipse(cell.getY()*50f+maze.getOffsetX()+25,cell.getX()*50f+maze.getOffsetY()+25,20,20);
+        }
     }
     public Point location(){
         return new Point(matrixX+maze.getOffsetX(), matrixY+maze.getOffsetY());

@@ -57,6 +57,7 @@ Working on title screen -- added images and created title screen (missing play a
 Finished title screen mode  
 Fixed too many verticies forming and causing weird rays to form  
 Added check to see if two Character can see each other (no walls blocking)  
+Started and finish end screen (win and lose) and starting a new game
 
 # Eric  
 5/17/19  

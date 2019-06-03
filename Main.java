@@ -7,7 +7,7 @@ public class Main extends PApplet{
 	private Maze maze;
 	private List<Renderable> renderables;
 	private boolean isGodMode;
-	private int screen = 0; //0 for maze, 1 for minimap
+	private Screen screen;
 	/**
 	* Singleton design pattern so we don't need to keep passing reference to this class around. We need
 	* the draw methods inside PApplet (like ellipse(float, float, float, float))
@@ -29,6 +29,7 @@ public class Main extends PApplet{
 
 	@Override
 	public void settings(){
+		screen = Screen.PLAYING;
 		instance = this;
 		size(1000, 1000);
 		renderables = new ArrayList<>();
@@ -45,20 +46,25 @@ public class Main extends PApplet{
 	@Override
 	public void draw(){
 		background(isGodMode ? 255 : 0);
-		if(screen==0){
-			renderables.forEach(Renderable::render);
-			character.move();
-		} else {
-			maze.renderMinimap();
-			if(isGodMode){
-				maze.renderMinimapGod();
-			}
+		switch(screen){
+			case TITLE_SCREEN:
+				break;
+			case MINIMAP:
+				maze.renderMinimap();
+				if(isGodMode){
+					maze.renderMinimapGod();
+				}
+				break;
+			case PLAYING:
+				renderables.forEach(Renderable::render);
+				character.move();
+				break;
 		}
 	}
 
 	@Override
 	public void keyPressed(){
-		if(screen==0){
+		if(screen == Screen.PLAYING){
 			switch(key){
 				case 'H':
 				case 'h':
@@ -80,7 +86,7 @@ public class Main extends PApplet{
 				break;
 			case 'M':
 			case 'm':
-				screen = (screen+1)%2;
+				screen = screen == Screen.MINIMAP ? Screen.PLAYING : Screen.MINIMAP;
 				break;
 		}
 	}
@@ -96,5 +102,11 @@ public class Main extends PApplet{
 	@Override
 	public void keyReleased(){
 		character.setVelocity(keyCode,false);
+	}
+
+	private enum Screen{
+		PLAYING,
+		MINIMAP,
+		TITLE_SCREEN,
 	}
 }

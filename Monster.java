@@ -21,12 +21,7 @@ public class Monster extends Character{
         this.player = player;
     }
     public void move(){
-        int velocity;
-        if(chase){
-            velocity = 25;
-        } else {
-            velocity = 100;
-        }
+        int velocity = chase? 25:100;
         if(path.size()!=0){
             Cell next = path.get(path.size()-1);
             float nextMatrixX = next.getY()*Maze.WALL_SCALE+Maze.WALL_SCALE/2;

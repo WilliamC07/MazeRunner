@@ -26,7 +26,7 @@ public class Character implements Renderable{
         sketch = Main.getInstance();
         this.maze = maze;
         this.centerOfScreen = new Point(sketch.width / 2, sketch.height / 2);
-        maze.refresh(1, 1, maze.WALL_SCALE, maze.WALL_SCALE);
+        maze.refresh(1, 1, Maze.WALL_SCALE, Maze.WALL_SCALE);
         // start off at the top left of the maze
         this.locationInMatrix = new Point(Maze.WALL_SCALE / 2, Maze.WALL_SCALE / 2); // temp
     }
@@ -48,8 +48,8 @@ public class Character implements Renderable{
         }
         float scalar = sketch.isGodMode()? 7:3;
         if(!sketch.isGodMode()){
-            float newX = centerOfScreen.getX()+scalar*dx;
-            float newY = centerOfScreen.getY()+scalar*dy;
+            float newX = centerOfScreen.getX()+scalar*dx+dx*10;
+            float newY = centerOfScreen.getY()+scalar*dy+dy*10;
             Point newLocation = new Point(newX,newY);
             Ray movement = new Ray(centerOfScreen, newLocation, true);
             for(Wall blocking : allWalls){
@@ -60,7 +60,7 @@ public class Character implements Renderable{
             }
         }
         locationInMatrix = new Point(locationInMatrix.getX()+scalar*dx, locationInMatrix.getY()+scalar*dy);
-        int[] currentCell = maze.getMatrixPoint(locationInMatrix);
+        int[] currentCell = Maze.getMatrixPoint(locationInMatrix);
         int[] previousCell = maze.getPathKeeper();
         if(Math.abs(currentCell[0]/2-previousCell[0])==1 ^ Math.abs(currentCell[1]/2-previousCell[1])==1){
             maze.updateCell(currentCell[0]/2,currentCell[1]/2);
@@ -103,7 +103,7 @@ public class Character implements Renderable{
         float offsetY = centerOfScreen.getY() - locationInMatrix.getY();
         maze.setOffsetX(offsetX);
         maze.setOffsetY(offsetY);
-        maze.refresh(offsetX, offsetY, maze.WALL_SCALE, maze.WALL_SCALE);
+        maze.refresh(offsetX, offsetY, Maze.WALL_SCALE, Maze.WALL_SCALE);
         this.verticies = maze.verticies(offsetX, offsetY);
         this.allWalls = maze.getWalls();
 

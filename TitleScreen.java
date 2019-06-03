@@ -78,6 +78,7 @@ public class TitleScreen implements Renderable{
         main.imageMode(main.CENTER);
         main.rectMode(main.CENTER);
         main.textSize(widthY * .7F);
+        main.stroke(255);
 
         // width input
         main.fill(255);

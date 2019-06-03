@@ -114,6 +114,12 @@ public class Character implements Renderable{
         sketch.fill(255,0,0);
         sketch.getInstance().noStroke();
         sketch.ellipse(centerOfScreen.getX(), centerOfScreen.getY(), 20, 20);
+
+        if(didWin()){
+            sketch.endGame(EndScreen.EndType.WIN);
+        }else if(didLose()){
+            sketch.endGame(EndScreen.EndType.LOSE);
+        }
     }
 
     private List<Ray> getRays(){

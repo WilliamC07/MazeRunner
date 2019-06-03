@@ -50,6 +50,9 @@ public class Main extends PApplet{
 			character.move();
 		} else {
 			maze.renderMinimap();
+			if(isGodMode){
+				maze.renderMinimapGod();
+			}
 		}
 	}
 

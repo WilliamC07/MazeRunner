@@ -425,6 +425,13 @@ public class Maze implements Renderable{
         float playerY = sketch.height/10f+2f*sketch.height/5/length+pathKeeper.getY()*4f*sketch.height/5/length;
         sketch.ellipse(playerX,playerY,15,15);
     }
+    public void renderMinimapGod(){
+        refresh(sketch.height/10f,sketch.width/10f,4f*sketch.height/5/length,4f*sketch.height/5/width);
+        sketch.stroke(0);
+        for(Wall wall : flatMaze){
+            wall.render();
+        }
+    }
     public int[] getPathKeeper(){
         int[] cell = new int[2];
         cell[0] = pathKeeper.getX();

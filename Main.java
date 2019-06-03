@@ -50,6 +50,7 @@ public class Main extends PApplet{
 		switch(screen){
 			case TITLE_SCREEN:
 				background(255);
+				titleScreen.render();
 				break;
 			case MINIMAP:
 				background(isGodMode ? 255 : 0);

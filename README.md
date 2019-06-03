@@ -4,42 +4,44 @@ You start in the top left corner and your objective is to reach the bottom right
 Monsters roam the maze and will chase you if you enter their line of sight.  
 To stop the monsters from chasing you, cut off their line of sight by rounding a corner.
 
-## Highlights
+## Highlights  
 * Ray casting for vision (the player can only see as much of the map as the in-game character can)
 * A* path finding algorithm for hints and solution
 
-## How to run
+## How to run  
 Download the repository and run the bash script.  
 ```chmod 755 run.sh && ./run.sh```  
 
-## Controls:  
-WASD or Arrow Keys to move  
-H for a hint (gives a portion of the path to the end)    
-G to give up, shows way out  
-P for god mode (can pass through walls, can see the whole maze, monsters will not appear and chase)  
+## Controls  
+```WASD``` or Arrow Keys to move.  
+```H``` for a hint (gives a portion of the path to the end).    
+```G``` to give up, shows way out.  
+```P``` for god mode (can pass through walls, can see the whole maze, monsters will not appear and chase).  
+````ESC```` for quiting the game.  
 
-## Resources:
+## Resources
 * [Ray casting -- general algorithm](https://www.redblobgames.com/articles/visibility/)  
 * [Math for ray casting](https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection)  
 * [A* Algorithm](https://www.geeksforgeeks.org/a-search-algorithm/)  
+* [Text font](https://textcraft.net/)
 
 ## Dev Log:
 ### William  
-5/17/19:  
+5/17/19  
 Created bash script to compile and run the project and added the jar.  
 Wrote boilerplate code for Wall, Character, and Main  
 Can render Wall and Character  
 
-5/18/19:  
+5/18/19  
 Can determine point of intersection between two line segments  
 More boilerplate code (distance formula, accessors)  
 Merged ray casting to master  
 
-5/19/19:  
+5/19/19  
 Draw additional rays to give a smoother field of vision  
 Fixed calculating intersection between two line segments and intersection between a ray and line segment  
 
-5/20/19:  
+5/20/19  
 Half completed ray casting drawing triangles for field of vision. A small bug of not drawing some triangles  
 Merged and connect Eric's work to mine  
 

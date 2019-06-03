@@ -15,7 +15,7 @@ public class Monster extends Character{
         this.maze=maze;
         sketch=Main.getInstance();
         chase = false;
-        path = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
+        path = generateRandomPath();
         matrixX = x*Maze.WALL_SCALE+Maze.WALL_SCALE/2;
         matrixY = y*Maze.WALL_SCALE+Maze.WALL_SCALE/2;
         this.player = player;
@@ -23,7 +23,7 @@ public class Monster extends Character{
     public void move(){
         int velocity;
         if(chase){
-            velocity = 50;
+            velocity = 25;
         } else {
             velocity = 100;
         }
@@ -41,7 +41,7 @@ public class Monster extends Character{
                 y = matrixPoint[1]/2;
             }
         } else {
-            path = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
+            path = generateRandomPath();
         }
     }
     public void render(){
@@ -53,15 +53,26 @@ public class Monster extends Character{
         if(player.canSeeCharacter(player,this)){
             chase=true;
             int[] playerPos = Maze.getMatrixPoint(player.getPos());
-            path = maze.solve(y,x,playerPos[1]/2,playerPos[0]/2);
+            ArrayList<Cell> tempPath = maze.solve(y,x,playerPos[1]/2,playerPos[0]/2);
+            if(tempPath.size()>0){
+                tempPath.remove(tempPath.size()-1);
+            }
+            path = tempPath;
         } else if(chase){
             chase=false;
-            path = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
+            path = generateRandomPath();
         }
         for(Cell cell : path){
             sketch.fill(0,255,0);
             sketch.ellipse(cell.getY()*50f+maze.getOffsetX()+25,cell.getX()*50f+maze.getOffsetY()+25,20,20);
         }
+    }
+    public ArrayList<Cell> generateRandomPath(){
+        ArrayList<Cell> returnPath = maze.solve(y,x,(int)(Math.random()*maze.getLength()),(int)(Math.random()*maze.getWidth()));
+        if(returnPath.size()>0){
+            returnPath.remove(returnPath.size()-1);
+        }
+        return returnPath;
     }
     public Point location(){
         return new Point(matrixX+maze.getOffsetX(), matrixY+maze.getOffsetY());

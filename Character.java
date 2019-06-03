@@ -26,7 +26,7 @@ public class Character implements Renderable{
         sketch = Main.getInstance();
         this.maze = maze;
         this.centerOfScreen = new Point(sketch.width / 2, sketch.height / 2);
-        maze.refresh(1, 1);
+        maze.refresh(1, 1, maze.WALL_SCALE, maze.WALL_SCALE);
         // start off at the top left of the maze
         this.locationInMatrix = new Point(Maze.WALL_SCALE / 2, Maze.WALL_SCALE / 2); // temp
     }
@@ -101,7 +101,7 @@ public class Character implements Renderable{
         float offsetY = centerOfScreen.getY() - locationInMatrix.getY();
         maze.setOffsetX(offsetX);
         maze.setOffsetY(offsetY);
-        maze.refresh(offsetX, offsetY);
+        maze.refresh(offsetX, offsetY, maze.WALL_SCALE, maze.WALL_SCALE);
         this.verticies = maze.verticies(offsetX, offsetY);
         this.allWalls = maze.getWalls();
 

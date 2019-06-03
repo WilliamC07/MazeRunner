@@ -177,7 +177,7 @@ public class Maze implements Renderable{
      * Adds the walls of the maze to {@link #flatMaze}. This does not include the border. Use {@link #generateBorder(float, float)} )}
      * for that.
      */
-    private void generateFormattedWalls(float offsetX, float offsetY){
+    private void generateFormattedWalls(float offsetX, float offsetY, float horizontalWidth, float verticalWidth){
         // IMPORTANT:
         // every other column is a wall, so divide by 2 and add 1
         // every other row is a wall, so divide by 2 and add 1
@@ -192,8 +192,8 @@ public class Maze implements Renderable{
                 }
 
                 // because the wall is horizontal, the start and end point share the same y
-                float y = offsetY + (r / 2 + 1) * WALL_SCALE;
-                Point start = new Point(offsetX + ((c + 1) / 2) * WALL_SCALE, y);
+                float y = offsetY + (r / 2 + 1) * horizontalWidth;
+                Point start = new Point(offsetX + ((c + 1) / 2) * horizontalWidth, y);
                 Point end;
 
                 // find the span of the wall
@@ -201,7 +201,7 @@ public class Maze implements Renderable{
                 while(endColumn < trueWidth && maze[r][endColumn]){
                     endColumn++;
                 }
-                end = new Point(offsetX + ((endColumn + 1) / 2) * WALL_SCALE, y);
+                end = new Point(offsetX + ((endColumn + 1) / 2) * horizontalWidth, y);
 
                 // keep track of the wall
                 Wall wall = new Wall(start, end);
@@ -220,8 +220,8 @@ public class Maze implements Renderable{
                 }
 
                 // because the wall is vertical, the start and end share the same x
-                float x = offsetX + (c / 2 + 1) * WALL_SCALE;
-                Point start = new Point(x,offsetY + ((r + 1) / 2) * WALL_SCALE);
+                float x = offsetX + (c / 2 + 1) * verticalWidth;
+                Point start = new Point(x,offsetY + ((r + 1) / 2) * verticalWidth);
                 Point end;
 
                 // find the span of the wall
@@ -229,7 +229,7 @@ public class Maze implements Renderable{
                 while(endRow < trueHeight && maze[endRow][c]){
                     endRow++;
                 }
-                end = new Point(x, offsetY + ((endRow + 1) / 2) * WALL_SCALE);
+                end = new Point(x, offsetY + ((endRow + 1) / 2) * verticalWidth);
 
                 // keep track of the wall
                 Wall wall = new Wall(start, end);
@@ -269,13 +269,13 @@ public class Maze implements Renderable{
         return points;
     }
 
-    private Wall[] generateBorder(float offsetX, float offsetY){
+    private Wall[] generateBorder(float offsetX, float offsetY, float horizontalWidth, float verticalWidth){
         Wall[] borders = new Wall[4];
 
         // border end points
         Point topLeft = new Point(offsetX, offsetY);
-        Point topRight = new Point(offsetX + width * WALL_SCALE, offsetY);
-        Point bottomLeft = new Point(offsetX, offsetY + length * WALL_SCALE);
+        Point topRight = new Point(offsetX + width * horizontalWidth, offsetY);
+        Point bottomLeft = new Point(offsetX, offsetY + length * verticalWidth);
         Point bottomRight = new Point(topRight.getX(), bottomLeft.getY());
 
         // top border
@@ -294,12 +294,12 @@ public class Maze implements Renderable{
         return flatMaze;
     }
 
-    public void refresh(float offsetX, float offsetY){
+    public void refresh(float offsetX, float offsetY, float horizontalWidth, float verticalWidth){
         flatMaze.clear();
         // add the walls to the flatMaze
-        generateFormattedWalls(offsetX, offsetY);
+        generateFormattedWalls(offsetX, offsetY, horizontalWidth, verticalWidth);
         // add the border to the flatMaze
-        generateBorder(offsetX, offsetY);
+        generateBorder(offsetX, offsetY, horizontalWidth, verticalWidth);
     }
 
     private boolean contains(ArrayList<Cell> list, Cell target){

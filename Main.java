@@ -38,6 +38,7 @@ public class Main extends PApplet{
 		titleScreen = new TitleScreen();
 		endScreen = new EndScreen();
 		renderables = new ArrayList<>();
+		movables = new ArrayList<>();
 	}
 
 	@Override
@@ -130,9 +131,12 @@ public class Main extends PApplet{
 	}
 
 	public void startGame(int rows, int columns, int amountMonsters){
+		// for when we restart the game
+		renderables.clear();
+		movables.clear();
+
 		maze = new Maze(rows, columns, this);
 		character = new Character(maze);
-		movables = new ArrayList<>();
 		movables.add(character);
 		renderables.add(character);
 		for(int i = 0; i<amountMonsters; i++){
@@ -154,6 +158,8 @@ public class Main extends PApplet{
 	}
 
 	public void bringToTitleScreen(){
+		titleScreen = new TitleScreen();
+		endScreen = new EndScreen();
 		this.screen = Screen.TITLE_SCREEN;
 	}
 	

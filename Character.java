@@ -326,13 +326,17 @@ public class Character implements Renderable{
     }
 
     public boolean didLose(){
-        int[] curPos = Maze.getMatrixPoint(locationInMatrix);
-        List<Monster> monsters = new ArrayList<Monster>();
-        for(int i = 1; i<sketch.getMovables().size(); i++){
-            if(sketch.getMovables().get(i).onTopOfPlayer()){
-                return true;
+        if(!sketch.isGodMode()){
+            int[] curPos = Maze.getMatrixPoint(locationInMatrix);
+            List<Monster> monsters = new ArrayList<Monster>();
+            for(int i = 1; i<sketch.getMovables().size(); i++){
+                if(sketch.getMovables().get(i).onTopOfPlayer()){
+                    return true;
+                }
             }
+            return false;
+        } else {
+            return false;
         }
-        return false;
     }
 }

@@ -249,6 +249,11 @@ public class Character implements Renderable{
     }
 
     private Ray createAuxiliaryRay(Ray mainRay){
+        // there is a bug with complete horizontal and vertical, so just return back the main ray
+        if(Math.abs(locationInMatrix.getY() - mainRay.getEnd().getY()) <= .1 || Math.abs(locationInMatrix.getX() - mainRay.getEnd().getX()) <= .1){
+            return mainRay;
+        }
+
         // mainRay.getEnd() gives direction of the geometric ray
         Ray auxiliary = new Ray(mainRay.getStart(), mainRay.getEnd(), false);
         for(Wall collideWall : allWalls){

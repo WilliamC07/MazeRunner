@@ -144,7 +144,13 @@ public class Main extends PApplet{
 		movables.add(character);
 		renderables.add(character);
 		for(int i = 0; i<amountMonsters; i++){
-			Monster monster = new Monster((int)(Math.random()*maze.getWidth()),(int)(Math.random()*maze.getLength()),maze, character);
+			int randomX = (int)(Math.random()*maze.getWidth());
+			int randomY = (int)(Math.random()*maze.getLength());
+			while(randomX<5 && randomY<5){
+				randomX = (int)(Math.random()*maze.getWidth());
+				randomY = (int)(Math.random()*maze.getLength());
+			}
+			Monster monster = new Monster(randomX,randomY,maze,character);
 			movables.add(monster);
 			renderables.add(monster);
 		}

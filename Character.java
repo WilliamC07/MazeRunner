@@ -47,6 +47,8 @@ public class Character implements Renderable{
             dy+=1;
         }
         float scalar = sketch.isGodMode()? 7:3;
+        boolean skipX = false;
+        boolean skipY = false;
         if(!sketch.isGodMode()){
             float newX = centerOfScreen.getX()+scalar*dx+dx*10;
             float newY = centerOfScreen.getY()+scalar*dy+dy*10;
@@ -58,8 +60,21 @@ public class Character implements Renderable{
                     return;
                 }
             }
+
+            // skip horizontal and vertical values so we don't get the bug ¯\_(ツ)_/¯. Those 20+ hours on ray casting isn't worth it
+            for(Wall wall : allWalls){
+                if(Math.abs(wall.getStart().getX() - newX) <= .1F){
+                    skipX = true;
+                }
+
+                if(Math.abs(wall.getStart().getY() - newY) <= .1F){
+                    skipY = true;
+                }
+            }
         }
-        locationInMatrix = new Point(locationInMatrix.getX()+scalar*dx, locationInMatrix.getY()+scalar*dy);
+
+
+        locationInMatrix = new Point(locationInMatrix.getX()+scalar*dx + (skipX ? .5F : 0), locationInMatrix.getY()+scalar*dy + (skipY ? .5F : 0));
         int[] currentCell = Maze.getMatrixPoint(locationInMatrix);
         int[] previousCell = maze.getPathKeeper();
         if(Math.abs(currentCell[0]/2-previousCell[0])==1 ^ Math.abs(currentCell[1]/2-previousCell[1])==1){

@@ -1,6 +1,6 @@
 # MazeRunner
 This is an escape-the-maze game, where walls block your line of sight.  
-You start in the top left corner and your objective is to reach the bottom right.  
+You start in the top left corner (red square) and your objective is to reach the bottom right (green square).  
 Monsters roam the maze and will chase you if you enter their line of sight.  
 To stop the monsters from chasing you, cut off their line of sight by rounding a corner.
 

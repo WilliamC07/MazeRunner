@@ -192,7 +192,7 @@ public class Maze implements Renderable{
                 }
 
                 // because the wall is horizontal, the start and end point share the same y
-                float y = offsetY + (r / 2 + 1) * horizontalWidth;
+                float y = offsetY + (r / 2 + 1) * verticalWidth;
                 Point start = new Point(offsetX + ((c + 1) / 2) * horizontalWidth, y);
                 Point end;
 
@@ -220,7 +220,7 @@ public class Maze implements Renderable{
                 }
 
                 // because the wall is vertical, the start and end share the same x
-                float x = offsetX + (c / 2 + 1) * verticalWidth;
+                float x = offsetX + (c / 2 + 1) * horizontalWidth;
                 Point start = new Point(x,offsetY + ((r + 1) / 2) * verticalWidth);
                 Point end;
 
@@ -431,7 +431,7 @@ public class Maze implements Renderable{
         sketch.ellipse(playerX,playerY,15,15);
     }
     public void renderMinimapGod(){
-        refresh(sketch.height/10f,sketch.width/10f,4f*sketch.height/5/length,4f*sketch.height/5/width);
+        refresh(sketch.width/10f,sketch.height/10f,4f*sketch.width/5/width,4f*sketch.height/5/length);
         sketch.stroke(0);
         for(Wall wall : flatMaze){
             wall.render();

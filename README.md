@@ -12,9 +12,10 @@ To stop the monsters from chasing you, cut off their line of sight by rounding a
 1. Download the repository and run the bash script.  
 ```chmod 755 run.sh && ./run.sh```  
 2. Click on green button that reads "play"
-3. Click on the number on next to the fields reading "width," "height," "monsters." The width and height is the amount 
+3. Click on the number next to the fields reading "width," "height," "monsters." The width and height is the amount 
 of columns and rows respectively. These values must be an integer in the range of 10 to 50 inclusive. Monsters must be 
-an integer in the range of 0 to 10 inclusive. The game will automatically fix the values if they are wrong.
+an integer in the range of 0 to 10 inclusive. The game will automatically fix the values if they are wrong. You may only use
+number keys, all other keys will not register.  
 4. Click the green play button again to start.
 5. Try to get to the end the maze.
 

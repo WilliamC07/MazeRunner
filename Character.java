@@ -318,7 +318,7 @@ public class Character implements Renderable{
 
     public boolean didWin(){
         int[] curPos = Maze.getMatrixPoint(locationInMatrix);
-        return curPos[0]/2==maze.getLength()-1 && curPos[1]/2==maze.getWidth()-1;
+        return curPos[1]/2==maze.getLength()-1 && curPos[0]/2==maze.getWidth()-1;
     }
 
     public boolean onTopOfPlayer(){

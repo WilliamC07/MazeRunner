@@ -18,8 +18,7 @@ public class Ray implements Comparable<Ray>{
      */
     public Point intersects(Wall wall){
         float[] result = lineLineIntersectionValues(wall);
-        // collinear lines means that we return the wall endpoint that is closest to the ray start point
-        // the result is length 3 to differentiate from t and u values returned if the lines are no collinear
+        // collinear lines means parallel lines, which have no intersection
         if(result == null){
             return null;
         }

@@ -85,10 +85,6 @@ public class Main extends PApplet{
 				case 'g':
 					maze.hint(character.getPos(),maze.getLength()*maze.getWidth());
 					break;
-				case 'P':
-				case 'p':
-					isGodMode = !isGodMode;
-					break;
 				default:
 					character.setVelocity(keyCode,true);
 					break;
@@ -101,6 +97,14 @@ public class Main extends PApplet{
 				case 'M':
 				case 'm':
 					screen = screen == Screen.MINIMAP ? Screen.PLAYING : Screen.MINIMAP;
+					break;
+				case 'P':
+				case 'p':
+					isGodMode = !isGodMode;
+					break;
+				case 'R':
+				case 'r':
+					bringToTitleScreen();
 					break;
 			}
 		}
@@ -162,7 +166,7 @@ public class Main extends PApplet{
 		endScreen = new EndScreen();
 		this.screen = Screen.TITLE_SCREEN;
 	}
-	
+
 	private enum Screen{
 		PLAYING,
 		MINIMAP,

@@ -85,10 +85,6 @@ public class Main extends PApplet{
 				case 'g':
 					maze.hint(character.getPos(),maze.getLength()*maze.getWidth());
 					break;
-				case 'P':
-				case 'p':
-					isGodMode = !isGodMode;
-					break;
 				default:
 					character.setVelocity(keyCode,true);
 					break;
@@ -101,6 +97,14 @@ public class Main extends PApplet{
 				case 'M':
 				case 'm':
 					screen = screen == Screen.MINIMAP ? Screen.PLAYING : Screen.MINIMAP;
+					break;
+				case 'P':
+				case 'p':
+					isGodMode = !isGodMode;
+					break;
+				case 'R':
+				case 'r':
+					bringToTitleScreen();
 					break;
 			}
 		}
@@ -140,7 +144,13 @@ public class Main extends PApplet{
 		movables.add(character);
 		renderables.add(character);
 		for(int i = 0; i<amountMonsters; i++){
-			Monster monster = new Monster((int)(Math.random()*maze.getWidth()),(int)(Math.random()*maze.getLength()),maze, character);
+			int randomX = (int)(Math.random()*maze.getWidth());
+			int randomY = (int)(Math.random()*maze.getLength());
+			while(randomX<5 && randomY<5){
+				randomX = (int)(Math.random()*maze.getWidth());
+				randomY = (int)(Math.random()*maze.getLength());
+			}
+			Monster monster = new Monster(randomX,randomY,maze,character);
 			movables.add(monster);
 			renderables.add(monster);
 		}
@@ -162,7 +172,7 @@ public class Main extends PApplet{
 		endScreen = new EndScreen();
 		this.screen = Screen.TITLE_SCREEN;
 	}
-	
+
 	private enum Screen{
 		PLAYING,
 		MINIMAP,

@@ -32,7 +32,7 @@ public class Maze implements Renderable{
         convertToBool(walls);
         convertToList(walls);
     }
-    public void fillWalls(int rows, int cols, Wall[][] walls){
+    private void fillWalls(int rows, int cols, Wall[][] walls){
         float rowWidth = 4f*sketch.height/5/rows;
         float colWidth = 4f*sketch.width/5/cols;
         for(int i = 0; i<walls.length; i++){
@@ -61,7 +61,7 @@ public class Maze implements Renderable{
             }
         }
     }
-    public void generate(int row, int col, Wall[][] walls){
+    private void generate(int row, int col, Wall[][] walls){
         ArrayList<Integer> adjacentWalls = new ArrayList<Integer>();
         if(col!=0 && walls[2*row][col-1]!=null){
             adjacentWalls.add(0); //left
@@ -121,7 +121,6 @@ public class Maze implements Renderable{
                         }
                     } else {
                         maze[i][j*2]=true;
-                        System.out.println(i+" "+j);
                         if(j<walls[i].length-1 && (walls[i-1][j]!=null || walls[i][j+1]!=null)){
                             maze[i][j*2+1]=true;
                         }
@@ -193,7 +192,7 @@ public class Maze implements Renderable{
                 }
 
                 // because the wall is horizontal, the start and end point share the same y
-                float y = offsetY + (r / 2 + 1) * horizontalWidth;
+                float y = offsetY + (r / 2 + 1) * verticalWidth;
                 Point start = new Point(offsetX + ((c + 1) / 2) * horizontalWidth, y);
                 Point end;
 
@@ -221,7 +220,7 @@ public class Maze implements Renderable{
                 }
 
                 // because the wall is vertical, the start and end share the same x
-                float x = offsetX + (c / 2 + 1) * verticalWidth;
+                float x = offsetX + (c / 2 + 1) * horizontalWidth;
                 Point start = new Point(x,offsetY + ((r + 1) / 2) * verticalWidth);
                 Point end;
 
@@ -432,7 +431,7 @@ public class Maze implements Renderable{
         sketch.ellipse(playerX,playerY,15,15);
     }
     public void renderMinimapGod(){
-        refresh(sketch.height/10f,sketch.width/10f,4f*sketch.height/5/length,4f*sketch.height/5/width);
+        refresh(sketch.width/10f,sketch.height/10f,4f*sketch.width/5/width,4f*sketch.height/5/length);
         sketch.stroke(0);
         for(Wall wall : flatMaze){
             wall.render();
